@@ -7,6 +7,8 @@
         FontFamily="Verdana" FontSize="10"
         Title="WIGO - PL Stock Market Watch" Height="499" Width="1025" Background="#FF646464" Initialized="Window_Initialized">
     <Window.Resources>
+
+        <!-- Motywy zakładek-->
         <Style x:Key="taby" TargetType="TabItem">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Black" />
@@ -19,25 +21,65 @@
                 </Trigger>                
             </Style.Triggers>-->
         </Style>
+
+        <Style x:Key="taby2" TargetType="TabItem">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Margin" Value="-2,2,2,-2" />
+            <!--<Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Yellow" />                
+                </Trigger>                
+            </Style.Triggers>-->
+        </Style>
+
+        <!-- Labele -->
+        
         <Style x:Key="labeltytul" TargetType="Label">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Height" Value="Auto" />
             <Setter Property="Width" Value="Auto" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
         </Style>
         <Style x:Key="labeldane" TargetType="Label">
             <Setter Property="Foreground" Value="Black" />
-            <!--<Setter Property="FontWeight" Value="Bold" />-->
             <Setter Property="FontSize" Value="11" />
             <Setter Property="Height" Value="Auto" />
             <Setter Property="Width" Value="Auto" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />            
         </Style>
+
+        <Style x:Key="labeltytul2" TargetType="Label">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Height" Value="Auto" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+        <Style x:Key="labeldane2" TargetType="Label">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Height" Value="Auto" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+
+        <!-- Reszta -->
         <Style x:Key="ramki" TargetType="Border">
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="Width" Value="178" />
             <Setter Property="Margin" Value="1,0,0,0" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
         <Style x:Key="grid" TargetType="DataGrid">
             <Setter Property="Background" Value="LightGray" />
@@ -82,93 +124,93 @@
 
         <!-- Dolne informacje  --> 
         <StackPanel DockPanel.Dock="Bottom" Height="120" Orientation="Horizontal">
-           <Border Style="{StaticResource ramki}" HorizontalAlignment="Left" Name="wigborder" Margin="2,0,0,0">
+           <Border Style="{StaticResource ramki}" Name="wigborder" Margin="2,0,0,0">
                 <Grid Name="wiggrid" Margin="0">
-                    <Label Content="WIG" HorizontalAlignment="Left" Name="wigl" Width="60" Style="{StaticResource labeltytul}" Height="29" VerticalAlignment="Top" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="+2,8%" HorizontalAlignment="Left" Margin="107,27,0,0" Name="wigprocentl" Style="{StaticResource labeldane}" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="28" HorizontalAlignment="Left" Margin="107,40,0,0" Name="wigzmianal" VerticalAlignment="Top" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="Otwarcie" HorizontalAlignment="Left" Margin="0,40,0,0" Name="wigotwl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" HorizontalAlignment="Left" Margin="0,56,0,0" Name="wigodnl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" HorizontalAlignment="Left" Margin="0,93,0,0" Name="wigwoll" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28" HorizontalAlignment="Left" Margin="0,78,0,0" Name="wigobrl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="wigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28" HorizontalAlignment="Left" Margin="132,-2,0,0" Name="wiggodzl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
+                    <Label Content="WIG" Name="wigl" Width="60" Style="{StaticResource labeltytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="+2,8%"  Margin="107,27,0,0" Name="wigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
+                    <Label Content="28" Margin="107,40,0,0" Name="wigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wigotwl" Style="{StaticResource labeldane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wigodnl" Style="{StaticResource labeldane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labeldane}" />
+                    <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labeldane}" Width="55" />
+                    <Image Height="50" Margin="97,60,0,0" Name="wigsymbol" Stretch="Fill"  Width="71" />
+                    <Label Content="17:20" Height="28"  Margin="132,-2,0,0" Name="wiggodzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" HorizontalAlignment="Left" Name="wig20border">
+            <Border Style="{StaticResource ramki}" Name="wig20border">
                 <Grid Name="wig20grid">
-                    <Label Content="WIG20" HorizontalAlignment="Left" Name="wig20l" Width="80" Style="{StaticResource labeltytul}" Height="29" VerticalAlignment="Top" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="+2,8%" HorizontalAlignment="Left" Margin="107,27,0,0" Name="wig20procentl" Style="{StaticResource labeldane}" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="28" HorizontalAlignment="Left" Margin="107,40,0,0" Name="wig20zmianal" VerticalAlignment="Top" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="Otwarcie" HorizontalAlignment="Left" Margin="0,40,0,0" Name="wig20otwl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" HorizontalAlignment="Left" Margin="0,56,0,0" Name="wig20odnl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" HorizontalAlignment="Left" Margin="0,93,0,0" Name="wig20woll" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28" HorizontalAlignment="Left" Margin="0,78,0,0" Name="wig20obrl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="wig20symbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28" HorizontalAlignment="Left" Margin="132,-2,0,0" Name="wig20godzl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
+                    <Label Content="WIG20" Name="wig20l" Width="80" Style="{StaticResource labeltytul}" Height="29"  />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="wig20procentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
+                    <Label Content="28" Margin="107,40,0,0" Name="wig20zmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wig20otwl" Style="{StaticResource labeldane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wig20odnl" Style="{StaticResource labeldane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labeldane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labeldane}" Width="55" />
+                    <Image Height="50"  Margin="97,60,0,0" Name="wig20symbol" Stretch="Fill"  Width="71" />
+                    <Label Content="17:20" Height="28" Margin="132,-2,0,0" Name="wig20godzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" HorizontalAlignment="Left" Name="mwigborder">
+            <Border Style="{StaticResource ramki}" Name="mwigborder">
                 <Grid Name="mwiggrid">
-                    <Label Content="mWIG40" HorizontalAlignment="Left" Name="mwigl" Width="88" Style="{StaticResource labeltytul}" Height="29" VerticalAlignment="Top" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="+2,8%" HorizontalAlignment="Left" Margin="107,27,0,0" Name="mwigprocentl" Style="{StaticResource labeldane}" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="28" HorizontalAlignment="Left" Margin="107,40,0,0" Name="mwigzmianal" VerticalAlignment="Top" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="Otwarcie" HorizontalAlignment="Left" Margin="0,40,0,0" Name="wmigotwl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" HorizontalAlignment="Left" Margin="0,56,0,0" Name="mwigodnl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" HorizontalAlignment="Left" Margin="0,93,0,0" Name="mwigwoll" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28" HorizontalAlignment="Left" Margin="0,78,0,0" Name="mwigobrl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="55" />
+                    <Label Content="mWIG40"  Name="mwigl" Width="88" Style="{StaticResource labeltytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="mwigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
+                    <Label Content="28"  Margin="107,40,0,0" Name="mwigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wmigotwl"  Style="{StaticResource labeldane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labeldane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labeldane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labeldane}" Width="55" />
                     <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="mwigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28" HorizontalAlignment="Left" Margin="132,-2,0,0" Name="mwiggodzl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
+                    <Label Content="17:20" Height="28" Margin="132,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" HorizontalAlignment="Left" Name="swigborder">
+            <Border Style="{StaticResource ramki}" Name="swigborder">
                 <Grid Name="swiggrid">
-                    <Label Content="sWIG80" HorizontalAlignment="Left" Name="swigl" Width="80" Style="{StaticResource labeltytul}" Height="29" VerticalAlignment="Top" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="+2,8%" HorizontalAlignment="Left" Margin="107,27,0,0" Name="swigprocentl" Style="{StaticResource labeldane}" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="28" HorizontalAlignment="Left" Margin="107,40,0,0" Name="swigzmianal" VerticalAlignment="Top" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="Otwarcie" HorizontalAlignment="Left" Margin="0,40,0,0" Name="swigotwl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" HorizontalAlignment="Left" Margin="0,56,0,0" Name="swigodnl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" HorizontalAlignment="Left" Margin="0,93,0,0" Name="swigwoll" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28" HorizontalAlignment="Left" Margin="0,78,0,0" Name="swigobrl" VerticalAlignment="Top" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="swigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28" HorizontalAlignment="Left" Margin="132,-2,0,0" Name="swiggodzl" VerticalAlignment="Top" Style="{StaticResource labeldane}" />
+                    <Label Content="sWIG80" Name="swigl" Width="80" Style="{StaticResource labeltytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="swigprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="28"  Margin="107,40,0,0" Name="swigzmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="swigotwl" Style="{StaticResource labeldane}" />
+                    <Label Content="Odniesienie" Height="28"  Margin="0,56,0,0" Name="swigodnl" Style="{StaticResource labeldane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labeldane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labeldane}" Width="55" />
+                    <Image Height="50"  Margin="97,60,0,0" Name="swigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
+                    <Label Content="17:20" Height="28"  Margin="132,-2,0,0" Name="swiggodzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" HorizontalAlignment="Left" Name="eurplnborder">
+            <Border Style="{StaticResource ramki}" Width="70" Name="eurplnborder">
                 <Grid Name="eurplngrid">
-                    <Label Content="EURPLN" HorizontalAlignment="Left" Name="eurplnl" Style="{StaticResource labeltytul}" VerticalAlignment="Top" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="eurplngodzl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurplnprocentl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurplnzmianal" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurplnotwarciel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" />
+                    <Label Content="EURPLN"  Name="eurplnl" Style="{StaticResource labeltytul}" FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="eurplngodzl" Style="{StaticResource labeldane}"  />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurplnzmianal" Style="{StaticResource labeldane}"  FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurplnotwarciel" Style="{StaticResource labeldane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labeldane}" Height="22" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" HorizontalAlignment="Left" Name="usdplnborder">
+            <Border Style="{StaticResource ramki}" Width="70" Name="usdplnborder">
                 <Grid Name="usdplngrid">
-                    <Label Content="USDPLN" HorizontalAlignment="Left" Name="usdplnl" Style="{StaticResource labeltytul}" VerticalAlignment="Top" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="usdplngodzl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="usdplnprocentl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="usdplnzmianal" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="usdplnotwarciel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" />
+                    <Label Content="USDPLN"  Name="usdplnl" Style="{StaticResource labeltytul}"  FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="usdplngodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="usdplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="usdplnzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="usdplnotwarciel" Style="{StaticResource labeldane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labeldane}" Height="22" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" HorizontalAlignment="Left" Name="eurusdborder">
+            <Border Style="{StaticResource ramki}" Width="70" Name="eurusdborder">
                 <Grid Name="eurusdgrid">
-                    <Label Content="EURUSD" HorizontalAlignment="Left" Name="eurusdl" Style="{StaticResource labeltytul}" VerticalAlignment="Top" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Width="53" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="eurusdgodzl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurusdprocentl" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurusdzmianal" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurusdotwarciel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labeldane}" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" />
+                    <Label Content="EURUSD" Name="eurusdl" Style="{StaticResource labeltytul}" FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="eurusdgodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurusdprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurusdzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurusdotwarciel" Style="{StaticResource labeldane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labeldane}" Height="22" />
                 </Grid>
             </Border>
         </StackPanel>
@@ -235,50 +277,48 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Indeksy" Style="{StaticResource ResourceKey=taby}">
-                <!--<Grid>
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="350" />
-                    </Grid.ColumnDefinitions>-->
-                    <!--<GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />-->
-                <TabControl Background="#FF868686" Foreground="White" BorderThickness="0">
-                    <TabItem Header="GPW" Style="{StaticResource ResourceKey=taby}">
+                    </Grid.ColumnDefinitions>
+                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
+                        <TabItem Header="GPW" Style="{StaticResource ResourceKey=taby2}">
+                                <ScrollViewer>
+                                    <DataGrid Name="indeksyGPWGrid" Style="{StaticResource grid}" />
+                                </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Światowe" Style="{StaticResource ResourceKey=taby2}">
+                                <ScrollViewer>
+                                    <DataGrid Name="indeksyGrid" Style="{StaticResource grid}" />
+                                </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Futures" Style="{StaticResource ResourceKey=taby2}">
+                                <ScrollViewer>
+                                    <DataGrid Name="indeksyFutGrid" Style="{StaticResource grid}" />
+                                </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                    <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="350" />
-                            </Grid.ColumnDefinitions>
-                            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                            <ScrollViewer>
-                                <DataGrid Name="indeksyGPWGrid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
+                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                            <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
+                            <Label Content="AOR ORRDINARES" Margin="26,40,0,0" Name="iNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                            <Label Content="15-04-2014 17:13:55" Height="28" Margin="6,66,0,0" Name="iData" Style="{StaticResource labeldane2}" FontSize="12" />
+                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
+                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="iKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="iZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="iMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="iOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="iOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
                         </Grid>
-                    </TabItem>
-                    <TabItem Header="Światowe" Style="{StaticResource ResourceKey=taby}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="350" />
-                            </Grid.ColumnDefinitions>
-                            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                            <ScrollViewer>
-                                <DataGrid Name="indeksyGrid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Futures" Style="{StaticResource ResourceKey=taby}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="350" />
-                            </Grid.ColumnDefinitions>
-                            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                            <ScrollViewer>
-                                <DataGrid Name="indeksyFutGrid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
             <TabItem Header="Akcje" Style="{StaticResource taby}">
                 <Grid>
@@ -286,51 +326,97 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="350" />
                     </Grid.ColumnDefinitions>
+                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
+                        <TabItem Header="Wszystkie" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="akcjeGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wig20Gid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="MWIG40" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="mwig40Grid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="SWIG80" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="swig80Grid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="New Connect" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="newconnectGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer>
-                        <DataGrid Name="akcjeGrid" Style="{StaticResource grid}" />
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                            <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
+                            <Label Content="Tauron" Margin="26,40,0,0" Name="aNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                            <Label Content="15-04-2014 17:13:55" Height="28" Margin="6,66,0,0" Name="aData" Style="{StaticResource labeldane2}" FontSize="12" />
+                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
+                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="aKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="aZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="aMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="aOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="aOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Waluty" Style="{StaticResource ResourceKey=taby}">
+            <TabItem Header="Waluty i towary" Style="{StaticResource ResourceKey=taby}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="350" />
                     </Grid.ColumnDefinitions>
+                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
+                        <TabItem Header="Waluty" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="walutyGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Towary" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="towaryGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer>
-                        <DataGrid Name="walutyGrid" Style="{StaticResource grid}" />
-                            <!--<DataGrid.Columns>
-                                <DataGridTextColumn Header="Data" />
-                                <DataGridTextColumn Header="Nazwa" />
-                                <DataGridTextColumn Header="Kurs" />
-                                <DataGridTextColumn Header="Zmiana" />
-                                <DataGridTextColumn Header="Otwarcie" />
-                            </DataGrid.Columns>
-                        </DataGrid>-->
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                            <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
+                            <Label Content="EUR / PLN 1:1" Margin="26,40,0,0" Name="wtNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                            <Label Content="15-04-2014 17:13:55" Height="28" Margin="6,66,0,0" Name="wtData" Style="{StaticResource labeldane2}" FontSize="12" />
+                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
+                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="wtKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="wtZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="wtMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="wtOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Content="0000" Name="wtOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Towary" Style="{StaticResource taby}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="350" />
-                    </Grid.ColumnDefinitions>
-                    <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer>
-                        <DataGrid Name="towaryGrid" Style="{StaticResource grid}" />
-                            <!--<DataGrid.Columns>
-                                <DataGridTextColumn Header="Data" />
-                                <DataGridTextColumn Header="Nazwa" />
-                                <DataGridTextColumn Header="Kurs" />
-                                <DataGridTextColumn Header="Zmiana" />
-                                <DataGridTextColumn Header="Otwarcie" />
-                            </DataGrid.Columns>
-                        </DataGrid>-->
-                    </ScrollViewer>
-                </Grid>
+            <TabItem Header="Ulubione" Style="{StaticResource taby}">
+                <ScrollViewer>
+                    <DataGrid Name="ulubioneGrid" Style="{StaticResource grid}" />
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Makro" Style="{StaticResource taby}" />
             <TabItem Header="Wiadomości" Style="{StaticResource taby}">
