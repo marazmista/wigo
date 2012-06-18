@@ -98,7 +98,7 @@ namespace klasynewsowe
             bool statPob;
             try
                 {
-                statPob = Pobierz(adresy.BankierRynkiNews, staleapki.appdir + staleapki.tmpdir + @"\" + nazwyPlikow.PBankierRynki);
+                statPob = Pobierz(adresy.BankierRynkiNews, staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PBankierRynki);
                 }
             catch { statPob = false; }
 
@@ -113,7 +113,7 @@ namespace klasynewsowe
 
                 try
                     {
-                    string[] aBankierRynki = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + @"\" + nazwyPlikow.PBankierRynki);
+                    string[] aBankierRynki = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PBankierRynki);
                     
                     foreach (string s in aBankierRynki)
                         {
@@ -184,7 +184,7 @@ namespace klasynewsowe
             bool statPob;
             try
                 {
-                statPob = Pobierz(adresy.MoneyKomentarze, staleapki.appdir + staleapki.tmpdir + @"\" + nazwyPlikow.PMoneyKomentarze);
+                statPob = Pobierz(adresy.MoneyKomentarze, staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PMoneyKomentarze);
                 }
             catch { statPob = false; }
 
@@ -196,7 +196,7 @@ namespace klasynewsowe
 
                     moneyKolekcja = new List<daneNewsa>();
 
-                    string[] aKomentarzeMoney = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + @"\" + nazwyPlikow.PMoneyKomentarze);
+                    string[] aKomentarzeMoney = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PMoneyKomentarze);
                     short i = 0;
 
                     foreach (string s in aKomentarzeMoney)

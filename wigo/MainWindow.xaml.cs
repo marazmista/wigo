@@ -32,9 +32,9 @@ namespace mm_gielda
     // ================
     public struct staleapki
         {
-        public const string tmpdir = @"\tmp";
-        public const string bazadir = @"\baza";
-        public const string danedir = @"\dane";
+        public const string tmpdir = @"\tmp\";
+        public const string bazadir = @"\baza\";
+        public const string danedir = @"\dane\";
         public static readonly string appdir = Environment.CurrentDirectory;
         }
 

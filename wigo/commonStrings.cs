@@ -12,10 +12,15 @@ namespace commonStrings
     struct messages
         {
         public const string pobFail = " Nie udało się pobrać danych";
-        public const string prasowanieFail = " Nie udało się odczytać danych z pliku";
+        public const string prasowanieFail = " Nie udało się odczytać najnowszych danych z pliku";
 
         public const string pobOk = " Pobrano plik z danymi";
         public const string prasowanieOk = " Odczytano dane z pliku";
+
+        public const string xmlOutOK = " Weksportowano do XML";
+        public const string xmlOutFail = " Eksport do XML nieudany";
+        public const string xmlOk = " Wczytano wartośći z pliku XML";
+        public const string xmlFail = " Brak poprzednich dobrych danych w pliku XML (pierwsze uruchomienie, weekend?)";
         }
 
     struct typy
@@ -49,6 +54,13 @@ namespace commonStrings
         public const string PStooqIndeksyFut = "stooqindeksyfut.html";
         public const string PStooqWaluty = "stooqwaluty.html";
         public const string PStooqTowary = "stooqtowary.html";
+
+        public const string xmlStooqAkcje = "stooqakcje.xml";
+        public const string xmlStooqIndeksy = "stooqindeksy.xml";
+        public const string xmlStooqIndeksyGPW = "stooqindeksygpw.xml";
+        public const string xmlStooqIndeksyFut = "stooqfut.xml";
+        public const string xmlStooqWaluty = "stooqwaluty.xml";
+        public const string xmlStooqTowary = "stooqtowary.xml";
         }
 
     struct adresy
