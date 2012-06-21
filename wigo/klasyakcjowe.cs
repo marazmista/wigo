@@ -52,7 +52,7 @@ namespace klasyakcjowe
 
             public daneAkcji(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie, int wolumen, int obrot, int transakcje)
                 {
-                this.Data = data.ToString("dd-MM-yyyy HH:mm:ss");  //zmiana na stringa, żeby format był ok, nie hmerykansky
+                this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
                 this.Nazwa = nazwa;
                 this.Symbol = symbol;
                 this.Kurs = kurs;
@@ -73,7 +73,7 @@ namespace klasyakcjowe
 
             public daneNumTabeli(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie)
                 {
-                this.Data = data.ToString("dd-MM-yyyy HH:mm:ss");  //zmiana na stringa, żeby format był ok, nie hmerykansky
+                this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
                 this.Nazwa = nazwa;
                 this.Symbol = symbol;
                 this.Kurs = kurs;
@@ -92,7 +92,7 @@ namespace klasyakcjowe
 
             public daneWaluty(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie)
                 {
-                this.Data = data.ToString("dd-MM-yyyy HH:mm:ss");  //zmiana na stringa, żeby format był ok, nie hmerykansky
+                this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
                 this.Nazwa = nazwa;
                 this.Symbol = symbol;
                 this.Kurs = kurs;
@@ -409,7 +409,7 @@ namespace klasyakcjowe
 
                              // konwersja daty
                              DateTime dt = new DateTime();
-                             dt = DateTime.ParseExact((string)xelem.Attribute("Data"), "dd-MM-yyyy HH:mm:ss", null);
+                             dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
 
                              lista.Add(new daneNumTabeli(dt,
                                  (string)xelem.Attribute("Nazwa"),
@@ -537,7 +537,7 @@ namespace klasyakcjowe
 
                         // konwersja daty
                         DateTime dt = new DateTime();
-                        dt = DateTime.ParseExact((string)xelem.Attribute("Data"), "dd-MM-yyyy HH:mm:ss", null);
+                        dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
 
                         lista.Add(new daneAkcji(dt,
                             (string)xelem.Attribute("Nazwa"),
@@ -750,7 +750,7 @@ namespace klasyakcjowe
 
                         // konwersja daty
                         DateTime dt = new DateTime();
-                        dt = DateTime.ParseExact((string)xelem.Attribute("Data"), "dd-MM-yyyy HH:mm:ss", null);
+                        dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
 
                         lista.Add(new daneWaluty(dt,
                             (string)xelem.Attribute("Nazwa"),

@@ -127,7 +127,7 @@
            <Border Style="{StaticResource ramki}" Name="wigborder" Margin="2,0,0,0">
                 <Grid Name="wiggrid" Margin="0">
                     <Label Content="WIG" Name="wigl" Width="60" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="+2,8%"  Margin="107,27,0,0" Name="wigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
                     <Label Content="28" Margin="107,40,0,0" Name="wigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="wigotwl" Style="{StaticResource labeldane}" />
@@ -135,13 +135,13 @@
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labeldane}" Width="55" />
                     <Image Height="50" Margin="97,60,0,0" Name="wigsymbol" Stretch="Fill"  Width="71" />
-                    <Label Content="17:20" Height="28"  Margin="132,-2,0,0" Name="wiggodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="wiggodzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="wig20border">
                 <Grid Name="wig20grid">
                     <Label Content="WIG20" Name="wig20l" Width="80" Style="{StaticResource labeltytul}" Height="29"  />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="+2,8%" Margin="107,27,0,0" Name="wig20procentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
                     <Label Content="28" Margin="107,40,0,0" Name="wig20zmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="wig20otwl" Style="{StaticResource labeldane}" />
@@ -149,27 +149,27 @@
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labeldane}" Width="55" />
                     <Image Height="50"  Margin="97,60,0,0" Name="wig20symbol" Stretch="Fill"  Width="71" />
-                    <Label Content="17:20" Height="28" Margin="132,-2,0,0" Name="wig20godzl" Style="{StaticResource labeldane}" />
+                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="wig20godzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="mwigborder">
                 <Grid Name="mwiggrid">
                     <Label Content="mWIG40"  Name="mwigl" Width="88" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="+2,8%" Margin="107,27,0,0" Name="mwigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" />
                     <Label Content="28"  Margin="107,40,0,0" Name="mwigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wmigotwl"  Style="{StaticResource labeldane}" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="mwigotwl"  Style="{StaticResource labeldane}" />
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labeldane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labeldane}" Width="55" />
                     <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="mwigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28" Margin="132,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labeldane}" />
+                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="swigborder">
                 <Grid Name="swiggrid">
                     <Label Content="sWIG80" Name="swigl" Width="80" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="+2,8%" Margin="107,27,0,0" Name="swigprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="28"  Margin="107,40,0,0" Name="swigzmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="swigotwl" Style="{StaticResource labeldane}" />
@@ -177,40 +177,40 @@
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labeldane}" Width="55" />
                     <Image Height="50"  Margin="97,60,0,0" Name="swigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
-                    <Label Content="17:20" Height="28"  Margin="132,-2,0,0" Name="swiggodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="swiggodzl" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" Name="eurplnborder">
+            <Border Style="{StaticResource ramki}" Width="75" Name="eurplnborder">
                 <Grid Name="eurplngrid">
                     <Label Content="EURPLN"  Name="eurplnl" Style="{StaticResource labeltytul}" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="18:25" Margin="24,27,0,0" Name="eurplngodzl" Style="{StaticResource labeldane}"  />
                     <Label Content="+0.00%" Margin="0,44,0,0" Name="eurplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,58,0,0" Name="eurplnzmianal" Style="{StaticResource labeldane}"  FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,93,0,0" Name="eurplnotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labeldane}" Height="22" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" Name="usdplnborder">
+            <Border Style="{StaticResource ramki}" Width="75" Name="usdplnborder">
                 <Grid Name="usdplngrid">
                     <Label Content="USDPLN"  Name="usdplnl" Style="{StaticResource labeltytul}"  FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="18:25" Margin="24,27,0,0" Name="usdplngodzl" Style="{StaticResource labeldane}" />
                     <Label Content="+0.00%" Margin="0,44,0,0" Name="usdplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,58,0,0" Name="usdplnzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,93,0,0" Name="usdplnotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labeldane}" Height="22" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="70" Name="eurusdborder">
+            <Border Style="{StaticResource ramki}" Width="75" Name="eurusdborder">
                 <Grid Name="eurusdgrid">
                     <Label Content="EURUSD" Name="eurusdl" Style="{StaticResource labeltytul}" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labeldane}" Width="53" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="18:25" Margin="24,27,0,0" Name="eurusdgodzl" Style="{StaticResource labeldane}" />
                     <Label Content="+0.00%" Margin="0,44,0,0" Name="eurusdprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,58,0,0" Name="eurusdzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
                     <Label Content="0.0000" Margin="0,93,0,0" Name="eurusdotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labeldane}" Height="22" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labeldane}" />
                 </Grid>
             </Border>
         </StackPanel>
@@ -332,17 +332,22 @@
                                 <DataGrid Name="akcjeGrid" Style="{StaticResource grid}" />
                             </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
+                        <TabItem Header="WIG" Style="{StaticResource ResourceKey=taby2}">
                             <ScrollViewer>
-                                <DataGrid Name="wig20Gid" Style="{StaticResource grid}" />
+                                <DataGrid Name="wigGrid" Style="{StaticResource grid}" />
                             </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="MWIG40" Style="{StaticResource ResourceKey=taby2}">
+                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wig20Grid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="mWIG40" Style="{StaticResource ResourceKey=taby2}">
                             <ScrollViewer>
                                 <DataGrid Name="mwig40Grid" Style="{StaticResource grid}" />
                             </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="SWIG80" Style="{StaticResource ResourceKey=taby2}">
+                        <TabItem Header="sWIG80" Style="{StaticResource ResourceKey=taby2}">
                             <ScrollViewer>
                                 <DataGrid Name="swig80Grid" Style="{StaticResource grid}" />
                             </ScrollViewer>
@@ -350,6 +355,86 @@
                         <TabItem Header="New Connect" Style="{StaticResource ResourceKey=taby2}">
                             <ScrollViewer>
                                 <DataGrid Name="newconnectGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG BANKI" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigbankiGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG BUDOW" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigbudowGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG CEE" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigceeGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG CHEMIA" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigchemiaGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG DEWEL" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigdewelGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG ENERG" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigenergGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG INFO" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wiginfoGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG MEDIA" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigmediaGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG PALIWA" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigpaliwaGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG PLUS" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigplusGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG POLAND" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigpolandGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG SPOZYW" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigspozywGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG SUROWC" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigsurowcGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG TELKOM" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigtelkomGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG UKRAIN" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="wigukrainGrid" Style="{StaticResource grid}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="RESPECT" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer>
+                                <DataGrid Name="respectGrid" Style="{StaticResource grid}" />
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>

@@ -36,6 +36,8 @@ namespace mm_gielda
         public const string bazadir = @"\baza\";
         public const string danedir = @"\dane\";
         public static readonly string appdir = Environment.CurrentDirectory;
+
+        public const string formatDaty = "dd-MM-yyyy HH:mm:ss";
         }
 
 
@@ -49,37 +51,27 @@ namespace mm_gielda
             try
                 {
                 InitializeComponent();
+                DirCheck();
                 }
             catch { };
 
-            if (!DirCheck())
-                {
-                try
-                    {
-                    Directory.CreateDirectory("tmp");
-                    Directory.CreateDirectory("Baza");
-                    Directory.CreateDirectory("Dane");
-                    Loger.dodajDoLogaInfo("Stworzono katalogi programu");
-                    }
-                catch { }//MessageBox.Show("Error tworzenia katalogów programu"); }
-                }
             // obsługa zdarzenia logującego w klasie mainwindow //
             Loger.updateLogbox += new EventHandler(Loger_updateLogbox);
 
             #region timery, deklaracja ====
             var timerGPW = new System.Windows.Threading.DispatcherTimer();
             timerGPW.Tick += new EventHandler(timerGPW_Tick);
-            timerGPW.Interval = new TimeSpan(0, 1, 0);
+            timerGPW.Interval = new TimeSpan(0, 2, 0);
             timerGPW.Start();
 
             var timerSwiat = new System.Windows.Threading.DispatcherTimer();
             timerGPW.Tick += new EventHandler(timerSwiat_Tick);
-            timerGPW.Interval = new TimeSpan(0, 1, 0);
+            timerGPW.Interval = new TimeSpan(0, 2, 0);
             timerGPW.Start();
 
             var timerNewsy = new System.Windows.Threading.DispatcherTimer();
             timerGPW.Tick += new EventHandler(timerNewsy_Tick);
-            timerGPW.Interval = new TimeSpan(0, 1, 0);
+            timerGPW.Interval = new TimeSpan(0, 5, 0);
             timerGPW.Start(); 
             #endregion
 

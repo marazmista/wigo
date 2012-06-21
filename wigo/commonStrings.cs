@@ -7,10 +7,13 @@
 // żeby zapobiec hardcode
 // ================
 
+using System.Collections.Generic;
+
 namespace commonStrings
     {
     struct messages
         {
+        // ogólne //
         public const string pobFail = " Nie udało się pobrać danych";
         public const string prasowanieFail = " Nie udało się odczytać najnowszych danych z pliku";
 
@@ -21,7 +24,14 @@ namespace commonStrings
         public const string xmlOutFail = " Eksport do XML nieudany";
         public const string xmlOk = " Wczytano wartośći z pliku XML";
         public const string xmlFail = " Brak poprzednich dobrych danych w pliku XML (pierwsze uruchomienie, weekend?)";
+
+        // odświeżanie składu indeksów //
+        public const string indOdswStart = "**** Rozpoczęcie aktualizacji składu indeksów GPW ****";
+        public const string indOdswKoniec = "**** Zakończono aktualizację składu indeksów GPW *****";
+        public const string indAktual = "Aktualizacja składu indeksu ";
+        public const string indOdswFail = " Nie udało się odświeżyć zawartości indeksów GPW (jesteś połączony z internetem?)";
         }
+
 
     struct typy
         {
