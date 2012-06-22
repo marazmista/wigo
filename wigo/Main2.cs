@@ -72,6 +72,7 @@ namespace mm_gielda
         private static long pobranoBytes;
 
         public static event EventHandler updateLogbox;
+        public static event EventHandler updateTotalDown;
 
         public static void dodajDoLogaInfo(string logInfoMessage)
             {
@@ -88,6 +89,7 @@ namespace mm_gielda
         public static void dodajPobrane(long d)
             {
             pobranoBytes += d;
+            updateTotalDown(null, null);
             }
 
         public static string returnTotalDownloaded()
@@ -121,6 +123,9 @@ namespace mm_gielda
                 {
                 var pobieracz = new WebClient();
                 pobieracz.DownloadFile(url, sciezka);
+
+                var fi = new FileInfo(sciezka);
+                Loger.dodajPobrane(fi.Length);
                 }
             catch { }
             }
@@ -360,30 +365,34 @@ namespace mm_gielda
                 daneTabel.tAkcje = stooqAkcje.generujTabele();
 
                 //=============
-                // mając tabelę z akcjami można filtrować na indeksy //
+                // mając tabelę z akcjami można filtrować na indeksy (w tle, żeby główna tab z akcjami się wczytała //
+                Action wczytajTab = delegate()
+                    {
+                    // odswieżanie składu indeksów //
+                    pobierzSkladIndeksow();
 
-                // odswieżanie składu indeksów //
-                pobierzSkladIndeksow();
+                    // wczytywanie tabel do gridów w interfejsie
+                    wczytajTabeleIndeksu(listaIndeksyGPW[1], daneTabel.tWig20, wig20Grid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[2], daneTabel.tmWig40, mwig40Grid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[3], daneTabel.tsWig80, swig80Grid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[4], daneTabel.tWigBanki, wigbankiGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[5], daneTabel.tWigBudow, wigbudowGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[6], daneTabel.tWigCee, wigceeGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[7], daneTabel.tWigChemia, wigchemiaGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigDewel, wigdewelGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigEnerg, wigenergGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[9], daneTabel.tWigInfo, wiginfoGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[10], daneTabel.tWigMedia, wigmediaGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[11], daneTabel.tWigPaliwa, wigpaliwaGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[12], daneTabel.tWigPlus, wigplusGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[13], daneTabel.tWigPoland, wigpolandGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[14], daneTabel.tWigSpozyw, wigspozywGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[15], daneTabel.tWigSurowc, wigsurowcGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[16], daneTabel.tWigTelkom, wigtelkomGrid);
+                    wczytajTabeleIndeksu(listaIndeksyGPW[17], daneTabel.tWigUkrain, wigukrainGrid);
+                    };
 
-                // wczytywanie tabel do gridów w interfejsie
-                wczytajTabeleIndeksu(listaIndeksyGPW[1], daneTabel.tWig20,wig20Grid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[2], daneTabel.tmWig40, mwig40Grid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[3], daneTabel.tsWig80, swig80Grid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[4], daneTabel.tWigBanki, wigbankiGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[5], daneTabel.tWigBudow, wigbudowGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[6], daneTabel.tWigCee, wigceeGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[7], daneTabel.tWigChemia, wigchemiaGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigDewel, wigdewelGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigEnerg, wigenergGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[9], daneTabel.tWigInfo, wiginfoGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[10], daneTabel.tWigMedia, wigmediaGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[11], daneTabel.tWigPaliwa, wigpaliwaGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[12], daneTabel.tWigPlus, wigplusGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[13], daneTabel.tWigPoland, wigpolandGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[14], daneTabel.tWigSpozyw, wigspozywGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[15], daneTabel.tWigSurowc, wigsurowcGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[16], daneTabel.tWigTelkom, wigtelkomGrid);
-                wczytajTabeleIndeksu(listaIndeksyGPW[17], daneTabel.tWigUkrain, wigukrainGrid);
+                wczytajTab.BeginInvoke(null, null);
                 }
             catch { }
             }
