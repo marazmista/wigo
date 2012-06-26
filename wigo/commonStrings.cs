@@ -30,6 +30,7 @@ namespace commonStrings
         public const string indOdswKoniec = "**** Zakończono aktualizację składu indeksów GPW *****";
         public const string indAktual = "Aktualizacja składu indeksu ";
         public const string indOdswFail = " Nie udało się odświeżyć zawartości indeksów GPW (jesteś połączony z internetem?)";
+        public const string indLoadFail = " Nie udało sie odczytać składu indeksu";
         }
 
 

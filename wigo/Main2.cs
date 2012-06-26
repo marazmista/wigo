@@ -32,11 +32,11 @@ namespace mm_gielda
 
         // ogólne tabele //
         internal static List<daneAkcji> tAkcje;
+        internal static List<daneAkcji> tIndeksyGPW;
         internal static List<daneNumTabeli> tIndeksy;
-        internal static List<daneNumTabeli> tIndeksyGPW;
         internal static List<daneNumTabeli> tIndeksyFut;
         internal static List<daneNumTabeli> tTowary;
-        internal static List<daneWaluty> tWaluty;
+        internal static List<daneNumTabeli> tWaluty;
 
         // newsy //
         internal static List<daneNewsa> NK;
@@ -65,7 +65,7 @@ namespace mm_gielda
         internal static List<daneAkcji> tRespect;
         }
 
-    #region logująca klasa
+    #region === logująca klasa ===
     public static class Loger
         {
         private static List<string> log = new List<string>();
@@ -98,7 +98,7 @@ namespace mm_gielda
             if (pobB < 2048)
                 return pobB.ToString() + "kB";
             else
-                return (pobB / 1024).ToString() + "MB";
+                return (pobB / 1024).ToString() + "." + (pobB % 1024).ToString().Remove(1) + "MB";
             }
 
         public static string returnLastLogLine()
@@ -150,71 +150,84 @@ namespace mm_gielda
         // metodka pobierająca albo odświeżająca skład indeksów //
         void pobierzSkladIndeksow()
             {
-            Loger.dodajDoLogaInfo(messages.indOdswStart);
-            try
+            // sprawdza czy to jest pierwsze pobieranie indeksów po odpaleniu apki, żeby zapobiec
+            // pobieraniu lub sprawdzaniu każdego indeksy przy każdym odświeżaniu akcji //
+            if (staleapki.pierwszePobranie)
                 {
-                // przerabianie wszystkich indeksów z listy powyższej //
-                foreach (var s in listaIndeksyGPW)
+                Loger.dodajDoLogaInfo(messages.indOdswStart);
+                try
                     {
-                    // ścieżka do pliku //
-                    string filepath = staleapki.appdir + staleapki.bazadir + s + ".txt";
-
-                    // jeśli pliczku nie ma, albo jest starszy niż tydzien //
-                    if (!File.Exists(filepath) | (File.GetCreationTime(filepath) - DateTime.Now).TotalDays > 5)
+                    // przerabianie wszystkich indeksów z listy powyższej //
+                    foreach (var s in listaIndeksyGPW)
                         {
-                        Loger.dodajDoLogaInfo(messages.indAktual + s.ToUpper());
-                        // tempowa lista z symbolami należącymi do indeksu //
-                        List<string> tmpl = new List<string>();
+                        // ścieżka do pliku //
+                        string filepath = staleapki.appdir + staleapki.bazadir + s + ".txt";
 
-                        // pobieranie pliczku z komponentami indeksu //
-                        string adres = "http://stooq.pl/q/i/?s=" + s;
-                        Pobierz(adres, staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
-
-                        // kod tej stronki //
-                        string[] tmpf = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
-
-                        // szukanie symboli spółek w indeksie //
-                        var reg = new Regex(@"<font id=f13><a href=q/\?s=(.+?)>");
-                        MatchCollection match = reg.Matches(tmpf[0]);
-
-                        // dodawanie do tej tempowej tabelki a potem zapis całości do pliku //
-                        foreach (var m in match)
+                        // jeśli pliczku nie ma, albo jest starszy niż tydzien //
+                        if (!File.Exists(filepath) | (File.GetCreationTime(filepath) - DateTime.Now).TotalDays > 5)
                             {
-                            var tmps = m.ToString();
-                            tmps = tmps
-                                        .Substring(26, 3)
-                                        .ToUpper();
+                            Loger.dodajDoLogaInfo(messages.indAktual + s.ToUpper());
+                            // tempowa lista z symbolami należącymi do indeksu //
+                            List<string> tmpl = new List<string>();
 
-                            tmpl.Add(tmps);
+                            // pobieranie pliczku z komponentami indeksu //
+                            string adres = "http://stooq.pl/q/i/?s=" + s;
+                            Pobierz(adres, staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
+
+                            // kod tej stronki //
+                            string[] tmpf = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
+
+                            // szukanie symboli spółek w indeksie //
+                            var reg = new Regex(@"<font id=f13><a href=q/\?s=(.+?)>");
+                            MatchCollection match = reg.Matches(tmpf[0]);
+
+                            // dodawanie do tej tempowej tabelki a potem zapis całości do pliku //
+                            foreach (var m in match)
+                                {
+                                var tmps = m.ToString();
+                                tmps = tmps
+                                            .Substring(26, 3)
+                                            .ToUpper();
+
+                                tmpl.Add(tmps);
+                                }
+                            File.WriteAllLines(filepath, tmpl.ToArray());
+                            File.SetCreationTime(filepath, DateTime.Now);
                             }
-                        File.WriteAllLines(filepath, tmpl.ToArray());
-                        File.SetCreationTime(filepath, DateTime.Now);
                         }
+                    Loger.dodajDoLogaInfo(messages.indOdswKoniec);
+                    staleapki.pierwszePobranie = false;
                     }
-                Loger.dodajDoLogaInfo(messages.indOdswKoniec);
+                catch { Loger.dodajDoLogaError(messages.indOdswFail); }
                 }
-            catch { Loger.dodajDoLogaError(messages.indOdswFail); }
             }
 
         //Action<string, List<daneAkcji>> wczytajTabeleIndeksu = (indeks, listaCel) =>
         void wczytajTabeleIndeksu(string indeks, List<daneAkcji> listaCel,DataGrid grid)
             {
-            string[] sklad = File.ReadAllLines(staleapki.appdir + staleapki.bazadir + indeks + ".txt");
-            List<daneAkcji> tmpl = new List<daneAkcji>();
-
-            for (int i = 0; i < sklad.Length; i++)
+            if (File.Exists(staleapki.appdir + staleapki.bazadir + indeks + ".txt"))
                 {
                 try
                     {
-                    var row = daneTabel.tAkcje.Find(a => a.Symbol == sklad[i]);
-                    tmpl.Add(row);
-                    }
-                catch { }
-                }
-            listaCel = tmpl;
+                    // wczytuje skład indeksu z pliku
+                    string[] sklad = File.ReadAllLines(staleapki.appdir + staleapki.bazadir + indeks + ".txt");
+                    List<daneAkcji> tmpl = new List<daneAkcji>();   //tempowa lista, żeby potem przypisać do static listy //
 
-            // wczytanie do grida
-            this.Dispatcher.Invoke(wAkcje, grid, listaCel);
+                    // leci po tablicy i kopiuje te akcje, które są w indeksie //
+                    for (int i = 0; i < sklad.Length; i++)
+                        {
+                        var row = daneTabel.tAkcje.Find(a => a.Symbol == sklad[i]);
+                        tmpl.Add(row);
+                        }
+                    listaCel = tmpl;
+
+                    // wczytanie do grida
+                    this.Dispatcher.Invoke(wAkcje, grid, listaCel);
+                    }
+                catch { Loger.dodajDoLogaError(indeks.ToUpper() + messages.indLoadFail); }
+                }
+            else
+                Loger.dodajDoLogaError(staleapki.appdir + staleapki.bazadir + indeks + ".txt - Plik nie istnieje!");
             }
 
         #region === delegary ogólne dla wątków ===
@@ -237,12 +250,7 @@ namespace mm_gielda
             {
                 wpfDataGrid.ItemsSource = lista;
             };
-
-        Action<DataGrid, List<daneWaluty>> wWaluty = delegate(DataGrid wpfDataGrid, List<daneWaluty> lista)
-            {
-                wpfDataGrid.ItemsSource = lista;
-            };
-
+        
         Action<DataGrid, List<daneNewsa>> wNewsy = delegate(DataGrid wpfDataGrid, List<daneNewsa> lista)
             {
                 wpfDataGrid.ItemsSource = lista;
@@ -257,7 +265,7 @@ namespace mm_gielda
         void tabelujGPW()
             {
             genDelegate.BeginInvoke(generujAkcje, done => { this.Dispatcher.Invoke(wAkcje, akcjeGrid, daneTabel.tAkcje); }, null);
-            genDelegate.BeginInvoke(generujIndeksyGPW, done => { this.Dispatcher.Invoke(wInne, indeksyGPWGrid, daneTabel.tIndeksyGPW); }, null);
+            genDelegate.BeginInvoke(generujIndeksyGPW, done => { this.Dispatcher.Invoke(wAkcje, indeksyGPWGrid, daneTabel.tIndeksyGPW); }, null);
             }
 
         void tabelujSwiat()
@@ -265,7 +273,7 @@ namespace mm_gielda
             genDelegate.BeginInvoke(generujIndeksy, done => { this.Dispatcher.Invoke(wInne, indeksyGrid, daneTabel.tIndeksy); }, null);
             genDelegate.BeginInvoke(generujIndeksyFut, done => { this.Dispatcher.Invoke(wInne, indeksyFutGrid, daneTabel.tIndeksyFut); }, null);
             genDelegate.BeginInvoke(generujTowary, done => { this.Dispatcher.Invoke(wInne, towaryGrid, daneTabel.tTowary); }, null);
-            genDelegate.BeginInvoke(generujWaluty, done => { this.Dispatcher.Invoke(wWaluty, walutyGrid, daneTabel.tWaluty); }, null);
+            genDelegate.BeginInvoke(generujWaluty, done => { this.Dispatcher.Invoke(wInne, walutyGrid, daneTabel.tWaluty); }, null);
             }
 
         void tabelujNewsy()
@@ -284,8 +292,8 @@ namespace mm_gielda
                 otwarcie.Content = oo.Otwarcie;
                 odniesienie.Content = oo.Odniesienie;
                 zmiana.Content = oo.Zmiana;
-                obrot.Content = "to do";
-                wolumen.Content = "to do";
+                obrot.Content = oo.Obrot;
+                wolumen.Content = oo.Wolumen;
                 zmianaproc.Content = oo.ZmianaProc;
 
                 var dt = new DateTime();

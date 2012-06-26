@@ -29,7 +29,7 @@ namespace klasyakcjowe
     // ========= szablony do generowania list kompatybilnych z datagridem //
     // **********************
     #region szablony do generowania list kompatybilnych z datagridem
-        abstract class daneNumOgolne
+        class daneAkcji
             {
             public string Data { get; set; }
             public string Nazwa { get; set; }
@@ -39,18 +39,16 @@ namespace klasyakcjowe
             public string Zmiana { get; set; }
             public string ZmianaProc { get; set; }
             public float Otwarcie { get; set; }
-            public float Odniesienie { get; set; }
-            }
-
-        class daneAkcji : daneNumOgolne
-            {
-            public int Wolumen { get; set; }
-            public int Obrot { get; set; }
+            public float Odniesienie { get; set; } 
+            //public int Wolumen { get; set; }  // jeśli chcssz wartości bez k,m,g przy liczbie, to zmien na int
+            //public int Obrot { get; set; }    // w konstruktorze też
+            public string Wolumen { get; set; }
+            public string Obrot { get; set; }
             public int Transakcje { get; set; }
 
             public daneAkcji() { }
 
-            public daneAkcji(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie, int wolumen, int obrot, int transakcje)
+            public daneAkcji(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie, string wolumen, string obrot, int transakcje)
                 {
                 this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
                 this.Nazwa = nazwa;
@@ -67,43 +65,43 @@ namespace klasyakcjowe
                 }
             }
 
-        class daneNumTabeli : daneNumOgolne
+        class daneNumTabeli
             {
+            public string Data { get; set; }
+            public string Nazwa { get; set; }
+            public string Symbol { get; set; }
+            public float Kurs { get; set; }
+            public string MaxMin { get; set; }
+            public string Zmiana { get; set; }
+            public string ZmianaProc { get; set; }
+            public float Otwarcie { get; set; }
+            public float Odniesienie { get; set; }
+
             public daneNumTabeli() { }
 
-            public daneNumTabeli(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie)
+            public daneNumTabeli(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie, bool czyWaluta )
                 {
                 this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
                 this.Nazwa = nazwa;
                 this.Symbol = symbol;
                 this.Kurs = kurs;
                 this.MaxMin = max.ToString() + " | " + min.ToString();
-                this.Zmiana = (kurs - odniesienie).ToString("0.##");
-                this.ZmianaProc = ((Convert.ToSingle(this.Zmiana) / odniesienie) * 100).ToString("0.##") + "%";
                 this.Otwarcie = otwarcie;
                 this.Odniesienie = odniesienie;
+
+                // spradza czy dodajemy walutę (bo różnią się dokładnością od zwykłych numer tabeli //
+                if (!czyWaluta)
+                    {
+                    this.Zmiana = (kurs - odniesienie).ToString("0.##");
+                    this.ZmianaProc = ((Convert.ToSingle(this.Zmiana) / odniesienie) * 100).ToString("0.##") + "%";
+                    }
+                else 
+                    {
+                    this.Zmiana = (kurs - odniesienie).ToString("0.####");
+                    this.ZmianaProc = ((Convert.ToSingle(this.Zmiana) / odniesienie) * 100).ToString("0.####") + "%";
+                    }
                 }
             }
-        
-        // waluty mają dokładność do .0000, więc nie może być to samo
-        class daneWaluty : daneNumOgolne
-            {
-            public daneWaluty() { }
-
-            public daneWaluty(DateTime data, string nazwa, string symbol, float kurs, float max, float min, float otwarcie, float odniesienie)
-                {
-                this.Data = data.ToString(staleapki.formatDaty);  //zmiana na stringa, żeby format był ok, nie hmerykansky
-                this.Nazwa = nazwa;
-                this.Symbol = symbol;
-                this.Kurs = kurs;
-                this.MaxMin = max.ToString() + " | " + min.ToString();
-                this.Zmiana = (kurs - odniesienie).ToString("0.####");
-                this.ZmianaProc = ((Convert.ToSingle(this.Zmiana) / odniesienie) * 100).ToString("0.####") + "%";
-                this.Otwarcie = otwarcie;
-                this.Odniesienie = odniesienie;
-                }
-            }
-
     #endregion
 
 
@@ -111,11 +109,10 @@ namespace klasyakcjowe
     // ========= szablony do bazowych klas (na tabelki) //
     // **********************
     #region Bazowe klasy
-
         // **********************
-        // ======== bazowa klasa dla danych do akcji z procedurkami i zmiennymi dla nich //
+        // ======== bazowa klasa dla danych do tabel z indeksami, wautami i towarami z procedurkami i zmiennymi dla nich //
         // **********************
-        internal abstract class NumAkcje
+        internal abstract class NumTab
             {
             protected List<DateTime> tDataGodz = new List<DateTime>();    // t od temp
             protected List<string> tNazwa = new List<string>();
@@ -128,10 +125,9 @@ namespace klasyakcjowe
             protected List<float> tOtwarcie = new List<float>();
             protected List<float> tOdniesienie = new List<float>();
 
+            protected List<daneNumTabeli> numKolekcja = new List<daneNumTabeli>();
             //dane do loga
             protected string serwis, typ;
-
-            public abstract void Prasuj(string url, string plik, string xmlBacupPlik);
 
             public virtual void Pobierz(string url, string sciezka)
                 {
@@ -146,6 +142,221 @@ namespace klasyakcjowe
                     }
                 catch { Loger.dodajDoLogaError(this.serwis + this.typ + messages.pobFail); }
                 }
+
+            // =============
+            // Metodki używane przy czytaniu indeksów GPW (daneAkcji) i innych indeksów, walut,towarów (daneNumTabeli)
+
+            // żeby przy każdym dodaniu nie konwertować i obcinac //
+            protected string Obetnij(string weString)
+                {
+                weString = weString
+                                 .Remove(weString.Length - 2)
+                                 .Remove(0, 1);
+                return weString;
+                }
+            protected float StrToFlo(string weString)
+                {
+                return Convert.ToSingle(Obetnij(weString).Replace('.', ','));
+                }
+
+            protected virtual void czytajNumValues(MatchCollection numCol)
+                {
+                // czytanie dancyh numerycznych
+                tOtwarcie.Add(StrToFlo(numCol[0].ToString()));
+                tMax.Add(StrToFlo(numCol[1].ToString()));
+                tMin.Add(StrToFlo(numCol[2].ToString()));
+                tKurs.Add(StrToFlo(numCol[3].ToString()));
+                tOdniesienie.Add(StrToFlo(numCol[5].ToString()));
+                }
+            protected void ZbierzWartosci(string weString)
+                {
+                // na jednym praserze nie leciało jak trzeba, więc są odddzielne
+                var numPraser = new Regex(@">([0-9kmg.]+?)</");
+                MatchCollection numCol = numPraser.Matches(weString);
+
+                var nazwaPraser = new Regex(@">([0-9a-zA-z\(\)\s-&'\#/:]+?)</");
+                MatchCollection nazwaCol = nazwaPraser.Matches(weString);
+
+                var symbolPraser = new Regex(@">\(([0-9A-Z\^\._]+?)\)</");
+                MatchCollection symbolCol = symbolPraser.Matches(weString);
+
+                var dataPraser = new Regex(@">([0-9-:]+?)</");
+                MatchCollection dataCol = dataPraser.Matches(weString);
+
+                string tmps;
+
+                try
+                    {
+                    // dodawanie nazw
+                    tmps = nazwaCol[0].ToString();
+                    tmps = tmps
+                               .Remove(tmps.Length - 2)
+                               .Remove(0, 1);
+                    tNazwa.Add(tmps);
+
+                    // dodwanie symboli
+                    tmps = symbolCol[0].ToString();
+                    tmps = tmps
+                               .Remove(tmps.Length - 3)
+                               .Remove(0, 2);
+                    tSymbol.Add(tmps);
+
+                    // czytanie dancyh numerycznych, żeby tylko overridować tą metodę przy czytaniu indeksów GPW
+                    // a nie cały zbierajWartości()
+                    czytajNumValues(numCol);
+
+                    //datka i godzinka
+                    var data = dataCol[0].ToString();
+                    var godz = dataCol[1].ToString();
+                    data = data
+                                .Remove(data.Length - 2)
+                                .Remove(0, 1);
+                    godz = godz
+                                .Remove(godz.Length - 2)
+                                .Remove(0, 1);
+
+                    tDataGodz.Add(new DateTime(Convert.ToInt32(data.Substring(0, 4)),
+                                               Convert.ToInt32(data.Substring(5, 2)),
+                                               Convert.ToInt32(data.Substring(8, 2)),
+                                               Convert.ToInt32(godz.Substring(0, 2)),
+                                               Convert.ToInt32(godz.Substring(3, 2)),
+                                               Convert.ToInt32(godz.Substring(6, 2))));
+                    }
+                catch { }
+
+                }
+
+            protected virtual void dodajDoKolekcji(bool czyWaluta)
+                {
+                for (int i = 0; i < tNazwa.Count; i++)
+                    {
+                    numKolekcja.Add(new daneNumTabeli(tDataGodz[i],
+                                                        tNazwa[i],
+                                                        tSymbol[i],
+                                                        tKurs[i],
+                                                        tMax[i],
+                                                        tMin[i],
+                                                        tOtwarcie[i],
+                                                        tOdniesienie[i],
+                                                        czyWaluta));
+                    }
+                }
+            public virtual void Prasuj(string url, string plik, string xmlBackupPlik, bool czyWaluta)
+                {
+                // próba pobrania
+                Pobierz(url, staleapki.appdir + staleapki.tmpdir + plik);
+
+                try
+                    {
+                    string[] aStooqIndeksy = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + plik);
+
+                    var tabPraser = new Regex("<table (.+?)</table>");
+                    MatchCollection matches = tabPraser.Matches(aStooqIndeksy[0]);
+
+                    foreach (var m in matches)
+                        {
+                        if (m.ToString().Contains("Poprz. kurs") && !(m.ToString().Contains("c></span")))
+                            {
+                            ZbierzWartosci(m.ToString());
+                            }
+                        }
+
+                    dodajDoKolekcji(czyWaluta);
+
+                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk);
+                    Action b = () => backupXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik,this.serwis,this.typ);
+                    b.BeginInvoke(null,null);
+                    }
+                catch
+                    {
+                    //numKolekcja.Add(new daneNumTabeli(DateTime.Now, "Błąd ładowania danych", "", 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+                    Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
+                    Action w = () => wczytajXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
+                    w.BeginInvoke(null, null);
+                    }
+                }
+
+            // Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
+            // dobrego odczytu
+            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wrzucana lista do xml
+            #region === metodki backupa i wczytania z xml ===
+            protected virtual void backupXML(string plikXml,string serwis, string typ)
+              {
+                  if (numKolekcja.Count > 0)
+                      {
+                      var xmlFile = new XElement(typ.Replace(' ','_'), new XAttribute("Data", DateTime.Now.ToString("dd-MM-yyyy")));
+
+                      foreach (var elem in numKolekcja)
+                          {
+                          var x = new XElement("Row",
+                              new XAttribute("Nazwa",elem.Nazwa),
+                              new XAttribute("Symbol", elem.Symbol),
+                              new XAttribute("Data", elem.Data),
+                              new XAttribute("Kurs", elem.Kurs),
+                              new XAttribute("MaxMin", elem.MaxMin),
+                              new XAttribute("Zmiana", elem.Zmiana),
+                              new XAttribute("ZmianaProc", elem.ZmianaProc),
+                              new XAttribute("Otwarcie", elem.Otwarcie),
+                              new XAttribute("Odniesienie", elem.Odniesienie));
+
+                          xmlFile.Add(x);
+                          }
+
+                      xmlFile.Save(plikXml);
+                      Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOutOK);
+                      }
+                  else
+                      Loger.dodajDoLogaError(serwis + typ + messages.xmlOutFail);
+              }
+
+            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wczytywana lista z xml
+            protected virtual void wczytajXML(string plikXml, string serwis, string typ, bool czyWaluta)
+                 {
+                     if (File.Exists(plikXml))
+                         {
+                         var xmlFile = XElement.Load(plikXml);
+
+                         foreach (var xelem in xmlFile.Elements())
+                             {
+                             // rozbicie MaxMin na dwie wartośći do tabeli
+                             string mm = (string)xelem.Attribute("MaxMin");
+                             string[] g = mm.Replace(" | ", "|").Split('|');
+
+                             // konwersja daty
+                             DateTime dt = new DateTime();
+                             dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
+
+                             numKolekcja.Add(new daneNumTabeli(dt,
+                                 (string)xelem.Attribute("Nazwa"),
+                                 (string)xelem.Attribute("Symbol"),
+                                 (float)xelem.Attribute("Kurs"),
+                                 Convert.ToSingle(g[0]),
+                                 Convert.ToSingle(g[1]),
+                                 (float)xelem.Attribute("Otwarcie"),
+                                 (float)xelem.Attribute("Odniesienie"),
+                                 czyWaluta));
+                             }
+                         Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOk);
+                         }
+                     else
+                         Loger.dodajDoLogaError(serwis + typ + messages.xmlFail);
+                 }
+            #endregion             
+            }
+
+        // **********************
+        // ======== bazowa klasa dla danych do akcji z procedurkami i zmiennymi dla nich //
+        // **********************
+        internal abstract class NumAkcje : NumTab
+            {
+            //protected List<int> tObrot = new List<int>();  // jeśli ma być bez k,m,g
+            //protected List<int> tWolumen = new List<int>();
+            protected List<string> tObrot = new List<string>();
+            protected List<string> tWolumen = new List<string>();
+            protected List<int> tTransakcje = new List<int>();
+
+            new protected List<daneAkcji> numKolekcja = new List<daneAkcji>();
+
             // =====
             // zbiera nazwy ze stooq //
             protected string zbierzNazwy(string weString, string regexString)
@@ -195,7 +406,6 @@ namespace klasyakcjowe
                 else
                     return 0.0F;
                 }
-
 
             // ======
             // zbiera inne wartości ze stooq //
@@ -251,7 +461,23 @@ namespace klasyakcjowe
                     return 0;       // jeśli wartość była pusta //
                 }
 
+            protected string zbierzWatroscString(string weString, string regexParam)
+                {
+                string s;
 
+                var praser = new Regex("_" + regexParam + @">(\.*[^<]*)");
+                var m = praser.Matches(weString);
+
+                // wywalenie niepotrzebnych znaków, do '>'//
+                s = m[0].ToString();
+
+                s = s
+                    .Remove(0, s.Length - (s.Length - s.IndexOf('>')) + 1)
+                    .Replace('.', ',');
+
+                return s;
+                }
+            
             // ======
             // zbiera datę i godzinę ze stooq //
             protected DateTime zbierzDateGodz(string weString, string regexStringData, string regexStringGodz)
@@ -279,224 +505,18 @@ namespace klasyakcjowe
                                     Convert.ToInt32(gs.Substring(3, 2)),
                                     Convert.ToInt32(gs.Substring(6, 2)));
                 }
-            }
 
-
-        // **********************
-        // ======== bazowa klasa dla danych do tabel z indeksami, wautami i towarami z procedurkami i zmiennymi dla nich //
-        // **********************
-        internal abstract class NumTabela : NumAkcje   // dziedziczy żeby były te same tempowe tableki
-            {
-            protected List<daneNumTabeli> numKolekcja;
-
-            // żeby się nie powtarzać nizej
-            private float StrToFlo(string weString)
+             //Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
+             //dobrego odczytu
+             //parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wrzucana lista do xml
+            #region === metodki backupa i wczytania z xml ===
+            protected override void backupXML(string plikXml,string serwis,string typ)
                 {
-                weString = weString
-                                   .Remove(weString.Length - 2)
-                                   .Remove(0, 1)
-                                   .Replace('.', ',');
-                return Convert.ToSingle(weString);
-                }
-
-            protected void ZbierzWartosci(string weString)
-                {
-                // na jednym praserze nie leciało jak trzeba, więc są odddzielne
-
-                var numPraser = new Regex(@">([0-9.]+?)</");
-                MatchCollection numCol = numPraser.Matches(weString);
-
-                var nazwaPraser = new Regex(@">([0-9a-zA-z\(\)\s-&'\#/:]+?)</");
-                MatchCollection nazwaCol = nazwaPraser.Matches(weString);
-
-                var symbolPraser = new Regex(@">\(([0-9A-Z\^\._]+?)\)</");
-                MatchCollection symbolCol = symbolPraser.Matches(weString);
-
-                var dataPraser = new Regex(@">([0-9-:]+?)</");
-                MatchCollection dataCol = dataPraser.Matches(weString);
-
-                string tmps;
-
-                try
+                if (numKolekcja.Count > 0)
                     {
-                    // dodawanie nazw
-                    tmps = nazwaCol[0].ToString();
-                    tmps = tmps
-                               .Remove(tmps.Length - 2)
-                               .Remove(0, 1);
-                    tNazwa.Add(tmps);
+                    var xmlFile = new XElement(typ.Replace(' ', '_'), new XAttribute("Data", DateTime.Now.ToString("dd-MM-yyyy")));
 
-                    // dodwanie symboli
-                    tmps = symbolCol[0].ToString();
-                    tmps = tmps
-                               .Remove(tmps.Length - 3)
-                               .Remove(0, 2);
-                    tSymbol.Add(tmps);
-
-                    // czytanie dancyh numerycznych
-                    tOtwarcie.Add(StrToFlo(numCol[0].ToString()));
-                    tMax.Add(StrToFlo(numCol[1].ToString()));
-                    tMin.Add(StrToFlo(numCol[2].ToString()));
-                    tKurs.Add(StrToFlo(numCol[3].ToString()));
-                    tOdniesienie.Add(StrToFlo(numCol[5].ToString()));
-
-                    //datka i godzinka
-                    var data = dataCol[0].ToString();
-                    var godz = dataCol[1].ToString();
-                    data = data
-                                .Remove(data.Length - 2)
-                                .Remove(0, 1);
-                    godz = godz
-                                .Remove(godz.Length - 2)
-                                .Remove(0, 1);
-
-                    tDataGodz.Add(new DateTime(Convert.ToInt32(data.Substring(0, 4)),
-                                               Convert.ToInt32(data.Substring(5, 2)),
-                                               Convert.ToInt32(data.Substring(8, 2)),
-                                               Convert.ToInt32(godz.Substring(0, 2)),
-                                               Convert.ToInt32(godz.Substring(3, 2)),
-                                               Convert.ToInt32(godz.Substring(6, 2))));
-                    }
-                catch { }
-
-                }
-
-            // Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
-            // dobrego odczytu
-            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wrzucana lista do xml
-            #region XML Action
-            protected Action<string, string, string, List<daneNumTabeli>> backupXML = (plikXml, serwis, typ, lista) =>
-              {
-                  if (lista.Count > 0)
-                      {
-                      var xmlFile = new XElement(typ.Replace(' ','_'), new XAttribute("Data", DateTime.Now.ToString("dd-MM-yyyy")));
-
-                      foreach (var elem in lista)
-                          {
-                          var x = new XElement("Row",
-                              new XAttribute("Nazwa",elem.Nazwa),
-                              new XAttribute("Symbol", elem.Symbol),
-                              new XAttribute("Data", elem.Data),
-                              new XAttribute("Kurs", elem.Kurs),
-                              new XAttribute("MaxMin", elem.MaxMin),
-                              new XAttribute("Zmiana", elem.Zmiana),
-                              new XAttribute("ZmianaProc", elem.ZmianaProc),
-                              new XAttribute("Otwarcie", elem.Otwarcie),
-                              new XAttribute("Odniesienie", elem.Odniesienie));
-
-                          xmlFile.Add(x);
-                          }
-
-                      xmlFile.Save(plikXml);
-                      Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOutOK);
-                      }
-                  else
-                      Loger.dodajDoLogaError(serwis + typ + messages.xmlOutFail);
-              };
-
-            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wczytywana lista z xml
-            protected Action<string, string, string, List<daneNumTabeli>> wczytajXML = (plikXml, serwis, typ, lista) =>
-                 {
-                     if (File.Exists(plikXml))
-                         {
-                         var xmlFile = XElement.Load(plikXml);
-
-                         foreach (var xelem in xmlFile.Elements())
-                             {
-                             // rozbicie MaxMin na dwie wartośći do tabeli
-                             string mm = (string)xelem.Attribute("MaxMin");
-                             string[] g = mm.Replace(" | ", "|").Split('|');
-
-                             // konwersja daty
-                             DateTime dt = new DateTime();
-                             dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
-
-                             lista.Add(new daneNumTabeli(dt,
-                                 (string)xelem.Attribute("Nazwa"),
-                                 (string)xelem.Attribute("Symbol"),
-                                 (float)xelem.Attribute("Kurs"),
-                                 Convert.ToSingle(g[0]),
-                                 Convert.ToSingle(g[1]),
-                                 (float)xelem.Attribute("Otwarcie"),
-                                 (float)xelem.Attribute("Odniesienie")));
-                             }
-                         Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOk);
-                         }
-                     else
-                         Loger.dodajDoLogaError(serwis + typ + messages.xmlFail);
-                 };
-            #endregion             
-
-            public override void Prasuj(string url, string plik, string xmlBackupPlik)
-                {
-                // próba pobrania
-                Pobierz(url, staleapki.appdir + staleapki.tmpdir  + plik);
-                numKolekcja = new List<daneNumTabeli>();
-
-                try
-                    {
-                    string[] aStooqIndeksy = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + plik);
-
-                    var tabPraser = new Regex("<table (.+?)</table>");
-                    MatchCollection matches = tabPraser.Matches(aStooqIndeksy[0]);
-
-                    foreach (var m in matches)
-                        {
-                        if (m.ToString().Contains("Poprz. kurs") && !(m.ToString().Contains("c></span")))
-                            {
-                            ZbierzWartosci(m.ToString());
-                            }
-                        }
-
-                    for (int i = 0; i < tNazwa.Count; i++)
-                        {
-                        numKolekcja.Add(new daneNumTabeli(tDataGodz[i],
-                                                            tNazwa[i],
-                                                            tSymbol[i],
-                                                            tKurs[i],
-                                                            tMax[i],
-                                                            tMin[i],
-                                                            tOtwarcie[i],
-                                                            tOdniesienie[i]));
-                        }
-                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk + " (" + numKolekcja.Count + " rekordów)");
-                    backupXML.BeginInvoke(staleapki.appdir + staleapki.tmpdir  + xmlBackupPlik, this.serwis, this.typ, numKolekcja, null, null);
-                    }
-                catch 
-                    { 
-                    //numKolekcja.Add(new daneNumTabeli(DateTime.Now, "Błąd ładowania danych", "", 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-                    Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
-                    wczytajXML.Invoke(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, numKolekcja);
-                    }
-                }
-            }
-    #endregion
-
-    //*********************************************
-    // ====== I M P L E M E N T A C J E ======= //
-    //*********************************************
-
-    #region implementacje
-        // ================
-        // klasa zajmująca się akcjami //
-        // ================
-        class Akcje : NumAkcje
-            {
-            private List<daneAkcji> akcjeKolekcja;
-
-            public Akcje(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
-
-            // Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
-            // dobrego odczytu
-            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wrzucana lista do xml
-            #region XML Action
-            protected Action<string, string, string, List<daneAkcji>> backupXML = (plikXml, serwis, typ, lista) =>
-            {
-                if (lista.Count > 0)
-                    {
-                    var xmlFile = new XElement(typ.Replace(' ','_'), new XAttribute("Data", DateTime.Now.ToString("dd-MM-yyyy")));
-
-                    foreach (var elem in lista)
+                    foreach (var elem in numKolekcja)
                         {
                         var x = new XElement("Row",
                             new XAttribute("Nazwa", elem.Nazwa),
@@ -520,11 +540,11 @@ namespace klasyakcjowe
                     }
                 else
                     Loger.dodajDoLogaError(serwis + typ + messages.xmlOutFail);
-            };
+                }
 
             // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wczytywana lista z xml
-            protected Action<string, string, string, List<daneAkcji>> wczytajXML = (plikXml, serwis, typ, lista) =>
-            {
+            protected override void wczytajXML(string plikXml,string serwis,string typ, bool czyWaluta)
+                {
                 if (File.Exists(plikXml))
                     {
                     var xmlFile = XElement.Load(plikXml);
@@ -539,7 +559,7 @@ namespace klasyakcjowe
                         DateTime dt = new DateTime();
                         dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
 
-                        lista.Add(new daneAkcji(dt,
+                        numKolekcja.Add(new daneAkcji(dt,
                             (string)xelem.Attribute("Nazwa"),
                             (string)xelem.Attribute("Symbol"),
                             (float)xelem.Attribute("Kurs"),
@@ -547,8 +567,8 @@ namespace klasyakcjowe
                             Convert.ToSingle(g[1]),
                             (float)xelem.Attribute("Otwarcie"),
                             (float)xelem.Attribute("Odniesienie"),
-                            (int)xelem.Attribute("Wolumen"),
-                            (int)xelem.Attribute("Obrot"),
+                            (string)xelem.Attribute("Wolumen"),
+                            (string)xelem.Attribute("Obrot"),
                             (int)xelem.Attribute("Transakcje")));
 
                         }
@@ -556,25 +576,34 @@ namespace klasyakcjowe
                     }
                 else
                     Loger.dodajDoLogaError(serwis + typ + messages.xmlFail);
-            };
+                }
             #endregion             
+            }
+    #endregion
 
-            public override void Prasuj(string url, string plik, string xmlBackupPlik)
+
+    //*********************************************
+    // ====== I M P L E M E N T A C J E ======= //
+    //*********************************************
+    #region implementacje
+        // ================
+        // klasa zajmująca się akcjami //
+        // ================
+        class Akcje : NumAkcje
+            {
+            public Akcje(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
+
+            public override void Prasuj(string url, string plik, string xmlBackupPlik, bool czyWaluta)
                 {
                 // próba pobrania
                 Pobierz(url, staleapki.appdir + staleapki.tmpdir + plik);
 
-                akcjeKolekcja = new List<daneAkcji>();
                 try
                     {
                     string[] aStooqAkcje = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + plik);
 
                     // szukanie tabel z danymi, taki główny regex
                     var tabPraser = new Regex("<table (.+?)</table>");
-
-                    List<int> tObrot = new List<int>();
-                    List<int> tWolumen = new List<int>();
-                    List<int> tTransakcje = new List<int>();
 
                     foreach (var m in tabPraser.Matches(aStooqAkcje[0]))
                         {
@@ -597,15 +626,17 @@ namespace klasyakcjowe
                             tMin.Add(zbierzWartosciFloat(tmpm, "l"));
                             tOtwarcie.Add(zbierzWartosciFloat(tmpm, "o"));
                             tOdniesienie.Add(zbierzWartosciFloat(tmpm, "p"));
-                            tWolumen.Add(zbierzWartosciInt(tmpm, "v2"));
-                            tObrot.Add(zbierzWartosciInt(tmpm, "r2"));
+                            // tWolumen.Add(zbierzWatroscInt(tmpm, "v2")); // jesli chcesz bez k,m,g
+                            //tObrot.Add(zbierzWatroscInt(tmpm, "r2"));
+                            tWolumen.Add(zbierzWatroscString(tmpm, "v2")); 
+                            tObrot.Add(zbierzWatroscString(tmpm, "r2"));
                             tTransakcje.Add(zbierzWartosciInt(tmpm, "n3"));
                             }
                         }
 
                     for (int i = 0; i < tNazwa.Count; i++)
                         {
-                        akcjeKolekcja.Add(new daneAkcji(tDataGodz[i],
+                        numKolekcja.Add(new daneAkcji(tDataGodz[i],
                                                         tNazwa[i],
                                                         tSymbol[i],
                                                         tKurs[i],
@@ -617,34 +648,76 @@ namespace klasyakcjowe
                                                         tObrot[i],
                                                         tTransakcje[i]));
                         }
-                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk + " (" + akcjeKolekcja.Count + " rekordów)");
-                    backupXML.BeginInvoke(staleapki.appdir + staleapki.tmpdir  + xmlBackupPlik, this.serwis, this.typ, akcjeKolekcja, null, null);
+                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk);
+                    Action b = () => backupXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ);
+                    b.BeginInvoke(null, null);
                     }           
                 catch 
                     { 
                     // akcjeKolekcja.Add(new daneAkcji(DateTime.Now, "Błąd ładowania danych", "", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0));
                     Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
-                    wczytajXML.Invoke(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, akcjeKolekcja);
+                    Action w = () => wczytajXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
+                    w.BeginInvoke(null, null);
                     }
                 }
 
             public List<daneAkcji> generujTabele()
                 {
-                Prasuj(adresy.StooqAkcjeGPW,nazwyPlikow.PStooqAkcje,nazwyPlikow.xmlStooqAkcje);
-                return akcjeKolekcja;
+                Prasuj(adresy.StooqAkcjeGPW,nazwyPlikow.PStooqAkcje,nazwyPlikow.xmlStooqAkcje, false);
+                return numKolekcja;
                 }
             }
 
         // ================
         // klasa zajmująca się indeksami GPW //
         // ================
-        class IndeksyGPW : NumTabela
+        class IndeksyGPW : NumAkcje
             {
             public IndeksyGPW(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
 
-            public List<daneNumTabeli> generujTabele()
+            // czytanie dancyh numerycznych (overridowana metoda na typ daneAkcji)
+            protected override void czytajNumValues(MatchCollection numCol)
                 {
-                Prasuj(adresy.StooqIndeksyGPw, nazwyPlikow.PStooqIndeksyGPW,nazwyPlikow.xmlStooqIndeksyGPW);
+                tOtwarcie.Add(StrToFlo(numCol[0].ToString()));
+                tMax.Add(StrToFlo(numCol[1].ToString()));
+                tMin.Add(StrToFlo(numCol[2].ToString()));
+                tKurs.Add(StrToFlo(numCol[3].ToString()));
+                tOdniesienie.Add(StrToFlo(numCol[5].ToString()));
+                if (numCol.Count == 9)
+                    {
+                    tWolumen.Add(Obetnij(numCol[6].ToString()));
+                    tObrot.Add(Obetnij(numCol[7].ToString()));
+                    tTransakcje.Add(Convert.ToInt32(Obetnij(numCol[8].ToString())));
+                    }
+                else
+                    { // jeśli nie ma tych wartości na stooq //
+                    tWolumen.Add("---");
+                    tObrot.Add("---");
+                    tTransakcje.Add(0);
+                    }
+                }
+            // dodawanie danych do kolekcji (overridowana metoda na typ daneAkcji)
+            protected override void dodajDoKolekcji(bool czyWaluta)
+                {
+                for (int i = 0; i < tNazwa.Count; i++)
+                    {
+                    this.numKolekcja.Add(new daneAkcji(tDataGodz[i],
+                                                        tNazwa[i],
+                                                        tSymbol[i],
+                                                        tKurs[i],
+                                                        tMax[i],
+                                                        tMin[i],
+                                                        tOtwarcie[i],
+                                                        tOdniesienie[i],
+                                                        tWolumen[i],
+                                                        tObrot[i],
+                                                        tTransakcje[i]));
+                    }
+                }
+
+            public List<daneAkcji> generujTabele()
+                {
+                Prasuj(adresy.StooqIndeksyGPw, nazwyPlikow.PStooqIndeksyGPW,nazwyPlikow.xmlStooqIndeksyGPW, false);
                 return numKolekcja;
                 }
             }
@@ -652,43 +725,41 @@ namespace klasyakcjowe
         // ================
         // klasa zajmująca się indeksami światowymi //
         // ================
-        class Indeksy : NumTabela
+        class Indeksy : NumTab
             {
             public Indeksy(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
 
             public List<daneNumTabeli> generujTabele()
                 {
-                Prasuj(adresy.StooqIndeksySwiat,nazwyPlikow.PStooqIndeksy,nazwyPlikow.xmlStooqIndeksy);
+                Prasuj(adresy.StooqIndeksySwiat,nazwyPlikow.PStooqIndeksy,nazwyPlikow.xmlStooqIndeksy, false);
                 return numKolekcja;
                 }
-
             }
 
         // ================
         // klasa zajmująca się indeksami fut //
         // ================
-        class IndeksyFut : NumTabela
+        class IndeksyFut : NumTab
             {
             public IndeksyFut(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
 
             public List<daneNumTabeli> generujTabele()
                 {
-                Prasuj(adresy.StooqIndeksyFutures,nazwyPlikow.PStooqIndeksyFut,nazwyPlikow.xmlStooqIndeksyFut);
+                Prasuj(adresy.StooqIndeksyFutures,nazwyPlikow.PStooqIndeksyFut,nazwyPlikow.xmlStooqIndeksyFut, false);
                 return numKolekcja;
                 }
-
             }
     
         // ================
         // klasa zajmująca się towarami //
         // ================
-        class Towary : NumTabela
+        class Towary : NumTab
             {
             public Towary(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
 
             public List<daneNumTabeli> generujTabele()
                 {
-                Prasuj(adresy.StooqTowary,nazwyPlikow.PStooqTowary,nazwyPlikow.xmlStooqTowary);
+                Prasuj(adresy.StooqTowary,nazwyPlikow.PStooqTowary,nazwyPlikow.xmlStooqTowary, false);
                 return numKolekcja;
                 }
             }
@@ -696,125 +767,14 @@ namespace klasyakcjowe
         // ================
         // klasa zajmująca się walutami //
         // ================
-        class Waluty : NumTabela
+        class Waluty : NumTab
             {
             public Waluty(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
-       
-            public List<daneWaluty> walutyKolekcja;
 
-            // Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
-            // dobrego odczytu
-            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wrzucana lista do xml
-            #region XML Action
-            protected Action<string, string, string, List<daneWaluty>> backupXML = (plikXml, serwis, typ, lista) =>
-            {
-                if (lista.Count > 0)
-                    {
-                    var xmlFile = new XElement(typ.Replace(' ','_'), new XAttribute("Data", DateTime.Now.ToString("dd-MM-yyyy")));
-
-                    foreach (var elem in lista)
-                        {
-                        var x = new XElement("Row",
-                            new XAttribute("Nazwa",elem.Nazwa),
-                            new XAttribute("Symbol", elem.Symbol),
-                            new XAttribute("Data", elem.Data),
-                            new XAttribute("Kurs", elem.Kurs),
-                            new XAttribute("MaxMin", elem.MaxMin),
-                            new XAttribute("Zmiana", elem.Zmiana),
-                            new XAttribute("ZmianaProc", elem.ZmianaProc),
-                            new XAttribute("Otwarcie", elem.Otwarcie),
-                            new XAttribute("Odniesienie", elem.Odniesienie));
-
-                        xmlFile.Add(x);
-                        }
-
-                    xmlFile.Save(plikXml);
-                    Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOutOK);
-                    }
-                else
-                    Loger.dodajDoLogaError(serwis + typ + messages.xmlOutFail);
-            };
-
-            // parametry: plikxml - ścieżka do xml, sewris i typ - do loga info, lista - wczytywana lista z xml
-            protected Action<string, string, string, List<daneWaluty>> wczytajXML = (plikXml, serwis, typ, lista) =>
-            {
-                if (File.Exists(plikXml))
-                    {
-                    var xmlFile = XElement.Load(plikXml);
-
-                    foreach (var xelem in xmlFile.Elements())
-                        {
-                        // rozbicie MaxMin na dwie wartośći do tabeli
-                        string mm = (string)xelem.Attribute("MaxMin");
-                        string[] g = mm.Replace(" | ", "|").Split('|');
-
-                        // konwersja daty
-                        DateTime dt = new DateTime();
-                        dt = DateTime.ParseExact((string)xelem.Attribute("Data"), staleapki.formatDaty, null);
-
-                        lista.Add(new daneWaluty(dt,
-                            (string)xelem.Attribute("Nazwa"),
-                            (string)xelem.Attribute("Symbol"),
-                            (float)xelem.Attribute("Kurs"),
-                            Convert.ToSingle(g[0]),
-                            Convert.ToSingle(g[1]),
-                            (float)xelem.Attribute("Otwarcie"),
-                            (float)xelem.Attribute("Odniesienie")));
-                        }
-                    Loger.dodajDoLogaInfo(serwis + typ + messages.xmlOk);
-                    }
-                else
-                    Loger.dodajDoLogaError(serwis + typ + messages.xmlFail);
-            };
-            #endregion             
-
-            public override void Prasuj(string url, string plik, string xmlBackupPlik)
+            public List<daneNumTabeli> generujTabele()
                 {
-                // próba pobrania
-                Pobierz(url, staleapki.appdir + staleapki.tmpdir  + plik);
-                walutyKolekcja = new List<daneWaluty>();
-
-                try
-                    {
-                    string[] aStooqIndeksy = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + plik);
-
-                    var tabPraser = new Regex("<table (.+?)</table>");
-                    MatchCollection matches = tabPraser.Matches(aStooqIndeksy[0]);
-
-                    foreach (var m in matches)
-                        {
-                        if (m.ToString().Contains("Poprz. kurs") && !(m.ToString().Contains("c></span")))
-                            {
-                            ZbierzWartosci(m.ToString());
-                            }
-                        }
-
-                    for (int i = 0; i < tNazwa.Count; i++)
-                        {
-                        walutyKolekcja.Add(new daneWaluty(tDataGodz[i],
-                                                            tNazwa[i],
-                                                            tSymbol[i],
-                                                            tKurs[i],
-                                                            tMax[i],
-                                                            tMin[i],
-                                                            tOtwarcie[i],
-                                                            tOdniesienie[i]));
-                        }
-                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk + " (" + walutyKolekcja.Count + " rekordów)");
-                    backupXML.BeginInvoke(staleapki.appdir + staleapki.tmpdir  + xmlBackupPlik, this.serwis, this.typ, walutyKolekcja, null, null);
-                    }
-                catch 
-                    { 
-                    //walutyKolekcja.Add(new daneWaluty(DateTime.Now, "Błąd ładowania danych", "", 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-                    Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
-                    wczytajXML.Invoke(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, walutyKolekcja);
-                    }
-                }
-
-            public List<daneWaluty> generujTabele()
-                {
-                Prasuj(adresy.StooqWaluty,nazwyPlikow.PStooqWaluty,nazwyPlikow.xmlStooqWaluty);
-                return walutyKolekcja;
+                Prasuj(adresy.StooqWaluty,nazwyPlikow.PStooqWaluty,nazwyPlikow.xmlStooqWaluty,true);
+                return numKolekcja;
                 }
             }
     #endregion
