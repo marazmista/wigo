@@ -125,7 +125,7 @@ namespace klasyakcjowe
             protected List<float> tOtwarcie = new List<float>();
             protected List<float> tOdniesienie = new List<float>();
 
-            protected List<daneNumTabeli> numKolekcja = new List<daneNumTabeli>();
+            protected List<daneNumTabeli> numKolekcja = new List<daneNumTabeli>(400);
             //dane do loga
             protected string serwis, typ;
 
@@ -355,7 +355,7 @@ namespace klasyakcjowe
             protected List<string> tWolumen = new List<string>();
             protected List<int> tTransakcje = new List<int>();
 
-            new protected List<daneAkcji> numKolekcja = new List<daneAkcji>();
+            new protected List<daneAkcji> numKolekcja = new List<daneAkcji>(450);
 
             // =====
             // zbiera nazwy ze stooq //
@@ -431,7 +431,7 @@ namespace klasyakcjowe
 
                 if (!(s == ""))  // jeśli nie puste //
                     {
-                    if (s.Contains("k") || s.Contains("m") || s.Contains("g")) // jeśli ma mnożnik //
+                    if (s.Contains("k") | s.Contains("m") | s.Contains("g")) // jeśli ma mnożnik //
                         {
                         // konwersja do inta i wywalanie mnożnika z końca (k, m albo g), żeby się skonwertowało//
                         tmpflo = Convert.ToSingle(s.Remove(s.Length - 1));
@@ -660,7 +660,7 @@ namespace klasyakcjowe
                     w.BeginInvoke(null, null);
                     }
                 }
-
+            
             public List<daneAkcji> generujTabele()
                 {
                 Prasuj(adresy.StooqAkcjeGPW,nazwyPlikow.PStooqAkcje,nazwyPlikow.xmlStooqAkcje, false);

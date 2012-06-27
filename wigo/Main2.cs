@@ -24,24 +24,63 @@ using klasyakcjowe;
 namespace mm_gielda
     {
 
+    class daneWzrostySpadki
+        {
+        public string Nazwa { get; set; }
+        public float Kurs { get; set; }
+        public string ZmianaProc { get; set; }
+        public float Zmiana { get; set; }
+
+        public daneWzrostySpadki() { }
+
+        public daneWzrostySpadki(string nazwa,float kurs, string zmianProc, float zmiana)
+            {
+            this.Nazwa = nazwa;
+            this.Kurs = kurs;
+            this.ZmianaProc = zmianProc;
+            this.Zmiana = zmiana;
+            }           
+        }
+
+    class daneNajaktyniejsze
+        {
+        // Obrot jest string tylko dlatego, żeby w tabeli na podsumowaniu nie było liczb typu 100000000.
+        // I po to też te wszystkie ciągłe konwersje ToString() albo ToInt32() niżej w metodzie filtrujNajaktwyniejsze // 
+        public string Nazwa { get; set; }
+        public float Kurs { get; set; }
+        public string Obrot { get; set; } 
+        public string Wolumen { get; set; }
+
+        public daneNajaktyniejsze() { }
+
+        public daneNajaktyniejsze(string nazwa, float kurs, string obrot, string wolumen)
+            {
+            this.Nazwa = nazwa;
+            this.Kurs = kurs;
+            this.Obrot = obrot;
+            this.Wolumen = wolumen;
+            }
+        }
+
     // ================
     // klasa z danymi dla tabel żeby wątki sobie je generowały i wypełniały kiedy chcą //
     // ================
     static class daneTabel
         {
 
-        // ogólne tabele //
+        #region == ogólne tabele ==
         internal static List<daneAkcji> tAkcje;
         internal static List<daneAkcji> tIndeksyGPW;
         internal static List<daneNumTabeli> tIndeksy;
         internal static List<daneNumTabeli> tIndeksyFut;
         internal static List<daneNumTabeli> tTowary;
-        internal static List<daneNumTabeli> tWaluty;
+        internal static List<daneNumTabeli> tWaluty; 
+        #endregion
 
         // newsy //
         internal static List<daneNewsa> NK;
 
-        // tabele indeksów gpw //
+        #region == tabele indeksów gpw ==
         internal static List<daneAkcji> tWig;
         internal static List<daneAkcji> tWig20;
         internal static List<daneAkcji> tmWig40;
@@ -62,7 +101,26 @@ namespace mm_gielda
         internal static List<daneAkcji> tWigSurowc;
         internal static List<daneAkcji> tWigTelkom;
         internal static List<daneAkcji> tWigUkrain;
-        internal static List<daneAkcji> tRespect;
+        internal static List<daneAkcji> tRespect; 
+        #endregion
+
+        #region == male tabele top indeksow ==
+        internal static List<daneWzrostySpadki> tWigWzrosty;
+        internal static List<daneWzrostySpadki> tWigSpadki;
+        internal static List<daneNajaktyniejsze> tWigNajaktywniejsze;
+
+        internal static List<daneWzrostySpadki> tWig20Wzrosty;
+        internal static List<daneWzrostySpadki> tWig20Spadki;
+        internal static List<daneNajaktyniejsze> tWig20Najaktywniejsze;
+
+        internal static List<daneWzrostySpadki> tMwig40Wzrosty;
+        internal static List<daneWzrostySpadki> tMwig40Spadki;
+        internal static List<daneNajaktyniejsze> tMwig40Najaktywniejsze;
+
+        internal static List<daneWzrostySpadki> tSwig80Wzrosty;
+        internal static List<daneWzrostySpadki> tSwig80Spadki;
+        internal static List<daneNajaktyniejsze> tSwig80Najaktywniejsze; 
+        #endregion
         }
 
     #region === logująca klasa ===
@@ -114,8 +172,8 @@ namespace mm_gielda
     public partial class MainWindow
         {
         //  lista indeksów //
-        List<string> listaIndeksyGPW = new List<string> { "wig", "wig20","mwig40","swig80","respect","wig_banki","wig_budow","wig_cee","wig_chemia",
-                "wig_dewel","wig_energ","wig_info","wig_media","wig_paliwa","wig_plus","wig_poland","wig_spozyw","wig_surowc","wig_telkom","wig_ukrain" };
+        string[] listaIndeksyGPW = { "wig", "wig20","mwig40","swig80","wig_banki","wig_budow","wig_cee","wig_chemia","wig_dewel","wig_energ","wig_info","wig_media",
+                                   "wig_paliwa","wig_plus","wig_poland","wig_spozyw","wig_surowc","wig_telkom","wig_ukrain","respect" };
 
         void Pobierz(string url, string sciezka)
             {
@@ -203,7 +261,7 @@ namespace mm_gielda
             }
 
         //Action<string, List<daneAkcji>> wczytajTabeleIndeksu = (indeks, listaCel) =>
-        void wczytajTabeleIndeksu(string indeks, List<daneAkcji> listaCel,DataGrid grid)
+        void wczytajTabeleIndeksu(string indeks,ref List<daneAkcji> listaCel,DataGrid grid)
             {
             if (File.Exists(staleapki.appdir + staleapki.bazadir + indeks + ".txt"))
                 {
@@ -211,13 +269,14 @@ namespace mm_gielda
                     {
                     // wczytuje skład indeksu z pliku
                     string[] sklad = File.ReadAllLines(staleapki.appdir + staleapki.bazadir + indeks + ".txt");
-                    List<daneAkcji> tmpl = new List<daneAkcji>();   //tempowa lista, żeby potem przypisać do static listy //
+                    var tmpl = new List<daneAkcji>();   //tempowa lista, żeby potem przypisać do static listy //
 
                     // leci po tablicy i kopiuje te akcje, które są w indeksie //
                     for (int i = 0; i < sklad.Length; i++)
                         {
                         var row = daneTabel.tAkcje.Find(a => a.Symbol == sklad[i]);
-                        tmpl.Add(row);
+                        if (row != null)
+                            tmpl.Add(row);  
                         }
                     listaCel = tmpl;
 
@@ -230,7 +289,80 @@ namespace mm_gielda
                 Loger.dodajDoLogaError(staleapki.appdir + staleapki.bazadir + indeks + ".txt - Plik nie istnieje!");
             }
 
-        #region === delegary ogólne dla wątków ===
+        // metodka filtrująca indeksy i wrzucająca do list te akcje które rosną i spadają najbardziej //
+        void filtrujWzrostySpadki(List<daneAkcji> listaZrodlo, ref List<daneWzrostySpadki> listaCelWzrosty, ref List<daneWzrostySpadki> listaCelSpadki)
+            {
+            // sortowanie po zmianie porocentowej //
+            IEnumerable<daneAkcji> tmp1 = listaZrodlo.OrderBy(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
+            IEnumerable<daneAkcji> tmp2 = listaZrodlo.OrderByDescending(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
+
+            // tempowe, żeby potem przypisać do staticów //
+            var tmpW = new List<daneWzrostySpadki>(staleapki.iloscNaj);
+            var tmpS = new List<daneWzrostySpadki>(staleapki.iloscNaj);
+
+            // zbieranie 5 pierwszych i wpisanie do listy typu daneWzrostySpadki //
+            for (byte i = 0; i < staleapki.iloscNaj; i++)
+                {
+                tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa,tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana)));
+                tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa,tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana)));
+                }
+            listaCelWzrosty = tmpW;
+            listaCelSpadki = tmpS;
+            }
+
+        void filtrujNajaktywniejsze(List<daneAkcji> listaZrodlo, ref List<daneNajaktyniejsze> listaCel)
+            {
+            // konwersja mnożników. Można kiedys poprawić jak znajdzie się lepszy sposób...
+            #region = konwersja mnożników obrotu (k,m,g) na liczby, żeby posortować =
+            var convAllTab = new List<daneNajaktyniejsze>(400);
+            for (int i = 0; i < listaZrodlo.Count; i++)
+                {
+                float tmpflo;
+                string tmps = listaZrodlo[i].Obrot.Replace('.', ',');
+                if (tmps.Contains('k') | tmps.Contains('m') | tmps.Contains('g'))
+                    {
+                    tmpflo = Convert.ToSingle(tmps.Remove(tmps.Length - 1));
+                    // identyfikacja mnożnika i przemnożenie
+                    switch (tmps[tmps.Length - 1])
+                        {
+                        case 'k':
+                            tmpflo *= 1000;
+                            break;
+                        case 'm':
+                            tmpflo *= 1000000;
+                            break;
+                        case 'g':
+                            tmpflo *= 1000000000;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                else
+                    {
+                    tmpflo = Convert.ToInt32(tmps);
+                    }
+                int t = (int)tmpflo;
+                convAllTab.Add(new daneNajaktyniejsze(listaZrodlo[i].Nazwa, listaZrodlo[i].Kurs, t.ToString("D"), listaZrodlo[i].Wolumen));
+                }; 
+            #endregion
+
+            IEnumerable<daneNajaktyniejsze> sConvTab = convAllTab.OrderByDescending(x => Convert.ToInt32(x.Obrot)).Take(staleapki.iloscNaj);
+
+            var tmpN = new List<daneNajaktyniejsze>(staleapki.iloscNaj);
+
+            for (byte i = 0; i < staleapki.iloscNaj; i++)
+                {
+                // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
+                var row = daneTabel.tAkcje.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
+                string obrotStock = row.Obrot;
+
+                tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, obrotStock, sConvTab.ElementAt(i).Wolumen));
+                }
+            listaCel = tmpN;
+            }
+
+        #region === actiony ogólne dla wątków ===
         Action<Action> genDelegate = (genMetoda) =>
             {
                 try
@@ -243,25 +375,34 @@ namespace mm_gielda
         // z lambdą, edukacyjnie:  Action<DataGrid,List<daneAkcji>> wA = (wpfDataGrid,lista) => { ... }
         Action<DataGrid, List<daneAkcji>> wAkcje = delegate(DataGrid wpfDataGrid, List<daneAkcji> lista)
             {
-                wpfDataGrid.ItemsSource = lista;
+            wpfDataGrid.ItemsSource = lista;
             };
 
         Action<DataGrid, List<daneNumTabeli>> wInne = delegate(DataGrid wpfDataGrid, List<daneNumTabeli> lista)
             {
-                wpfDataGrid.ItemsSource = lista;
+            wpfDataGrid.ItemsSource = lista;
             };
-        
+
+        Action<DataGrid,DataGrid, List<daneWzrostySpadki>, List<daneWzrostySpadki>> wWS = delegate(DataGrid wpfDataGridWzrosty, DataGrid wpfDataGridSpadki, List<daneWzrostySpadki> listaWzrosty, List<daneWzrostySpadki> listaSpadki)
+            {
+            wpfDataGridWzrosty.ItemsSource = listaWzrosty;
+            wpfDataGridSpadki.ItemsSource = listaSpadki;
+            };
+
+        Action<DataGrid, List<daneNajaktyniejsze>> wN = delegate(DataGrid wpfNajaktywniejszeGrid, List<daneNajaktyniejsze> listaNaj)
+            {
+            wpfNajaktywniejszeGrid.ItemsSource = listaNaj;
+            };
+
         Action<DataGrid, List<daneNewsa>> wNewsy = delegate(DataGrid wpfDataGrid, List<daneNewsa> lista)
             {
-                wpfDataGrid.ItemsSource = lista;
+            wpfDataGrid.ItemsSource = lista;
             };
         #endregion
-
 
         #region === metody timerowe, wczytujące tabele ===
         // ================
         // metody wrzucane do timerów, które w wątkach organizują infromację dla tabel
-        // ================
         void tabelujGPW()
             {
             genDelegate.BeginInvoke(generujAkcje, done => { this.Dispatcher.Invoke(wAkcje, akcjeGrid, daneTabel.tAkcje); }, null);
@@ -280,8 +421,33 @@ namespace mm_gielda
             {
             genDelegate.BeginInvoke(generujNK, done => { this.Dispatcher.Invoke(wNewsy, wiadomosciGrid, daneTabel.NK); }, null);
             }
-        #endregion
 
+        void tabelujWzrostySpadki()
+            {
+            filtrujWzrostySpadki(daneTabel.tWig, ref daneTabel.tWigWzrosty, ref daneTabel.tWigSpadki);
+            filtrujWzrostySpadki(daneTabel.tWig20, ref daneTabel.tWig20Wzrosty, ref daneTabel.tWig20Spadki);
+            filtrujWzrostySpadki(daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
+            filtrujWzrostySpadki(daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
+
+            this.Dispatcher.Invoke(wWS, wigWzrostyGrid, wigSpadkiGrid,daneTabel.tWigWzrosty, daneTabel.tWigSpadki);
+            this.Dispatcher.Invoke(wWS, wig20WzrostyGrid, wig20SpadkiGrid, daneTabel.tWig20Wzrosty, daneTabel.tWig20Spadki);
+            this.Dispatcher.Invoke(wWS, mwig40WzrostyGrid, mwig40SpadkiGrid, daneTabel.tMwig40Wzrosty, daneTabel.tMwig40Spadki);
+            this.Dispatcher.Invoke(wWS, swig80WzrostyGrid, swig80SpadkiGrid, daneTabel.tSwig80Wzrosty, daneTabel.tSwig80Spadki);
+            }
+
+        void tabelujNajaktywniejsze()
+            {
+            filtrujNajaktywniejsze(daneTabel.tWig,ref daneTabel.tWigNajaktywniejsze);
+            filtrujNajaktywniejsze(daneTabel.tWig20, ref daneTabel.tWig20Najaktywniejsze);
+            filtrujNajaktywniejsze(daneTabel.tmWig40, ref daneTabel.tMwig40Najaktywniejsze);
+            filtrujNajaktywniejsze(daneTabel.tsWig80, ref daneTabel.tSwig80Najaktywniejsze);
+
+            this.Dispatcher.Invoke(wN, wigNajaktywniejszeGrid, daneTabel.tWigNajaktywniejsze);
+            this.Dispatcher.Invoke(wN, wig20NajaktywniejszeGrid, daneTabel.tWig20Najaktywniejsze);
+            this.Dispatcher.Invoke(wN, mwig40NajaktywniejszeGrid, daneTabel.tMwig40Najaktywniejsze);
+            this.Dispatcher.Invoke(wN, swig80NajaktywniejszeGrid, daneTabel.tSwig80Najaktywniejsze);
+            }
+        #endregion
 
         #region ==== action odświeżający te dolne kwadraciki ====
         Action<string, Label, Label, Label, Label, Label, Label, Label, Label, Grid> odswiezDolInfoIndeksy = (item, kurs, otwarcie, odniesienie, obrot, wolumen, zmiana, zmianaproc, godz, bgGrid) =>
@@ -345,7 +511,7 @@ namespace mm_gielda
             {
             var bankierRynki = new newsBankier(serwisy.Bankier, typy.Wiadomosci);
             var komentarzeMoney = new komentarzeMoney(serwisy.Money, typy.Komentarze);
-            var tmptab = new List<daneNewsa>();
+            var tmptab = new List<daneNewsa>(50);
 
             try
                 {
@@ -380,27 +546,29 @@ namespace mm_gielda
                     pobierzSkladIndeksow();
 
                     // wczytywanie tabel do gridów w interfejsie
-                    wczytajTabeleIndeksu(listaIndeksyGPW[1], daneTabel.tWig20, wig20Grid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[2], daneTabel.tmWig40, mwig40Grid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[3], daneTabel.tsWig80, swig80Grid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[4], daneTabel.tWigBanki, wigbankiGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[5], daneTabel.tWigBudow, wigbudowGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[6], daneTabel.tWigCee, wigceeGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[7], daneTabel.tWigChemia, wigchemiaGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigDewel, wigdewelGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[8], daneTabel.tWigEnerg, wigenergGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[9], daneTabel.tWigInfo, wiginfoGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[10], daneTabel.tWigMedia, wigmediaGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[11], daneTabel.tWigPaliwa, wigpaliwaGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[12], daneTabel.tWigPlus, wigplusGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[13], daneTabel.tWigPoland, wigpolandGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[14], daneTabel.tWigSpozyw, wigspozywGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[15], daneTabel.tWigSurowc, wigsurowcGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[16], daneTabel.tWigTelkom, wigtelkomGrid);
-                    wczytajTabeleIndeksu(listaIndeksyGPW[17], daneTabel.tWigUkrain, wigukrainGrid);
+                    wczytajTabeleIndeksu("wig",ref daneTabel.tWig, wigGrid);
+                    wczytajTabeleIndeksu("wig20",ref daneTabel.tWig20, wig20Grid);
+                    wczytajTabeleIndeksu("mwig40",ref daneTabel.tmWig40, mwig40Grid);
+                    wczytajTabeleIndeksu("swig80",ref daneTabel.tsWig80, swig80Grid);
+                    wczytajTabeleIndeksu("wig_banki",ref daneTabel.tWigBanki, wigbankiGrid);
+                    wczytajTabeleIndeksu("wig_budow",ref daneTabel.tWigBudow, wigbudowGrid);
+                    wczytajTabeleIndeksu("wig_cee",ref daneTabel.tWigCee, wigceeGrid);
+                    wczytajTabeleIndeksu("wig_chemia",ref daneTabel.tWigChemia, wigchemiaGrid);
+                    wczytajTabeleIndeksu("wig_dewel",ref daneTabel.tWigDewel, wigdewelGrid);
+                    wczytajTabeleIndeksu("wig_energ",ref daneTabel.tWigEnerg, wigenergGrid);
+                    wczytajTabeleIndeksu("wig_info",ref daneTabel.tWigInfo, wiginfoGrid);
+                    wczytajTabeleIndeksu("wig_media",ref daneTabel.tWigMedia, wigmediaGrid);
+                    wczytajTabeleIndeksu("wig_paliwa",ref daneTabel.tWigPaliwa, wigpaliwaGrid);
+                    wczytajTabeleIndeksu("wig_plus",ref daneTabel.tWigPlus, wigplusGrid);
+                    wczytajTabeleIndeksu("wig_poland",ref daneTabel.tWigPoland, wigpolandGrid);
+                    wczytajTabeleIndeksu("wig_spozyw",ref daneTabel.tWigSpozyw, wigspozywGrid);
+                    wczytajTabeleIndeksu("wig_surowc",ref daneTabel.tWigSurowc, wigsurowcGrid);
+                    wczytajTabeleIndeksu("wig_telkom",ref daneTabel.tWigTelkom, wigtelkomGrid);
+                    wczytajTabeleIndeksu("wig_ukrain",ref daneTabel.tWigUkrain, wigukrainGrid);
+                    wczytajTabeleIndeksu("respect",ref daneTabel.tRespect, respectGrid);
                     };
 
-                wczytajTab.BeginInvoke(null, null);
+                wczytajTab.BeginInvoke(done => { tabelujWzrostySpadki(); tabelujNajaktywniejsze(); }, null);
                 }
             catch { }
             }

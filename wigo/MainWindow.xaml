@@ -87,6 +87,7 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
             <Setter Property="SelectionMode" Value="Single" />
             <Setter Property="AlternatingRowBackground" Value="Khaki" />
+            <Setter Property="AutoGenerateColumns" Value="True" />
         </Style>
         <Style x:Key="groupboxglowny" TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="Black" />
@@ -95,28 +96,32 @@
             <Setter Property="Margin" Value="2,0,2,0" />
         </Style>
         <Style x:Key="groupboxspadki" TargetType="GroupBox">
-            <!--<Setter Property="BorderBrush" Value="Red" />
-            <Setter Property="Foreground" Value="Red" />-->
-            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Red" />
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Height" Value="130" />
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" />
         </Style>
         <Style x:Key="groupboxwzrosty" TargetType="GroupBox">
-            <!--<Setter Property="BorderBrush" Value="LawnGreen" />
-            <Setter Property="Foreground" Value="LawnGreen" />-->
-            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="LawnGreen" />
+            <Setter Property="Foreground" Value="LawnGreen" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Height" Value="130" />
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" /> 
         </Style>
         <Style x:Key="groupboxnajaktywniejsze" TargetType="GroupBox">
-            <!--<Setter Property="BorderBrush" Value="SkyBlue" />
-            <Setter Property="Foreground" Value="Skyblue" />-->
-            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="SkyBlue" />
+            <Setter Property="Foreground" Value="Skyblue" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Height" Value="130" />
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" />
+        </Style>
+        <Style x:Key="scroll" TargetType="ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         </Style>
     </Window.Resources>
 
@@ -223,52 +228,52 @@
                         <GroupBox Header="WIG" Style="{StaticResource groupboxglowny}">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <GroupBox Header="Wzrosty"  Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wigWzrostyGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wigSpadkiGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wigNajaktywniejszeGrid" />
                                 </GroupBox>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="WIG20" Style="{StaticResource groupboxglowny}" >
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wig20WzrostyGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wig20SpadkiGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="wig20NajaktywniejszeGrid" />
                                 </GroupBox>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="mWIG40"  Style="{StaticResource groupboxglowny}">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="mwig40WzrostyGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="mwig40SpadkiGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="mwig40NajaktywniejszeGrid" />
                                 </GroupBox>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="sWIG80" Style="{StaticResource groupboxglowny}">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="swig80WzrostyGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="swig80SpadkiGrid" />
                                 </GroupBox>
                                 <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" />
+                                    <DataGrid Style="{StaticResource grid}" Name="swig80NajaktywniejszeGrid" />
                                 </GroupBox>
                             </StackPanel>
                         </GroupBox>
@@ -283,23 +288,23 @@
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
                         <TabItem Header="GPW" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer>
+                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                     <DataGrid Name="indeksyGPWGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyGPWGrid_Selected" />
                                 </ScrollViewer>
                         </TabItem>
                         <TabItem Header="Światowe" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer>
+                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                     <DataGrid Name="indeksyGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyGrid_Selected" />
                                 </ScrollViewer>
                         </TabItem>
                         <TabItem Header="Futures" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer>
+                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                     <DataGrid Name="indeksyFutGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyFutGrid_Selected" />
                                 </ScrollViewer>
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
                         <Grid>
                             <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
@@ -313,14 +318,14 @@
                             <Label Content="Wolumen:" Margin="23,241,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Obrót:" Margin="51,271,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Transakcje:" Margin="11,298,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="iKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="iZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="iMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="iOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="iOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,241,0,0" Name="iWolumen" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,271,0,0" Name="iObrot" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,298,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
+                            <Label Name="iKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                            <Label Name="iZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="iMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="iOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="iOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,241,0,0" Name="iWolumen" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,271,0,0" Name="iObrot" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,298,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
                             <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="iImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
                         </Grid>
@@ -334,119 +339,119 @@
                         <ColumnDefinition Width="350" />
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
-                        <TabItem Header="Wszystkie" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
+                        <TabItem Header="Wszystkie GPW" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                 <DataGrid Name="akcjeGrid" Style="{StaticResource grid}" DataGridCell.Selected="akcjeGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="WIG" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigGrid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wig20Grid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Header="mWIG40" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="mwig40Grid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Header="sWIG80" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="swig80Grid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
-                        </TabItem>
                         <TabItem Header="New Connect" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                 <DataGrid Name="newconnectGrid" Style="{StaticResource grid}" />
                             </ScrollViewer>
                         </TabItem>
+                        <TabItem Header="WIG" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigGrid_Selected"/>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wig20Grid" Style="{StaticResource grid}" DataGridCell.Selected="wig20Grid_Selected"/>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="mWIG40" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="mwig40Grid" Style="{StaticResource grid}" DataGridCell.Selected="mwig40Grid_Selected" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="sWIG80" Style="{StaticResource ResourceKey=taby2}">
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="swig80Grid" Style="{StaticResource grid}" DataGridCell.Selected="swig80Grid_Selected" />
+                            </ScrollViewer>
+                        </TabItem>
                         <TabItem Header="WIG BANKI" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigbankiGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigbankiGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigbankiGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG BUDOW" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigbudowGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigbudowGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigbudowGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG CEE" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigceeGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigceeGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigceeGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG CHEMIA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigchemiaGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigchemiaGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigchemiaGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG DEWEL" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigdewelGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigdewelGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigdewelGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG ENERG" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigenergGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigenergGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigenergGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG INFO" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wiginfoGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wiginfoGrid" Style="{StaticResource grid}" DataGridCell.Selected="wiginfoGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG MEDIA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigmediaGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigmediaGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigmediaGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG PALIWA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigpaliwaGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigpaliwaGrid" Style="{StaticResource grid}"  DataGridCell.Selected="wigpaliwaGrid_Selected"/>
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG PLUS" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigplusGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}"> 
+                                <DataGrid Name="wigplusGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigplusGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG POLAND" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigpolandGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigpolandGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigpolandGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG SPOZYW" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigspozywGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigspozywGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigspozywGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG SUROWC" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigsurowcGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigsurowcGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigsurowcGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG TELKOM" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigtelkomGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigtelkomGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigtelkomGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="WIG UKRAIN" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="wigukrainGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="wigukrainGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigukrainGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="RESPECT" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
-                                <DataGrid Name="respectGrid" Style="{StaticResource grid}" />
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
+                                <DataGrid Name="respectGrid" Style="{StaticResource grid}" DataGridCell.Selected="respectGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
                         <Grid>
                             <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
@@ -460,14 +465,14 @@
                             <Label Content="Obrót:" Margin="51,271,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Transakcje:" Margin="11,298,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Wolumen:" Margin="23,241,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="aKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="aZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="aMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="aOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="aOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,271,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,298,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Margin="116,241,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
+                            <Label Name="aKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                            <Label Name="aZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="aMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="aOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="aOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,271,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,298,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
+                            <Label Margin="116,241,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
                             <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="aImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="aBorder" VerticalAlignment="Top" Width="9" />
                         </Grid>
@@ -482,18 +487,18 @@
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
                         <TabItem Header="Waluty" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
+                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
                                 <DataGrid Name="walutyGrid" Style="{StaticResource grid}" DataGridCell.Selected="walutyGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="Towary" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer>
+                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
                                 <DataGrid Name="towaryGrid" Style="{StaticResource grid}" DataGridCell.Selected="towaryGrid_Selected" />
                             </ScrollViewer>
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
-                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
                         <Grid>
                             <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
@@ -504,11 +509,11 @@
                             <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
                             <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="wtKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="wtZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="wtMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="wtOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="0000" Name="wtOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="wtKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                            <Label Name="wtZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="wtMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="wtOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
+                            <Label Name="wtOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
                             <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="wtImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="wtBorder" VerticalAlignment="Top" Width="9" />
                         </Grid>
@@ -516,13 +521,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Ulubione" Style="{StaticResource taby}">
-                <ScrollViewer>
+                <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
                     <DataGrid Name="ulubioneGrid" Style="{StaticResource grid}" />
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Makro" Style="{StaticResource taby}" />
             <TabItem Header="Wiadomości" Style="{StaticResource taby}">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" Name="wiadomosciGrid_scrool">
+                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}" Name="wiadomosciGrid_scrool">
                     <DataGrid Name="wiadomosciGrid" Style="{StaticResource grid}" />
                 </ScrollViewer>
             </TabItem>
@@ -538,7 +543,7 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Portfel" Style="{StaticResource taby}"/>
-            <TabItem Header="Opcje" Style="{StaticResource taby}">
+            <TabItem Header="Log" Style="{StaticResource taby}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50" />
