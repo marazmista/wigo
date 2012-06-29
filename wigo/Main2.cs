@@ -16,10 +16,14 @@ using System.Net;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Text.RegularExpressions;
+using System.Windows.Resources;
+using System.Resources;
+using System.Windows.Shapes;
 
 using klasynewsowe;
 using commonStrings;
 using klasyakcjowe;
+
 
 namespace mm_gielda
     {
@@ -105,6 +109,10 @@ namespace mm_gielda
         #endregion
 
         #region == male tabele top indeksow ==
+        internal static List<daneWzrostySpadki> tAkcjeGPWWzrosty;
+        internal static List<daneWzrostySpadki> tAkcjeGPWSpadki;
+        internal static List<daneNajaktyniejsze> tAkcjeGPWNajaktwyniejsze;
+
         internal static List<daneWzrostySpadki> tWigWzrosty;
         internal static List<daneWzrostySpadki> tWigSpadki;
         internal static List<daneNajaktyniejsze> tWigNajaktywniejsze;
@@ -194,15 +202,52 @@ namespace mm_gielda
             try
                 {
                 if (!(Directory.Exists(staleapki.appdir + staleapki.tmpdir)))
-                    Directory.CreateDirectory("tmp");
+                    Directory.CreateDirectory(staleapki.appdir + @"\tmp");
                 if (!(Directory.Exists(staleapki.appdir + staleapki.bazadir)))
-                    Directory.CreateDirectory("Baza");
+                    Directory.CreateDirectory(staleapki.appdir + @"\baza");
                 if (!(Directory.Exists(staleapki.appdir + staleapki.danedir)))
-                    Directory.CreateDirectory("Dane");
+                    Directory.CreateDirectory(staleapki.appdir + @"\dane");
+                if (!(Directory.Exists(staleapki.appdir + staleapki.tmpWykresDir)))
+                    Directory.CreateDirectory(staleapki.appdir + staleapki.tmpdir + "tmpWykresy");
 
                 Loger.dodajDoLogaInfo("Katalogi OK");
                 }
             catch { Loger.dodajDoLogaError("Błąd katalgów programu"); }
+            }
+
+        bool czyTrwaSesja()
+            {
+            if ((DateTime.Now.Date == staleapki.dataUruchmienia) & (DateTime.Now.Hour <= staleapki.nieOdswGPWPoGodz) & (DateTime.Now.Minute < staleapki.nieOdswGPWPoMin))
+                return true;
+            else
+                return false;
+            }
+
+        bool czyOdswierzacAkcje()
+            {
+            // sprawdza czy tabela jest pusta, a potem jeśli nie jest, to sprawdza czy trwa sesja //
+            if (daneTabel.tAkcje == null)
+                return true;
+            else
+                {
+                if (czyTrwaSesja())
+                    return true;
+                else
+                    return false;
+                }
+            }
+
+        bool czyOdswierzacIndeksyGPW()
+            {
+            if (daneTabel.tIndeksyGPW == null)
+                return true;
+            else
+                {
+                if (czyTrwaSesja())
+                    return true;
+                else
+                    return false;
+                }
             }
 
         // metodka pobierająca albo odświeżająca skład indeksów //
@@ -260,7 +305,6 @@ namespace mm_gielda
                 }
             }
 
-        //Action<string, List<daneAkcji>> wczytajTabeleIndeksu = (indeks, listaCel) =>
         void wczytajTabeleIndeksu(string indeks,ref List<daneAkcji> listaCel,DataGrid grid)
             {
             if (File.Exists(staleapki.appdir + staleapki.bazadir + indeks + ".txt"))
@@ -424,11 +468,13 @@ namespace mm_gielda
 
         void tabelujWzrostySpadki()
             {
+            filtrujWzrostySpadki(daneTabel.tAkcje, ref daneTabel.tAkcjeGPWWzrosty, ref daneTabel.tAkcjeGPWSpadki);
             filtrujWzrostySpadki(daneTabel.tWig, ref daneTabel.tWigWzrosty, ref daneTabel.tWigSpadki);
             filtrujWzrostySpadki(daneTabel.tWig20, ref daneTabel.tWig20Wzrosty, ref daneTabel.tWig20Spadki);
             filtrujWzrostySpadki(daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
             filtrujWzrostySpadki(daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
 
+            this.Dispatcher.Invoke(wWS, akcjeGPWWzrostyGrid, akcjeGPWSpadkiGrid, daneTabel.tAkcjeGPWWzrosty, daneTabel.tAkcjeGPWSpadki);
             this.Dispatcher.Invoke(wWS, wigWzrostyGrid, wigSpadkiGrid,daneTabel.tWigWzrosty, daneTabel.tWigSpadki);
             this.Dispatcher.Invoke(wWS, wig20WzrostyGrid, wig20SpadkiGrid, daneTabel.tWig20Wzrosty, daneTabel.tWig20Spadki);
             this.Dispatcher.Invoke(wWS, mwig40WzrostyGrid, mwig40SpadkiGrid, daneTabel.tMwig40Wzrosty, daneTabel.tMwig40Spadki);
@@ -437,11 +483,13 @@ namespace mm_gielda
 
         void tabelujNajaktywniejsze()
             {
+            filtrujNajaktywniejsze(daneTabel.tAkcje, ref daneTabel.tAkcjeGPWNajaktwyniejsze);
             filtrujNajaktywniejsze(daneTabel.tWig,ref daneTabel.tWigNajaktywniejsze);
             filtrujNajaktywniejsze(daneTabel.tWig20, ref daneTabel.tWig20Najaktywniejsze);
             filtrujNajaktywniejsze(daneTabel.tmWig40, ref daneTabel.tMwig40Najaktywniejsze);
             filtrujNajaktywniejsze(daneTabel.tsWig80, ref daneTabel.tSwig80Najaktywniejsze);
 
+            this.Dispatcher.Invoke(wN, akcjeGPWNajaktywniejszeGrid, daneTabel.tAkcjeGPWNajaktwyniejsze);
             this.Dispatcher.Invoke(wN, wigNajaktywniejszeGrid, daneTabel.tWigNajaktywniejsze);
             this.Dispatcher.Invoke(wN, wig20NajaktywniejszeGrid, daneTabel.tWig20Najaktywniejsze);
             this.Dispatcher.Invoke(wN, mwig40NajaktywniejszeGrid, daneTabel.tMwig40Najaktywniejsze);
@@ -449,32 +497,26 @@ namespace mm_gielda
             }
         #endregion
 
-        #region ==== action odświeżający te dolne kwadraciki ====
-        Action<string, Label, Label, Label, Label, Label, Label, Label, Label, Grid> odswiezDolInfoIndeksy = (item, kurs, otwarcie, odniesienie, obrot, wolumen, zmiana, zmianaproc, godz, bgGrid) =>
+        #region ==== odswiezanie dolnych kwadracików ====
+        void odswiezDolInfoIndeksy(string item, Label kurs, Label otwarcie, Label odniesienie, Label obrot, Label wolumen, Label zmiana, Label zmianaproc, Label godz, Grid bgGrid, Rectangle rect)
             {
-                var oo = daneTabel.tIndeksyGPW.Find(row => row.Nazwa == item);
+            var oo = daneTabel.tIndeksyGPW.Find(row => row.Nazwa == item);
 
-                kurs.Content = oo.Kurs;
-                otwarcie.Content = oo.Otwarcie;
-                odniesienie.Content = oo.Odniesienie;
-                zmiana.Content = oo.Zmiana;
-                obrot.Content = oo.Obrot;
-                wolumen.Content = oo.Wolumen;
-                zmianaproc.Content = oo.ZmianaProc;
+            kurs.Content = oo.Kurs;
+            otwarcie.Content = oo.Otwarcie;
+            odniesienie.Content = oo.Odniesienie;
+            zmiana.Content = oo.Zmiana;
+            obrot.Content = oo.Obrot;
+            wolumen.Content = oo.Wolumen;
+            zmianaproc.Content = oo.ZmianaProc;
 
-                var dt = new DateTime();
-                dt = DateTime.ParseExact(oo.Data, staleapki.formatDaty, null);
+            var dt = new DateTime();
+            dt = DateTime.ParseExact(oo.Data, staleapki.formatDaty, null);
+            godz.Content = dt.ToString("HH:mm");
 
-                godz.Content = dt.ToString("HH:mm");
+            KolorISymbol(oo.Zmiana, null,bgGrid, rect);
+            }
 
-                // Zmiana koloru tła, można w XAMLu, ale na razie jest tu //
-                if (Convert.ToSingle(oo.Zmiana) > 0.00)
-                    bgGrid.Background = Brushes.Green;
-                else
-                    bgGrid.Background = Brushes.Red;
-                if (Convert.ToSingle(oo.Zmiana) == 0.00)
-                    bgGrid.Background = Brushes.Aqua;
-            };
         Action<string, Label, Label, Label, Label, Label, Label, Grid> odswiezDolInfoWaluty = (item, kurs, otwarcie, odniesienie, zmiana, zmianaproc, godz, bgGrid) =>
             {
             var oo = daneTabel.tWaluty.Find(row => row.Symbol == item);
@@ -489,7 +531,7 @@ namespace mm_gielda
             dt = DateTime.ParseExact(oo.Data, staleapki.formatDaty, null);
 
             godz.Content = dt.ToString("HH:mm");
-
+                
             // Zmiana koloru tła, można w XAMLu, ale na razie jest tu //
             if (Convert.ToSingle(oo.Zmiana) > 0.0000)
                 bgGrid.Background = Brushes.Green;  // albo FF009500
@@ -500,8 +542,8 @@ namespace mm_gielda
             };
         #endregion
 
-        //===============================================================================
-        //===============================================================================
+//===============================================================================
+//===============================================================================
 
         // ================
         // procka zwracająca połaczone kolekcje z newsami z różnych źródeł, żeby
@@ -536,39 +578,43 @@ namespace mm_gielda
             var stooqAkcje = new Akcje(serwisy.Stooq, typy.Akcje);
             try
                 {
-                daneTabel.tAkcje = stooqAkcje.generujTabele();
-
-                //=============
-                // mając tabelę z akcjami można filtrować na indeksy (w tle, żeby główna tab z akcjami się wczytała //
-                Action wczytajTab = delegate()
+                if (czyOdswierzacAkcje())
                     {
-                    // odswieżanie składu indeksów //
-                    pobierzSkladIndeksow();
+                    //Loger.dodajDoLogaInfo(serwisy.Stooq + typy.Akcje + messages.pobStart);
+                    daneTabel.tAkcje = stooqAkcje.generujTabele();
 
-                    // wczytywanie tabel do gridów w interfejsie
-                    wczytajTabeleIndeksu("wig",ref daneTabel.tWig, wigGrid);
-                    wczytajTabeleIndeksu("wig20",ref daneTabel.tWig20, wig20Grid);
-                    wczytajTabeleIndeksu("mwig40",ref daneTabel.tmWig40, mwig40Grid);
-                    wczytajTabeleIndeksu("swig80",ref daneTabel.tsWig80, swig80Grid);
-                    wczytajTabeleIndeksu("wig_banki",ref daneTabel.tWigBanki, wigbankiGrid);
-                    wczytajTabeleIndeksu("wig_budow",ref daneTabel.tWigBudow, wigbudowGrid);
-                    wczytajTabeleIndeksu("wig_cee",ref daneTabel.tWigCee, wigceeGrid);
-                    wczytajTabeleIndeksu("wig_chemia",ref daneTabel.tWigChemia, wigchemiaGrid);
-                    wczytajTabeleIndeksu("wig_dewel",ref daneTabel.tWigDewel, wigdewelGrid);
-                    wczytajTabeleIndeksu("wig_energ",ref daneTabel.tWigEnerg, wigenergGrid);
-                    wczytajTabeleIndeksu("wig_info",ref daneTabel.tWigInfo, wiginfoGrid);
-                    wczytajTabeleIndeksu("wig_media",ref daneTabel.tWigMedia, wigmediaGrid);
-                    wczytajTabeleIndeksu("wig_paliwa",ref daneTabel.tWigPaliwa, wigpaliwaGrid);
-                    wczytajTabeleIndeksu("wig_plus",ref daneTabel.tWigPlus, wigplusGrid);
-                    wczytajTabeleIndeksu("wig_poland",ref daneTabel.tWigPoland, wigpolandGrid);
-                    wczytajTabeleIndeksu("wig_spozyw",ref daneTabel.tWigSpozyw, wigspozywGrid);
-                    wczytajTabeleIndeksu("wig_surowc",ref daneTabel.tWigSurowc, wigsurowcGrid);
-                    wczytajTabeleIndeksu("wig_telkom",ref daneTabel.tWigTelkom, wigtelkomGrid);
-                    wczytajTabeleIndeksu("wig_ukrain",ref daneTabel.tWigUkrain, wigukrainGrid);
-                    wczytajTabeleIndeksu("respect",ref daneTabel.tRespect, respectGrid);
-                    };
+                    //=============
+                    // mając tabelę z akcjami można filtrować na indeksy (w tle, żeby główna tab z akcjami się wczytała //
+                    Action wczytajTab = delegate()
+                        {
+                            // odswieżanie składu indeksów //
+                            pobierzSkladIndeksow();
 
-                wczytajTab.BeginInvoke(done => { tabelujWzrostySpadki(); tabelujNajaktywniejsze(); }, null);
+                            // wczytywanie tabel do gridów w interfejsie
+                            wczytajTabeleIndeksu("wig", ref daneTabel.tWig, wigGrid);
+                            wczytajTabeleIndeksu("wig20", ref daneTabel.tWig20, wig20Grid);
+                            wczytajTabeleIndeksu("mwig40", ref daneTabel.tmWig40, mwig40Grid);
+                            wczytajTabeleIndeksu("swig80", ref daneTabel.tsWig80, swig80Grid);
+                            wczytajTabeleIndeksu("wig_banki", ref daneTabel.tWigBanki, wigbankiGrid);
+                            wczytajTabeleIndeksu("wig_budow", ref daneTabel.tWigBudow, wigbudowGrid);
+                            wczytajTabeleIndeksu("wig_cee", ref daneTabel.tWigCee, wigceeGrid);
+                            wczytajTabeleIndeksu("wig_chemia", ref daneTabel.tWigChemia, wigchemiaGrid);
+                            wczytajTabeleIndeksu("wig_dewel", ref daneTabel.tWigDewel, wigdewelGrid);
+                            wczytajTabeleIndeksu("wig_energ", ref daneTabel.tWigEnerg, wigenergGrid);
+                            wczytajTabeleIndeksu("wig_info", ref daneTabel.tWigInfo, wiginfoGrid);
+                            wczytajTabeleIndeksu("wig_media", ref daneTabel.tWigMedia, wigmediaGrid);
+                            wczytajTabeleIndeksu("wig_paliwa", ref daneTabel.tWigPaliwa, wigpaliwaGrid);
+                            wczytajTabeleIndeksu("wig_plus", ref daneTabel.tWigPlus, wigplusGrid);
+                            wczytajTabeleIndeksu("wig_poland", ref daneTabel.tWigPoland, wigpolandGrid);
+                            wczytajTabeleIndeksu("wig_spozyw", ref daneTabel.tWigSpozyw, wigspozywGrid);
+                            wczytajTabeleIndeksu("wig_surowc", ref daneTabel.tWigSurowc, wigsurowcGrid);
+                            wczytajTabeleIndeksu("wig_telkom", ref daneTabel.tWigTelkom, wigtelkomGrid);
+                            wczytajTabeleIndeksu("wig_ukrain", ref daneTabel.tWigUkrain, wigukrainGrid);
+                            wczytajTabeleIndeksu("respect", ref daneTabel.tRespect, respectGrid);
+                        };
+
+                    wczytajTab.BeginInvoke(done => { tabelujWzrostySpadki(); tabelujNajaktywniejsze(); }, null);
+                    }
                 }
             catch { }
             }
@@ -578,13 +624,22 @@ namespace mm_gielda
             var stooqIndeksyGPW = new IndeksyGPW(serwisy.Stooq, typy.IndeksyGPW);
             try
                 {
-                daneTabel.tIndeksyGPW = stooqIndeksyGPW.generujTabele();
+                if (czyOdswierzacIndeksyGPW())
+                    {
+                    //Loger.dodajDoLogaInfo(serwisy.Stooq + typy.IndeksyGPW + messages.pobStart);
+                    daneTabel.tIndeksyGPW = stooqIndeksyGPW.generujTabele();
 
-                // wczytanie dolnych kwadracików
-                this.Dispatcher.Invoke(odswiezDolInfoIndeksy, "WIG", wigkursl, wigotwl, wigodnl, wigobrl, wigwoll, wigzmianal, wigprocentl, wiggodzl,wiggrid);
-                this.Dispatcher.Invoke(odswiezDolInfoIndeksy, "WIG20", wig20kursl, wig20otwl, wig20odnl, wig20obrl, wig20woll, wig20zmianal, wig20procentl, wig20godzl, wig20grid);
-                this.Dispatcher.Invoke(odswiezDolInfoIndeksy, "MWIG40", mwigkursl, mwigotwl, mwigodnl, mwigobrl, mwigwoll, mwigzmianal, mwigprocentl, mwiggodzl, mwiggrid);
-                this.Dispatcher.Invoke(odswiezDolInfoIndeksy, "SWIG80", swigkursl, swigotwl, swigodnl, swigobrl, swigwoll, swigzmianal, swigprocentl, swiggodzl, swiggrid);
+                    if (daneTabel.tIndeksyGPW.Count != 0)
+                        {
+                        // wczytanie dolnych kwadracików
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG",wigkursl,wigotwl,wigodnl,wigobrl,wigwoll,wigzmianal,wigprocentl,wiggodzl,wiggrid,wigRect);}));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG20", wig20kursl, wig20otwl, wig20odnl, wig20obrl, wig20woll, wig20zmianal, wig20procentl, wig20godzl, wig20grid,wig20Rect); }));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("MWIG40", mwigkursl, mwigotwl, mwigodnl, mwigobrl, mwigwoll, mwigzmianal, mwigprocentl, mwiggodzl, mwiggrid,mwigRect); }));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("SWIG80", swigkursl, swigotwl, swigodnl, swigobrl, swigwoll, swigzmianal, swigprocentl, swiggodzl, swiggrid,swigRect); }));
+                        }
+                    else
+                        Loger.dodajDoLogaError(messages.indBoxRefreshError);
+                    }
                 }
             catch { }
             }
@@ -594,6 +649,7 @@ namespace mm_gielda
             var stooqIndeksy = new Indeksy(serwisy.Stooq, typy.Indeksy);
             try
                 {
+                Loger.dodajDoLogaInfo(serwisy.Stooq + typy.Indeksy + messages.pobStart);
                 daneTabel.tIndeksy = stooqIndeksy.generujTabele();
                 }
             catch { }
@@ -604,6 +660,7 @@ namespace mm_gielda
             var stooqIndeksyFut = new IndeksyFut(serwisy.Stooq, typy.IndeksyFut);
             try
                 {
+                Loger.dodajDoLogaInfo(serwisy.Stooq + typy.IndeksyFut + messages.pobStart);
                 daneTabel.tIndeksyFut = stooqIndeksyFut.generujTabele();
                 }
             catch { }
@@ -614,6 +671,7 @@ namespace mm_gielda
             var stooqTowary = new Towary(serwisy.Stooq, typy.Towary);
             try
                 {
+                Loger.dodajDoLogaInfo(serwisy.Stooq + typy.Towary + messages.pobStart);
                 daneTabel.tTowary = stooqTowary.generujTabele();
                 }
             catch { }
@@ -624,12 +682,18 @@ namespace mm_gielda
             var stooqWaluty = new Waluty(serwisy.Stooq, typy.Waluty);
             try
                 {
+                Loger.dodajDoLogaInfo(serwisy.Stooq + typy.Waluty + messages.pobStart);
                 daneTabel.tWaluty = stooqWaluty.generujTabele();
 
-                // wczytanie dolnych kwadracików
-                this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURPLN", eurplnkursl, eurplnotwarciel, eurplnodniesieniel, eurplnzmianal, eurplnprocentl, eurplngodzl, eurplngrid);
-                this.Dispatcher.Invoke(odswiezDolInfoWaluty, "USDPLN", usdplnkursl, usdplnotwarciel, usdplnodniesieniel, usdplnzmianal, usdplnprocentl, usdplngodzl, usdplngrid);
-                this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURUSD", eurusdkursl, eurusdotwarciel, eurusdodniesieniel, eurusdzmianal, eurusdprocentl, eurusdgodzl, eurusdgrid);
+                if (daneTabel.tWaluty.Count != 0)
+                    {
+                    // wczytanie dolnych kwadracików
+                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURPLN", eurplnkursl, eurplnotwarciel, eurplnodniesieniel, eurplnzmianal, eurplnprocentl, eurplngodzl, eurplngrid);
+                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "USDPLN", usdplnkursl, usdplnotwarciel, usdplnodniesieniel, usdplnzmianal, usdplnprocentl, usdplngodzl, usdplngrid);
+                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURUSD", eurusdkursl, eurusdotwarciel, eurusdodniesieniel, eurusdzmianal, eurusdprocentl, eurusdgodzl, eurusdgrid);
+                    }
+                else
+                    Loger.dodajDoLogaError(messages.walutyBoxRefreshError);
                 }
             catch { }
             }

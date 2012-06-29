@@ -5,9 +5,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         FontFamily="Verdana" FontSize="10"
-        Title="WIGO - Polska Giełda" Height="499" Width="1025" Background="#FF646464" Initialized="Window_Initialized">
+        Title="WIGO - Polska Giełda" Height="516" Width="1049" Background="#FF646464" Initialized="Window_Initialized">
     <Window.Resources>
 
+        <!--ikonki obrazki-->
+        <ImageBrush ImageSource="res/up.png" x:Key="up" />
+        <ImageBrush ImageSource="res/down.png" x:Key="down" />
+        <ImageBrush ImageSource="res/zero.png" x:Key="zero" />
+        
         <!-- Motywy zakładek-->
         <Style x:Key="taby" TargetType="TabItem">
             <Setter Property="Foreground" Value="Black" />
@@ -123,6 +128,22 @@
             <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
             <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
         </Style>
+        <Style x:Key="znaczekDol" TargetType="Rectangle">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Width" Value="48" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="120,65,0,0" />
+        </Style>
+        <Style x:Key="znaczekBokInfo" TargetType="Rectangle">
+            <Setter Property="Height" Value="85"/>
+            <Setter Property="Width" Value="85" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="246,65,0,0" />
+        </Style>
+
+
     </Window.Resources>
 
     <DockPanel>
@@ -138,8 +159,8 @@
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wigodnl" Style="{StaticResource labeldane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50" Margin="97,60,0,0" Name="wigsymbol" Stretch="Fill"  Width="71" />
                     <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="wiggodzl" Style="{StaticResource labeldane}" />
+                    <Rectangle Name="wigRect" Style="{StaticResource znaczekDol}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="wig20border">
@@ -152,8 +173,8 @@
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wig20odnl" Style="{StaticResource labeldane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50"  Margin="97,60,0,0" Name="wig20symbol" Stretch="Fill"  Width="71" />
                     <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="wig20godzl" Style="{StaticResource labeldane}" />
+                    <Rectangle Name="wig20Rect" Style="{StaticResource znaczekDol}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="mwigborder">
@@ -166,8 +187,8 @@
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labeldane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50" HorizontalAlignment="Left" Margin="97,60,0,0" Name="mwigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
                     <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labeldane}" />
+                    <Rectangle Name="mwigRect" Style="{StaticResource znaczekDol}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Name="swigborder">
@@ -180,8 +201,8 @@
                     <Label Content="Odniesienie" Height="28"  Margin="0,56,0,0" Name="swigodnl" Style="{StaticResource labeldane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labeldane}" />
                     <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Image Height="50"  Margin="97,60,0,0" Name="swigsymbol" Stretch="Fill" VerticalAlignment="Top" Width="71" />
                     <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="swiggodzl" Style="{StaticResource labeldane}" />
+                    <Rectangle Name="swigRect" Style="{StaticResource znaczekDol}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource ramki}" Width="80" Name="eurplnborder">
@@ -225,6 +246,20 @@
             <TabItem Header="Podsumowanie" Style="{StaticResource taby}" FontWeight="Bold">
                 <ScrollViewer>
                     <WrapPanel Margin="2,0,0,0">
+                        <GroupBox Header="Akcje GPW" Style="{StaticResource groupboxglowny}">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <GroupBox Header="Wzrosty"  Style="{StaticResource groupboxwzrosty}">
+                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWWzrostyGrid" />
+                                </GroupBox>
+                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
+                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWSpadkiGrid" />
+                                </GroupBox>
+                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
+                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWNajaktywniejszeGrid" />
+                                </GroupBox>
+                            </StackPanel>
+                        </GroupBox>
+
                         <GroupBox Header="WIG" Style="{StaticResource groupboxglowny}">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                 <GroupBox Header="Wzrosty"  Style="{StaticResource groupboxwzrosty}">
@@ -328,6 +363,8 @@
                             <Label Margin="116,298,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
                             <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="iImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
+                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                            <Rectangle Style="{StaticResource znaczekBokInfo}" Name="iRect" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>
@@ -473,8 +510,9 @@
                             <Label Margin="116,271,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
                             <Label Margin="116,298,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
                             <Label Margin="116,241,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
-                            <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="aImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="aBorder" VerticalAlignment="Top" Width="9" />
+                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="aWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                            <Rectangle Name="aRect" Style="{StaticResource znaczekBokInfo}" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>
@@ -514,8 +552,9 @@
                             <Label Name="wtMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
                             <Label Name="wtOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
                             <Label Name="wtOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="wtImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="wtBorder" VerticalAlignment="Top" Width="9" />
+                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="wtWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                            <Rectangle Name="wtRect" Style="{StaticResource znaczekBokInfo}" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>

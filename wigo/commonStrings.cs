@@ -14,6 +14,8 @@ namespace commonStrings
     struct messages
         {
         // ogólne //
+        public const string pobStart = " Rozpoczęto pobieranie...";
+
         public const string pobFail = " Nie udało się pobrać danych";
         public const string prasowanieFail = " Nie udało się odczytać najnowszych danych z pliku";
 
@@ -31,6 +33,10 @@ namespace commonStrings
         public const string indAktual = "Aktualizacja składu indeksu ";
         public const string indOdswFail = " Nie udało się odświeżyć zawartości indeksów GPW (jesteś połączony z internetem?)";
         public const string indLoadFail = " Nie udało sie odczytać składu indeksu";
+
+        // dolne kwadraciki error wczytywania //
+        public const string indBoxRefreshError = "Błąd wczytywania informacji o indeksach GPW do dolnych pól (pusta tabela?)";
+        public const string walutyBoxRefreshError = "Błąd wczytywania informacji o walutach do dolnych pól (pusta tabela?)";
         }
 
 
@@ -89,6 +95,8 @@ namespace commonStrings
         public const string StooqTowary = "http://stooq.pl/notowania/index.html?kat=t1&show=3&wtr=1&chart_=1&typ_=l&sort=";
         public const string StooqIndeksyFutures = "http://stooq.pl/notowania/index.html?kat=i6&show=3&wtr=1&chart_=1&typ_=l&sort=";
         public const string StooqWaluty = "http://stooq.pl/notowania/index.html?kat=w1&show=3&wtr=1&chart_=1&typ_=l&sort=";
+
+        public const string StooqMWykres = "http://stooq.pl/c/?p&s=";
         }
 
     struct kategorie

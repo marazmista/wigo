@@ -33,12 +33,18 @@ namespace mm_gielda
     public struct staleapki
         {
         public const string tmpdir = @"\tmp\";
+        public const string tmpWykresDir = tmpdir + @"tmpWykresy\";
         public const string bazadir = @"\baza\";
         public const string danedir = @"\dane\";
         public static readonly string appdir = Environment.CurrentDirectory;
 
         public const string formatDaty = "dd-MM-yyyy HH:mm:ss";
         public const byte iloscNaj = 6;  // ilość w tabelach wzrosty,spadki i najaktywniejsze na podsumowaniu //
+
+        // stałe czasu, po kótym nie pobierać nowych danych z gpw //
+        public const byte nieOdswGPWPoGodz = 17;
+        public const byte nieOdswGPWPoMin = 50;
+        public static readonly DateTime dataUruchmienia = DateTime.Now.Date;
 
         // powiedzmy że zmienna, do metody pobierającej składy indeksów //
         public static bool pierwszePobranie = true;
@@ -94,15 +100,13 @@ namespace mm_gielda
         // zdarzenie aktualizujace loga //
         void Loger_updateLogbox(object sender, EventArgs e)
             {
-            Action append = delegate() { logbox.AppendText(Loger.returnLastLogLine() + "\n"); };
-            this.Dispatcher.Invoke(append);
+            this.Dispatcher.Invoke(new Action(() => { logbox.AppendText(Loger.returnLastLogLine() + "\n"); }));
             }
 
         // zdarzenie aktualizujące labelkę z pobranymi danymi //
         void Loger_updateTotalDown(object sender, EventArgs e)
             {
-            Action a = delegate() { totalDownL.Content = "Łącznie pobrano danych: " + Loger.returnTotalDownloaded().ToString(); };
-            this.Dispatcher.Invoke(a);
+            this.Dispatcher.Invoke(new Action(() => { totalDownL.Content = "Łącznie pobrano danych: " + Loger.returnTotalDownloaded().ToString(); }));
             }
         #endregion
 

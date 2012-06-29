@@ -6,13 +6,16 @@
 // ================
 
 using System;
-using System.Windows.Media;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Windows;
-
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 using klasyakcjowe;
+using commonStrings;
+using System.Windows.Media.Imaging;
 
 namespace mm_gielda
     {
@@ -21,22 +24,81 @@ namespace mm_gielda
         #region === zdarzenia timerowe ===
         void timerGPW_Tick(object sender, EventArgs e)
             {
-            Action a = () => tabelujGPW();
-            a.BeginInvoke(null, null);
+            new Action(delegate() { tabelujGPW() ;}).BeginInvoke(null, null);
             }
 
         public void timerSwiat_Tick(object sender, EventArgs e)
             {
-            Action a = () => tabelujSwiat();
-            a.BeginInvoke(null, null);
+            new Action(delegate() { tabelujSwiat(); }).BeginInvoke(null, null);
             }
 
         public void timerNewsy_Tick(object sender, EventArgs e)
             {
-            Action a = () => tabelujNewsy();
-            a.BeginInvoke(null, null);
+            new Action(delegate() { tabelujNewsy(); }).BeginInvoke(null, null);
             }
         #endregion
+
+        // pobieranie tego małego wykresu obok tabeli //
+        void wczytajMalyWykres(string symbol,Image wpfImage, bool czyGPW)
+            {
+            string wykresPlik = staleapki.appdir + staleapki.tmpWykresDir + symbol + "_mWykres.png";
+
+            // sprawdza czy pobiera coś z gpw, jeśli nie to pobiera zawsze, nie patrzy na godzinę //
+            if (czyGPW)
+                {
+                if (czyTrwaSesja())    // jeśli trwa sesja to pobieraj
+                    Pobierz(adresy.StooqMWykres + symbol.ToLower(), wykresPlik);
+                else if (!File.Exists(wykresPlik))  // jeśli pliku nie ma to pobieraj
+                    Pobierz(adresy.StooqMWykres + symbol.ToLower(), wykresPlik);
+                else if ((File.GetCreationTime(wykresPlik) == DateTime.Now) & (File.GetCreationTime(wykresPlik).Hour > 9) & (File.GetCreationTime(wykresPlik).Hour <= 17))
+                    Pobierz(adresy.StooqMWykres + symbol.ToLower(), wykresPlik); // jeśli plik jest z sesji, a sesji już nie ma to też pobieraj (wykres zamknięcia) //
+                }
+            else
+                Pobierz(adresy.StooqMWykres + symbol.ToLower(), wykresPlik);
+
+            try
+                {
+                BitmapImage bp = new BitmapImage(new Uri(wykresPlik));
+                wpfImage.Source = bp;
+                }
+            catch {  }
+            }
+
+        // zmiana koloru paska i ikonki(góra, dół, kwadrat) na bocznym infie //
+        void KolorISymbol(string zmiana,Border border, Grid grid, Rectangle rect)
+            {
+            var kolorUp = Brushes.Green;
+            var kolorDown = Brushes.Red;
+            var kolorZero = Brushes.Aqua;
+
+            if (Convert.ToSingle(zmiana) > 0.00)
+                {
+                if (border != null)
+                    border.Background = kolorUp;
+                if (grid != null)
+                    grid.Background = kolorUp;
+
+                rect.Fill = (ImageBrush)Resources["up"];
+                }
+            else
+                {
+                if (border != null)
+                    border.Background = kolorDown;
+                if (grid != null)
+                    grid.Background = kolorDown;
+
+                rect.Fill = (ImageBrush)Resources["down"];
+                };
+            
+            if (Convert.ToSingle(zmiana) == 0.00)
+                {
+                if (border != null)
+                    border.Background = kolorZero;
+                if (grid != null)
+                    grid.Background = kolorZero;
+                rect.Fill = (ImageBrush)Resources["zero"];
+                }
+            }
 
         #region === zdarzenie wczytujace dane obok tabel po wcisnieciu na gridzie ===
 		void wczytajAkcjeDetails(List<daneAkcji> tabela, DataGrid grid, bool czyAkcja)
@@ -56,14 +118,9 @@ namespace mm_gielda
                 aWolumen.Content = tabela[i].Wolumen;
                 aObrot.Content = tabela[i].Obrot;
                 aTransakcje.Content = tabela[i].Transakcje;
+                KolorISymbol(tabela[i].Zmiana, aBorder,null, aRect);
 
-                if (Convert.ToSingle(tabela[i].Zmiana) < 0.00)
-                    aBorder.Background = Brushes.Red;
-                else
-                    aBorder.Background = Brushes.Green;
-
-                if (Convert.ToSingle(tabela[i].Zmiana) == 0.00)
-                    aBorder.Background = Brushes.Aqua;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }));
                 }
             else
                 {
@@ -77,15 +134,9 @@ namespace mm_gielda
                 iWolumen.Content = tabela[i].Wolumen;
                 iObrot.Content = tabela[i].Obrot;
                 iTransakcje.Content = tabela[i].Transakcje;
+                KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
 
-                if (Convert.ToSingle(tabela[i].Zmiana) < 0.00)
-                    iBorder.Background = Brushes.Red;
-                else
-                    iBorder.Background = Brushes.Green;
-
-                if (Convert.ToSingle(tabela[i].Zmiana) == 0.00)
-                    iBorder.Background = Brushes.Aqua;
-
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, true); }));
                 }
             }
 
@@ -103,14 +154,9 @@ namespace mm_gielda
                 wtMaxMin.Content = tabela[i].MaxMin;
                 wtOtwarcie.Content = tabela[i].Otwarcie;
                 wtOdniesienie.Content = tabela[i].Odniesienie;
+                KolorISymbol(tabela[i].Zmiana, wtBorder,null, wtRect);
 
-                if (Convert.ToSingle(tabela[i].Zmiana) < 0.00)
-                    wtBorder.Background = Brushes.Red;
-                else
-                    wtBorder.Background = Brushes.Green;
-
-                if (Convert.ToSingle(tabela[i].Zmiana) == 0.00)
-                    wtBorder.Background = Brushes.Aqua;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, wtWykres, false); }));
                 }
             else
                 {
@@ -121,14 +167,9 @@ namespace mm_gielda
                 iMaxMin.Content = tabela[i].MaxMin;
                 iOtwarcie.Content = tabela[i].Otwarcie;
                 iOdniesienie.Content = tabela[i].Odniesienie;
+                KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
 
-                if (Convert.ToSingle(tabela[i].Zmiana) < 0.00)
-                    iBorder.Background = Brushes.Red;
-                else
-                    iBorder.Background = Brushes.Green;
-
-                if (Convert.ToSingle(tabela[i].Zmiana) == 0.00)
-                    iBorder.Background = Brushes.Aqua;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, false); }));
                 }
             }
 
