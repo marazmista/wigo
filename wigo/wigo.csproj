@@ -143,6 +143,33 @@
     <Resource Include="res\up.png" />
     <Resource Include="res\zero.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Podium256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Favorites_256x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Text.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\wallet_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Product-documentation256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Calendar_256x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\diagram_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Blueprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\chat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

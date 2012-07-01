@@ -108,17 +108,20 @@ namespace mm_gielda
             // sprawdza czy wczytuje akcje, czy indeks gpw //
             if (czyAkcja)
                 {
-                aNazwa.Content = tabela[i].Nazwa;
-                aData.Content = tabela[i].Data;
-                aKurs.Content = tabela[i].Kurs;
-                aZmiana.Content = tabela[i].Zmiana + " (" + tabela[i].ZmianaProc + ")";
-                aMaxMin.Content = tabela[i].MaxMin;
-                aOtwarcie.Content = tabela[i].Otwarcie;
-                aOdniesienie.Content = tabela[i].Odniesienie;
-                aWolumen.Content = tabela[i].Wolumen;
-                aObrot.Content = tabela[i].Obrot;
-                aTransakcje.Content = tabela[i].Transakcje;
-                KolorISymbol(tabela[i].Zmiana, aBorder,null, aRect);
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    aNazwa.Content = tabela[i].Nazwa;
+                    aData.Content = tabela[i].Data;
+                    aKurs.Content = tabela[i].Kurs;
+                    aZmiana.Content = tabela[i].Zmiana + " (" + tabela[i].ZmianaProc + ")";
+                    aMaxMin.Content = tabela[i].MaxMin;
+                    aOtwarcie.Content = tabela[i].Otwarcie;
+                    aOdniesienie.Content = tabela[i].Odniesienie;
+                    aWolumen.Content = tabela[i].Wolumen;
+                    aObrot.Content = tabela[i].Obrot;
+                    aTransakcje.Content = tabela[i].Transakcje;
+                    KolorISymbol(tabela[i].Zmiana, aBorder, null, aRect);
+                }));
 
                 this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }));
                 }
@@ -175,6 +178,7 @@ namespace mm_gielda
 
         private void akcjeGrid_Selected(object sender, RoutedEventArgs e)
             {
+            //this.Dispatcher.BeginInvoke(new Action(() => wczytajAkcjeDetails(daneTabel.tAkcje, akcjeGrid, true)));
             wczytajAkcjeDetails(daneTabel.tAkcje, akcjeGrid, true);
             }
 

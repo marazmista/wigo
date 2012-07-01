@@ -13,6 +13,15 @@
         <ImageBrush ImageSource="res/down.png" x:Key="down" />
         <ImageBrush ImageSource="res/zero.png" x:Key="zero" />
         
+        <ImageBrush ImageSource="res/diagram_64.png" x:Key="diagram" />
+        <ImageBrush ImageSource="res/Favorites_256x256.png" x:Key="FavStar" />
+        <ImageBrush ImageSource="res/Product-documentation256.png" x:Key="Doc" />
+        <ImageBrush ImageSource="res/Text.png" x:Key="Text" />
+        <ImageBrush ImageSource="res/wallet_64.png" x:Key="Portfel" />
+        <ImageBrush ImageSource="res/Calendar_256x256.png" x:Key="cal" />
+        <ImageBrush ImageSource="res/Blueprint.png" x:Key="analizy" />
+        <ImageBrush ImageSource="res/chat.png" x:Key="chat" />
+        
         <!-- Motywy zakładek-->
         <Style x:Key="taby" TargetType="TabItem">
             <Setter Property="Foreground" Value="Black" />
@@ -39,6 +48,56 @@
                 </Trigger>                
             </Style.Triggers>-->
         </Style>
+        
+        <ControlTemplate x:Key="tabTemp" TargetType="{x:Type TabItem}">
+            <Border Height="auto" Name="Ramka" Width="Auto" CornerRadius="2" Background="Black" BorderBrush="Gray" BorderThickness="2" Margin="4,1">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Margin="2" Height="30" Width="30" Name="RectPic" Stretch="Fill" />
+                    <Label Name="lTytul" Content="{TemplateBinding Header}" Foreground="White" />
+                </StackPanel>
+            </Border>
+            
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Ramka" Property="Background" Value="DarkGray" />
+                    <Setter TargetName="Ramka" Property="BorderBrush" Value="Yellow" />
+                    <Setter TargetName="lTytul" Property="Foreground" Value="Black" />
+                    <Setter TargetName="lTytul" Property="FontWeight" Value="Bold" />
+                </Trigger>
+                
+                <Trigger Property="Header" Value="Podsumowanie">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource Doc}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Akcje">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource diagram}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Indeksy">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource diagram}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Waluty i towary">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource diagram}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Ulubione">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource FavStar}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Log">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource Text}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Portfel">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource Portfel}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Makro">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource cal}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Analizy">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource analizy}" />
+                </Trigger>
+                <Trigger Property="Header" Value="Wiadomości">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource chat}" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
 
         <!-- Labele -->
         
@@ -243,7 +302,7 @@
 
         
         <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" TabStripPlacement="Left" Background="#FF868686" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="4" BorderThickness="0">
-            <TabItem Header="Podsumowanie" Style="{StaticResource taby}" FontWeight="Bold">
+            <TabItem Header="Podsumowanie" Template="{StaticResource tabTemp}">
                 <ScrollViewer>
                     <WrapPanel Margin="2,0,0,0">
                         <GroupBox Header="Akcje GPW" Style="{StaticResource groupboxglowny}">
@@ -315,7 +374,7 @@
                     </WrapPanel>    
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Indeksy" Style="{StaticResource ResourceKey=taby}">
+            <TabItem Header="Indeksy" Template="{StaticResource tabTemp}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -363,13 +422,13 @@
                             <Label Margin="116,298,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
                             <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="iImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
                             <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
-                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
                             <Rectangle Style="{StaticResource znaczekBokInfo}" Name="iRect" />
+                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
                         </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Akcje" Style="{StaticResource taby}">
+            <TabItem Header="Akcje"  Template="{StaticResource tabTemp}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -517,7 +576,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Waluty i towary" Style="{StaticResource ResourceKey=taby}">
+            <TabItem Header="Waluty i towary"  Template="{StaticResource tabTemp}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -559,18 +618,18 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Ulubione" Style="{StaticResource taby}">
+            <TabItem Header="Ulubione"  Template="{StaticResource tabTemp}">
                 <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
                     <DataGrid Name="ulubioneGrid" Style="{StaticResource grid}" />
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Makro" Style="{StaticResource taby}" />
-            <TabItem Header="Wiadomości" Style="{StaticResource taby}">
+            <TabItem Header="Makro"  Template="{StaticResource tabTemp}" />
+            <TabItem Header="Wiadomości"  Template="{StaticResource tabTemp}">
                 <ScrollViewer  Style="{StaticResource ResourceKey=scroll}" Name="wiadomosciGrid_scrool">
                     <DataGrid Name="wiadomosciGrid" Style="{StaticResource grid}" />
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Analizy" Style="{StaticResource taby}">
+            <TabItem Header="Analizy"  Template="{StaticResource tabTemp}">
                 <ScrollViewer>
                     <DataGrid>
                         <DataGrid.Columns>
@@ -581,8 +640,8 @@
                     </DataGrid>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Portfel" Style="{StaticResource taby}"/>
-            <TabItem Header="Log" Style="{StaticResource taby}">
+            <TabItem Header="Portfel"  Template="{StaticResource tabTemp}"/>
+            <TabItem Header="Log"  Template="{StaticResource tabTemp}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50" />
