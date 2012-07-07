@@ -85,6 +85,7 @@
     <Compile Include="klasyakcjowe.cs" />
     <Compile Include="klasynewsowe.cs" />
     <Compile Include="Main2.cs" />
+    <Compile Include="mainOpcje.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -169,6 +170,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\chat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Settings_256x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Information_256x256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\statistics_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\circle-check.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

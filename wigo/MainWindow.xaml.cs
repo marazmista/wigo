@@ -21,6 +21,7 @@ using System.IO;
 using System.Data;
 using System.Collections.Generic;
 using System.Collections;
+using System.Windows.Threading;
 
 using commonStrings;
 using klasyakcjowe;
@@ -50,9 +51,14 @@ namespace mm_gielda
         public static bool pierwszePobranie = true;
         }
 
-
     public partial class MainWindow : Window
         {
+
+        //timery
+        DispatcherTimer timerGPW = new DispatcherTimer();
+        DispatcherTimer timerSwiat = new DispatcherTimer();
+        DispatcherTimer timerNewsy = new DispatcherTimer();
+
         // ================
         // cały nasz mainwindow, okienko //
         // ================
@@ -64,34 +70,50 @@ namespace mm_gielda
                 DirCheck();
                 }
             catch { };
-
-            // obsługa zdarzenia logującego w klasie mainwindow //
-            Loger.updateLogbox += new EventHandler(Loger_updateLogbox);
-            Loger.updateTotalDown += new EventHandler(Loger_updateTotalDown);
-
-            #region timery, deklaracja ====
-            var timerGPW = new System.Windows.Threading.DispatcherTimer();
-            timerGPW.Tick += new EventHandler(timerGPW_Tick);
-            timerGPW.Interval = new TimeSpan(0, 2, 0);
-            timerGPW.Start();
-
-            var timerSwiat = new System.Windows.Threading.DispatcherTimer();
-            timerSwiat.Tick += new EventHandler(timerSwiat_Tick);
-            timerSwiat.Interval = new TimeSpan(0, 2, 0);
-            timerSwiat.Start();
-
-            var timerNewsy = new System.Windows.Threading.DispatcherTimer();
-            timerNewsy.Tick += new EventHandler(timerNewsy_Tick);
-            timerNewsy.Interval = new TimeSpan(0, 5, 0);
-            timerNewsy.Start();
-            #endregion
-
-            Loger.dodajDoLogaInfo("Start logowania");
             }// zamkniecie maina
+
+        void setTimers()
+            {
+            timerGPW.Tick += new EventHandler(timerGPW_Tick);
+            timerGPW.Interval = new TimeSpan(0, config.gpwInterwal, 0);
+
+            timerSwiat.Tick += new EventHandler(timerSwiat_Tick);
+            timerSwiat.Interval = new TimeSpan(0, config.swiatInterwal, 0);
+
+            timerNewsy.Tick += new EventHandler(timerNewsy_Tick);
+            timerNewsy.Interval = new TimeSpan(0, config.newsyInterwal, 0);
+
+            // jesli odpalonew w weekend, to nie startuj timerów, jedynie wczytaj w WindowInitialized tabele jednokrotnie //
+            if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday | DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
+                {
+                timerGPW.Start();
+                timerSwiat.Start();
+                timerNewsy.Start();
+                }
+            }
 
         #region === inne zdarzenia ===
         private void Window_Initialized(object sender, EventArgs e)
             {
+            // obsługa zdarzenia logującego w klasie mainwindow //
+            Loger.updateLogbox += new EventHandler(Loger_updateLogbox);
+            Loger.updateTotalDown += new EventHandler(Loger_updateTotalDown);
+
+            Loger.dodajDoLogaInfo("Start logowania");
+
+            // załączenie timerów //
+            setTimers();
+
+            // wczytanie configa jeśli jest //
+            if (File.Exists(configFilePath))
+            {
+                wczytajOpcje();
+                Loger.dodajDoLogaInfo("Wczytano ustawienia");
+            }
+            else
+                Loger.dodajDoLogaInfo("Brak pliku ustawień, wczytano domyślne");
+
+            // odpalenie ticka, żeby wczytać tabele na starcie //
             timerGPW_Tick(null, null);
             timerSwiat_Tick(null, null);
             timerNewsy_Tick(null, null);

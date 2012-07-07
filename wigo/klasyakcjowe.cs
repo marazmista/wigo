@@ -249,6 +249,7 @@ namespace klasyakcjowe
                 try
                     {
                     string[] aStooqIndeksy = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + plik);
+                    File.Delete(staleapki.appdir + staleapki.tmpdir + plik); // żeby nie było bałaganu
 
                     var tabPraser = new Regex("<table (.+?)</table>");
                     MatchCollection matches = tabPraser.Matches(aStooqIndeksy[0]);
@@ -601,6 +602,7 @@ namespace klasyakcjowe
                 try
                     {
                     string[] aStooqAkcje = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + plik);
+                    File.Delete(staleapki.appdir + staleapki.tmpdir + plik); // żeby nie było bałaganu
 
                     // szukanie tabel z danymi, taki główny regex
                     var tabPraser = new Regex("<table (.+?)</table>");

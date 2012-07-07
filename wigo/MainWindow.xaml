@@ -5,7 +5,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         FontFamily="Verdana" FontSize="10"
-        Title="WIGO - Polska Giełda" Height="516" Width="1049" Background="#FF646464" Initialized="Window_Initialized">
+        Title="WIGO - Polska Giełda" Height="562" Width="1087" Background="#FF646464" Initialized="Window_Initialized">
     <Window.Resources>
 
         <!--ikonki obrazki-->
@@ -21,32 +21,31 @@
         <ImageBrush ImageSource="res/Calendar_256x256.png" x:Key="cal" />
         <ImageBrush ImageSource="res/Blueprint.png" x:Key="analizy" />
         <ImageBrush ImageSource="res/chat.png" x:Key="chat" />
-        
-        <!-- Motywy zakładek-->
-        <Style x:Key="taby" TargetType="TabItem">
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="Background" Value="Gray" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Width" Value="Auto" />
-            <Setter Property="Margin" Value="-2,2,2,-2" />
-            <!--<Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Yellow" />                
-                </Trigger>                
-            </Style.Triggers>-->
-        </Style>
-
+        <ImageBrush ImageSource="res/Settings_256x256.png" x:Key="settings" />
+        <ImageBrush ImageSource="res/Information_256x256.png" x:Key="info" />
+        <ImageBrush ImageSource="res/statistics_64.png" x:Key="stats" />
+        <ImageBrush ImageSource="res/circle-check.png" x:Key="ok" />
+                
+        <!-- Motywy zakładek-->       
         <Style x:Key="taby2" TargetType="TabItem">
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="Background" Value="Gray" />
             <Setter Property="Height" Value="25" />
             <Setter Property="Width" Value="Auto" />
             <Setter Property="Margin" Value="-2,2,2,-2" />
-            <!--<Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Yellow" />                
-                </Trigger>                
-            </Style.Triggers>-->
+        </Style>
+        
+        <Style x:Key="rectStyle" TargetType="Rectangle">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="20" />
+        </Style>
+        
+        <Style x:Key="tbox" TargetType="TextBox">
+            <Setter Property="Background" Value="#FFE8DFDF" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         </Style>
         
         <ControlTemplate x:Key="tabTemp" TargetType="{x:Type TabItem}">
@@ -95,10 +94,12 @@
                 <Trigger Property="Header" Value="Wiadomości">
                     <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource chat}" />
                 </Trigger>
+                <Trigger Property="Header" Value="Opcje">
+                    <Setter TargetName="RectPic" Property="Fill" Value="{StaticResource settings}" />
+                </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        
-
+                
         <!-- Labele -->
         
         <Style x:Key="labeltytul" TargetType="Label">
@@ -201,7 +202,12 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="246,65,0,0" />
         </Style>
-
+        
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />   
+        </Style>
 
     </Window.Resources>
 
@@ -378,7 +384,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="350" />
+                        <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
                         <TabItem Header="GPW" Style="{StaticResource ResourceKey=taby2}">
@@ -399,32 +405,56 @@
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
                     <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
-                        <Grid>
-                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                        <StackPanel>                            
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
-                            <Label Content="..." Margin="26,40,0,0" Name="iNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                            <Label Content="..." Height="28" Margin="8,66,0,0" Name="iData" Style="{StaticResource labeldane2}" FontSize="12" />
-                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
-                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Wolumen:" Margin="23,241,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Obrót:" Margin="51,271,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Transakcje:" Margin="11,298,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="iKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                            <Label Name="iZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="iMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="iOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="iOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,241,0,0" Name="iWolumen" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,271,0,0" Name="iObrot" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,298,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
-                            <Image Height="100" HorizontalAlignment="Left" Margin="230,66,0,0" Name="iImage" Stretch="Fill" VerticalAlignment="Top" Width="100" />
-                            <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
-                            <Rectangle Style="{StaticResource znaczekBokInfo}" Name="iRect" />
-                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
-                        </Grid>
+                            <Separator Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+
+                            <Expander>
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Rectangle Fill="{StaticResource settings}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Opcje" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Button Content="Dodaj do ulubionych" />
+                                    <Button Content="Przejdź to AT" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander IsExpanded="True">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Fill="{StaticResource stats}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Info" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <Grid>
+                                    <Label Content="..." Margin="27,7,0,0" Name="iNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="iData" Style="{StaticResource labeldane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="iKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                                    <Label Name="iZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="iMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="iOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="iOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,208,0,0" Name="iWolumen" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,238,0,0" Name="iObrot" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,265,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
+                                    <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
+                                    <Rectangle Style="{StaticResource znaczekBokInfo}" Name="iRect" Margin="247,32,0,0" />
+                                    <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                                </Grid>
+                            </Expander>
+
+                        </StackPanel>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
@@ -432,7 +462,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="350" />
+                        <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
                         <TabItem Header="Wszystkie GPW" Style="{StaticResource ResourceKey=taby2}">
@@ -548,31 +578,78 @@
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
                     <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
-                        <Grid>
-                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                        <StackPanel>
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
-                            <Label Content="..." Margin="26,40,0,0" Name="aNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                            <Label Content="..." Height="28" Margin="8,66,0,0" Name="aData" Style="{StaticResource labeldane2}" FontSize="12" />
-                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
-                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Obrót:" Margin="51,271,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Transakcje:" Margin="11,298,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Wolumen:" Margin="23,241,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="aKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                            <Label Name="aZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="aMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="aOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="aOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,271,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,298,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
-                            <Label Margin="116,241,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
-                            <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="aBorder" VerticalAlignment="Top" Width="9" />
-                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="aWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
-                            <Rectangle Name="aRect" Style="{StaticResource znaczekBokInfo}" />
-                        </Grid>
+                            <Separator Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+
+                            <Expander>
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Rectangle Fill="{StaticResource settings}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Opcje" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Button Content="Dodaj do ulubionych" />
+                                    <Button Content="Przejdź to AT" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander IsExpanded="True">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Fill="{StaticResource stats}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Info" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <Grid>
+                                    <Label Content="..." Margin="27,7,0,0" Name="aNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="aData" Style="{StaticResource labeldane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="aKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                                    <Label Name="aZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="aMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="aOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="aOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,238,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,265,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
+                                    <Label Margin="117,208,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
+                                    <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="aBorder" VerticalAlignment="Top" Width="9" />
+                                    <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="aWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                                    <Rectangle Name="aRect" Style="{StaticResource znaczekBokInfo}" Margin="247,32,0,0" />
+                                </Grid>
+                            </Expander>
+                            
+                            <Expander>
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Fill="{StaticResource info}"  Style="{StaticResource rectStyle}" />
+                                        <Label Content="Informacje o spółce" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <TabControl HorizontalAlignment="Left" Width="335" Height="200">
+                                    <TabItem Style="{StaticResource taby2}" Header="Ogólne">
+                                        <ScrollViewer>
+                                            
+                                        </ScrollViewer>
+                                    </TabItem>
+                                    <TabItem Style="{StaticResource taby2}" Header="Profil">
+                                        <TextBox Style="{StaticResource tbox}" >Info o spółce... ble ble ble</TextBox>
+                                    </TabItem>
+                                    <TabItem Style="{StaticResource taby2}" Header="Akcjonariat">
+                                        
+                                    </TabItem>
+                                </TabControl>
+                            </Expander>
+
+                        </StackPanel>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
@@ -580,7 +657,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="350" />
+                        <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
                         <TabItem Header="Waluty" Style="{StaticResource ResourceKey=taby2}">
@@ -596,25 +673,50 @@
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
                     <ScrollViewer Margin="3,0,0,0" Grid.Column="1" Style="{StaticResource ResourceKey=scroll}">
-                        <Grid>
-                            <Separator Height="5" HorizontalAlignment="Stretch" Margin="6,29,0,0" VerticalAlignment="Top" />
+                        <StackPanel>
                             <Label Content="Szczegóły wybranego obiektu" Height="28" HorizontalAlignment="Left" Margin="59,2,0,0" VerticalAlignment="Top" FontSize="14" FontStyle="Normal" FontWeight="Bold" />
-                            <Label Content="..." Margin="26,40,0,0" Name="wtNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                            <Label Content="..." Height="28" Margin="8,66,0,0" Name="wtData" Style="{StaticResource labeldane2}" FontSize="12" />
-                            <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="59,100,0,0" />
-                            <Label Content="Zmiana:" Margin="37,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Max | Min:" Margin="19,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Otwarcie:" Margin="27,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Content="Odniesienie:" Margin="6,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="wtKurs" Margin="116,100,0,200" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                            <Label Name="wtZmiana" Margin="116,126,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="wtMaxMin" Margin="116,151,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="wtOtwarcie" Margin="116,181,0,0" Style="{StaticResource labeldane2}" />
-                            <Label Name="wtOdniesienie" Margin="116,211,0,0" Style="{StaticResource labeldane2}" />
-                            <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="2,40,0,0" Name="wtBorder" VerticalAlignment="Top" Width="9" />
-                            <Image Height="96" HorizontalAlignment="Left" Margin="19,332,0,0" Name="wtWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
-                            <Rectangle Name="wtRect" Style="{StaticResource znaczekBokInfo}" />
-                        </Grid>
+                            <Separator Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+
+                            <Expander>
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Rectangle Fill="{StaticResource settings}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Opcje" />
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel>
+                                    <Button Content="Dodaj do ulubionych" />
+                                    <Button Content="Przejdź to AT" />
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander IsExpanded="True">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Fill="{StaticResource stats}" Style="{StaticResource rectStyle}" />
+                                        <Label Content="Info" />
+                                    </StackPanel>
+                                </Expander.Header>
+
+                                <Grid>
+                                    <Label Content="..." Margin="27,7,0,0" Name="wtNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="wtData" Style="{StaticResource labeldane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="wtKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
+                                    <Label Name="wtZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="wtMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="wtOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Name="wtOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="wtBorder" VerticalAlignment="Top" Width="9" />
+                                    <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="wtWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+                                    <Rectangle Name="wtRect" Style="{StaticResource znaczekBokInfo}" Margin="247,32,0,0" />
+                                </Grid>
+                            </Expander>
+                        </StackPanel>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
@@ -641,13 +743,65 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Portfel"  Template="{StaticResource tabTemp}"/>
+            <TabItem Header="Opcje" Template="{StaticResource tabTemp}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Button Name="zapiszConfig" HorizontalAlignment="Left" Margin="5,2,0,2" Click="zapiszConfig_Click">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Fill="{StaticResource ok}" Height="24" Width="24" />
+                                    <Label Content="Zapisz ustawienia" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                <WrapPanel Grid.Row="1">
+                     <GroupBox Header="GPW" Margin="2">
+                        <StackPanel Margin="2">
+                            <CheckBox Content="Pobieraj akcje GPW"  IsChecked="True" Name="CB_pobierajAkcjeGPW"  />
+                            <CheckBox Content="Pobieraj indeksy GPW" IsChecked="True" Name="CB_pobierajIndeksyGPW" />
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Odświeżaj co: [min]" />
+                                <TextBox Text="2" Name="T_GPWinterwal" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Świat" Margin="2">
+                        <StackPanel Margin="2">
+                            <CheckBox Content="Pobieraj indeksy światowe"  IsChecked="True" Name="CB_pobierajIndeksySwiat"/>
+                            <CheckBox Content="Pobieraj indesy Futures"  IsChecked="True" Name="CB_pobierajIndeksyFut"/>
+                            <CheckBox Content="Pobieraj waluty"  IsChecked="True" Name="CB_pobierajWaluty"/>
+                            <CheckBox Content="Pobieraj towary"  IsChecked="True" Name="CB_pobierjaTowary"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Odświeżaj co: [min]" />
+                                <TextBox Text="2" Name="T_swiatInterwal" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="Newsy i komentarze" Margin="2">
+                        <StackPanel Margin="2">
+                            <CheckBox Content="Pobieraj newsy z Bankier.pl" IsChecked="True" Name="CB_pobierajNewsyBankier" />
+                            <CheckBox Content="Pobieraj komentarze z Money.pl"  IsChecked="True" Name="CB_pobierajKomMoney"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Odświeżaj co: [min]" />
+                                <TextBox Text="5" Name="T_newsyInterwal" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </WrapPanel>
+                </Grid>
+            </TabItem>
             <TabItem Header="Log"  Template="{StaticResource tabTemp}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                        <TextBox Name="logbox" Grid.Row="1" VerticalAlignment="Stretch" Foreground="Black" Margin="3" VerticalScrollBarVisibility="Auto" Height="Auto" IsReadOnly="True" Background="#FFE8DFDF" />
+                        <TextBox Name="logbox" Style="{StaticResource tbox}" Grid.Row="1" VerticalAlignment="Stretch" Margin="3" VerticalScrollBarVisibility="Auto" Height="Auto" />
                     <Label Content="Łącznie pobrano danych: " Height="28" HorizontalAlignment="Left" Name="totalDownL" VerticalAlignment="Top" />
                 </Grid>
             </TabItem>

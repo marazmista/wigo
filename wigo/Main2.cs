@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Resources;
 using System.Resources;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 using klasynewsowe;
 using commonStrings;
@@ -274,11 +275,12 @@ namespace mm_gielda
                             List<string> tmpl = new List<string>();
 
                             // pobieranie pliczku z komponentami indeksu //
-                            string adres = "http://stooq.pl/q/i/?s=" + s;
+                            string adres = adresy.StooqSkladIndeks + s;
                             Pobierz(adres, staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
 
                             // kod tej stronki //
                             string[] tmpf = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
+                            File.Delete(filepath);
 
                             // szukanie symboli spółek w indeksie //
                             var reg = new Regex(@"<font id=f13><a href=q/\?s=(.+?)>");
@@ -383,9 +385,8 @@ namespace mm_gielda
                         }
                     }
                 else
-                    {
-                    tmpflo = Convert.ToInt32(tmps);
-                    }
+                    tmpflo = (tmps != "") ? Convert.ToInt32(tmps) : 0;
+
                 int t = (int)tmpflo;
                 convAllTab.Add(new daneNajaktyniejsze(listaZrodlo[i].Nazwa, listaZrodlo[i].Kurs, t.ToString("D"), listaZrodlo[i].Wolumen));
                 }; 
@@ -449,21 +450,27 @@ namespace mm_gielda
         // metody wrzucane do timerów, które w wątkach organizują infromację dla tabel
         void tabelujGPW()
             {
-            genDelegate.BeginInvoke(generujAkcje, done => { this.Dispatcher.Invoke(wAkcje, akcjeGrid, daneTabel.tAkcje); }, null);
-            genDelegate.BeginInvoke(generujIndeksyGPW, done => { this.Dispatcher.Invoke(wAkcje, indeksyGPWGrid, daneTabel.tIndeksyGPW); }, null);
+            if (config.czyPobieracAkcje)
+                genDelegate.BeginInvoke(generujAkcje, done => { this.Dispatcher.Invoke(wAkcje,DispatcherPriority.Background,akcjeGrid, daneTabel.tAkcje); }, null);
+            if (config.czyPobieracIndeksyGPW)
+                genDelegate.BeginInvoke(generujIndeksyGPW, done => { this.Dispatcher.Invoke(wAkcje, DispatcherPriority.Background, indeksyGPWGrid, daneTabel.tIndeksyGPW); }, null);
             }
 
         void tabelujSwiat()
             {
-            genDelegate.BeginInvoke(generujIndeksy, done => { this.Dispatcher.Invoke(wInne, indeksyGrid, daneTabel.tIndeksy); }, null);
-            genDelegate.BeginInvoke(generujIndeksyFut, done => { this.Dispatcher.Invoke(wInne, indeksyFutGrid, daneTabel.tIndeksyFut); }, null);
-            genDelegate.BeginInvoke(generujTowary, done => { this.Dispatcher.Invoke(wInne, towaryGrid, daneTabel.tTowary); }, null);
-            genDelegate.BeginInvoke(generujWaluty, done => { this.Dispatcher.Invoke(wInne, walutyGrid, daneTabel.tWaluty); }, null);
+            if (config.czyPobieracIndeksySw)
+                genDelegate.BeginInvoke(generujIndeksy, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, indeksyGrid, daneTabel.tIndeksy); }, null);
+            if (config.czyPobieracIndeksyFut)
+                genDelegate.BeginInvoke(generujIndeksyFut, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, indeksyFutGrid, daneTabel.tIndeksyFut); }, null);
+            if (config.czyPobieracTowary)
+                genDelegate.BeginInvoke(generujTowary, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, towaryGrid, daneTabel.tTowary); }, null);
+            if (config.czyPobieracWaluty)
+                genDelegate.BeginInvoke(generujWaluty, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, walutyGrid, daneTabel.tWaluty); }, null);
             }
 
         void tabelujNewsy()
             {
-            genDelegate.BeginInvoke(generujNK, done => { this.Dispatcher.Invoke(wNewsy, wiadomosciGrid, daneTabel.NK); }, null);
+            genDelegate.BeginInvoke(generujNK, done => { this.Dispatcher.Invoke(wNewsy, DispatcherPriority.Background, wiadomosciGrid, daneTabel.NK); }, null);
             }
 
         void tabelujWzrostySpadki()
@@ -474,11 +481,11 @@ namespace mm_gielda
             filtrujWzrostySpadki(daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
             filtrujWzrostySpadki(daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
 
-            this.Dispatcher.Invoke(wWS, akcjeGPWWzrostyGrid, akcjeGPWSpadkiGrid, daneTabel.tAkcjeGPWWzrosty, daneTabel.tAkcjeGPWSpadki);
-            this.Dispatcher.Invoke(wWS, wigWzrostyGrid, wigSpadkiGrid,daneTabel.tWigWzrosty, daneTabel.tWigSpadki);
-            this.Dispatcher.Invoke(wWS, wig20WzrostyGrid, wig20SpadkiGrid, daneTabel.tWig20Wzrosty, daneTabel.tWig20Spadki);
-            this.Dispatcher.Invoke(wWS, mwig40WzrostyGrid, mwig40SpadkiGrid, daneTabel.tMwig40Wzrosty, daneTabel.tMwig40Spadki);
-            this.Dispatcher.Invoke(wWS, swig80WzrostyGrid, swig80SpadkiGrid, daneTabel.tSwig80Wzrosty, daneTabel.tSwig80Spadki);
+            this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, akcjeGPWWzrostyGrid, akcjeGPWSpadkiGrid, daneTabel.tAkcjeGPWWzrosty, daneTabel.tAkcjeGPWSpadki);
+            this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, wigWzrostyGrid, wigSpadkiGrid, daneTabel.tWigWzrosty, daneTabel.tWigSpadki);
+            this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, wig20WzrostyGrid, wig20SpadkiGrid, daneTabel.tWig20Wzrosty, daneTabel.tWig20Spadki);
+            this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, mwig40WzrostyGrid, mwig40SpadkiGrid, daneTabel.tMwig40Wzrosty, daneTabel.tMwig40Spadki);
+            this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, swig80WzrostyGrid, swig80SpadkiGrid, daneTabel.tSwig80Wzrosty, daneTabel.tSwig80Spadki);
             }
 
         void tabelujNajaktywniejsze()
@@ -489,11 +496,11 @@ namespace mm_gielda
             filtrujNajaktywniejsze(daneTabel.tmWig40, ref daneTabel.tMwig40Najaktywniejsze);
             filtrujNajaktywniejsze(daneTabel.tsWig80, ref daneTabel.tSwig80Najaktywniejsze);
 
-            this.Dispatcher.Invoke(wN, akcjeGPWNajaktywniejszeGrid, daneTabel.tAkcjeGPWNajaktwyniejsze);
-            this.Dispatcher.Invoke(wN, wigNajaktywniejszeGrid, daneTabel.tWigNajaktywniejsze);
-            this.Dispatcher.Invoke(wN, wig20NajaktywniejszeGrid, daneTabel.tWig20Najaktywniejsze);
-            this.Dispatcher.Invoke(wN, mwig40NajaktywniejszeGrid, daneTabel.tMwig40Najaktywniejsze);
-            this.Dispatcher.Invoke(wN, swig80NajaktywniejszeGrid, daneTabel.tSwig80Najaktywniejsze);
+            this.Dispatcher.Invoke(wN, DispatcherPriority.Background, akcjeGPWNajaktywniejszeGrid, daneTabel.tAkcjeGPWNajaktwyniejsze);
+            this.Dispatcher.Invoke(wN, DispatcherPriority.Background, wigNajaktywniejszeGrid, daneTabel.tWigNajaktywniejsze);
+            this.Dispatcher.Invoke(wN, DispatcherPriority.Background, wig20NajaktywniejszeGrid, daneTabel.tWig20Najaktywniejsze);
+            this.Dispatcher.Invoke(wN, DispatcherPriority.Background, mwig40NajaktywniejszeGrid, daneTabel.tMwig40Najaktywniejsze);
+            this.Dispatcher.Invoke(wN, DispatcherPriority.Background, swig80NajaktywniejszeGrid, daneTabel.tSwig80Najaktywniejsze);
             }
         #endregion
 
@@ -551,19 +558,25 @@ namespace mm_gielda
         // ================
         private void generujNK()
             {
-            var bankierRynki = new newsBankier(serwisy.Bankier, typy.Wiadomosci);
-            var komentarzeMoney = new komentarzeMoney(serwisy.Money, typy.Komentarze);
             var tmptab = new List<daneNewsa>(50);
 
             try
                 {
-                tmptab = bankierRynki.generujTabele();
+                if (config.czyPobieracNewsyBankier)
+                    {
+                    var bankierRynki = new newsBankier(serwisy.Bankier, typy.Wiadomosci);
+                    tmptab = bankierRynki.generujTabele();
+                    }
                 }
             catch { }
 
             try
                 {
-                tmptab = tmptab.Concat(komentarzeMoney.generujTabele()).ToList();
+                    if (config.czyPobieracKomentarzeMoney)
+                    {
+                        var komentarzeMoney = new komentarzeMoney(serwisy.Money, typy.Komentarze);
+                        tmptab = tmptab.Concat(komentarzeMoney.generujTabele()).ToList();
+                    }
                 }
             catch { }
 

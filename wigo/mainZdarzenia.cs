@@ -12,6 +12,8 @@ using System.Windows;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 
 using klasyakcjowe;
 using commonStrings;
@@ -24,17 +26,19 @@ namespace mm_gielda
         #region === zdarzenia timerowe ===
         void timerGPW_Tick(object sender, EventArgs e)
             {
-            new Action(delegate() { tabelujGPW() ;}).BeginInvoke(null, null);
+            new Action(delegate() { tabelujGPW(); }).BeginInvoke(null, null);
+            timerGPW.Interval = new TimeSpan(0, config.gpwInterwal, 0);
             }
-
         public void timerSwiat_Tick(object sender, EventArgs e)
             {
             new Action(delegate() { tabelujSwiat(); }).BeginInvoke(null, null);
+            timerSwiat.Interval = new TimeSpan(0, config.swiatInterwal, 0);
             }
 
         public void timerNewsy_Tick(object sender, EventArgs e)
             {
             new Action(delegate() { tabelujNewsy(); }).BeginInvoke(null, null);
+            timerNewsy.Interval = new TimeSpan(0, config.newsyInterwal, 0);
             }
         #endregion
 
@@ -108,22 +112,20 @@ namespace mm_gielda
             // sprawdza czy wczytuje akcje, czy indeks gpw //
             if (czyAkcja)
                 {
-                this.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    aNazwa.Content = tabela[i].Nazwa;
-                    aData.Content = tabela[i].Data;
-                    aKurs.Content = tabela[i].Kurs;
-                    aZmiana.Content = tabela[i].Zmiana + " (" + tabela[i].ZmianaProc + ")";
-                    aMaxMin.Content = tabela[i].MaxMin;
-                    aOtwarcie.Content = tabela[i].Otwarcie;
-                    aOdniesienie.Content = tabela[i].Odniesienie;
-                    aWolumen.Content = tabela[i].Wolumen;
-                    aObrot.Content = tabela[i].Obrot;
-                    aTransakcje.Content = tabela[i].Transakcje;
-                    KolorISymbol(tabela[i].Zmiana, aBorder, null, aRect);
-                }));
+                aNazwa.Content = tabela[i].Nazwa;
+                aData.Content = tabela[i].Data;
+                aKurs.Content = tabela[i].Kurs;
+                aZmiana.Content = tabela[i].Zmiana + " (" + tabela[i].ZmianaProc + ")";
+                aMaxMin.Content = tabela[i].MaxMin;
+                aOtwarcie.Content = tabela[i].Otwarcie;
+                aOdniesienie.Content = tabela[i].Odniesienie;
+                aWolumen.Content = tabela[i].Wolumen;
+                aObrot.Content = tabela[i].Obrot;
+                aTransakcje.Content = tabela[i].Transakcje;
+                KolorISymbol(tabela[i].Zmiana, aBorder, null, aRect);
 
-                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }));
+                aWykres.Source = null;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }),DispatcherPriority.Background );
                 }
             else
                 {
@@ -139,7 +141,8 @@ namespace mm_gielda
                 iTransakcje.Content = tabela[i].Transakcje;
                 KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
 
-                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, true); }));
+                iWykres.Source = null;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, true); }), DispatcherPriority.Background);
                 }
             }
 
@@ -159,7 +162,8 @@ namespace mm_gielda
                 wtOdniesienie.Content = tabela[i].Odniesienie;
                 KolorISymbol(tabela[i].Zmiana, wtBorder,null, wtRect);
 
-                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, wtWykres, false); }));
+                wtWykres.Source = null;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, wtWykres, false); }), DispatcherPriority.Background);
                 }
             else
                 {
@@ -172,7 +176,8 @@ namespace mm_gielda
                 iOdniesienie.Content = tabela[i].Odniesienie;
                 KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
 
-                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, false); }));
+                iWykres.Source = null;
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, false); }), DispatcherPriority.Background);
                 }
             }
 

@@ -114,7 +114,8 @@ namespace klasynewsowe
                 try
                     {
                     string[] aBankierRynki = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PBankierRynki);
-                    
+                    File.Delete(staleapki.appdir + staleapki.tmpdir + nazwyPlikow.PBankierRynki);
+
                     foreach (string s in aBankierRynki)
                         {
                         // ---- wyławianie daty ----//
@@ -197,6 +198,7 @@ namespace klasynewsowe
                     moneyKolekcja = new List<daneNewsa>();
 
                     string[] aKomentarzeMoney = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PMoneyKomentarze);
+                    File.Delete(staleapki.appdir + staleapki.tmpdir + nazwyPlikow.PMoneyKomentarze);
                     short i = 0;
 
                     foreach (string s in aKomentarzeMoney)

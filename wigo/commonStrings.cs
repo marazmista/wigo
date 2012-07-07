@@ -24,7 +24,7 @@ namespace commonStrings
 
         public const string xmlOutOK = " Weksportowano do XML";
         public const string xmlOutFail = " Eksport do XML nieudany";
-        public const string xmlOk = " Wczytano wartośći z pliku XML";
+        public const string xmlOk = " Wczytano wartości z pliku XML";
         public const string xmlFail = " Brak poprzednich dobrych danych w pliku XML (pierwsze uruchomienie, weekend?)";
 
         // odświeżanie składu indeksów //
@@ -97,6 +97,8 @@ namespace commonStrings
         public const string StooqWaluty = "http://stooq.pl/notowania/index.html?kat=w1&show=3&wtr=1&chart_=1&typ_=l&sort=";
 
         public const string StooqMWykres = "http://stooq.pl/c/?p&s=";
+        public const string StooqSkladIndeks = "http://stooq.pl/q/i/?s=";
+        public const string StooqProfilSpolki = "http://stooq.pl/q/p/?s=";
         }
 
     struct kategorie
