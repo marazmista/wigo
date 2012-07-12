@@ -37,6 +37,15 @@ namespace commonStrings
         // dolne kwadraciki error wczytywania //
         public const string indBoxRefreshError = "Błąd wczytywania informacji o indeksach GPW do dolnych pól (pusta tabela?)";
         public const string walutyBoxRefreshError = "Błąd wczytywania informacji o walutach do dolnych pól (pusta tabela?)";
+
+        public const string pobListaBI = " Pobrano listę biuletynów tygodniowych";
+        public const string pobListeBIFail = " Nie udało sie pobrać listy biuletynów tygodniowych";
+        public const string pobListeKR = " Pobrano listę komentarzy rynkowych";
+        public const string pobListeKRFail = "Nie udało sie pobrać listy komentarzy rynkowych";
+
+        public const string pobGPWNewsletterFail = " Nie udało się pobrać listy newsletterów GPW";
+
+        public const string docFail = " Nie udało się pobrać dokumentu";
         }
 
 
@@ -44,6 +53,7 @@ namespace commonStrings
         {
         public const string Wiadomosci = " Wiadomości";
         public const string Komentarze = " Komentarze";
+
         public const string Akcje = " Akcje";
         public const string Indeksy = " Indeksy";
         public const string IndeksyGPW = " Indeksy GPW";
@@ -57,6 +67,10 @@ namespace commonStrings
         public const string Bankier = "Bankier.pl";
         public const string Money = "Money.pl";
         public const string Stooq = "Stooq.pl";
+
+        public const string Investors = "Investors.pl";
+        public const string Pekao = "Pekao.com.pl";
+        public const string GPW = "GPW.pl";
         }
 
     struct nazwyPlikow
@@ -99,6 +113,12 @@ namespace commonStrings
         public const string StooqMWykres = "http://stooq.pl/c/?p&s=";
         public const string StooqSkladIndeks = "http://stooq.pl/q/i/?s=";
         public const string StooqProfilSpolki = "http://stooq.pl/q/p/?s=";
+        public const string StooqAt = "http://stooq.pl/q/a/?s=";
+
+        public const string InvestorsBI = "http://investors.pl/dokumenty/biuletyny-tygodniowe.html";
+        public const string InvestorsKR = "http://investors.pl/dokumenty/komentarze-rynkowe.html";
+
+        public const string GPWNewsletter = "http://www.gpw.pl/newsletter";
         }
 
     struct kategorie

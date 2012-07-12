@@ -244,12 +244,11 @@ namespace klasyakcjowe
             public virtual void Prasuj(string url, string plik, string xmlBackupPlik, bool czyWaluta)
                 {
                 // próba pobrania
-                Pobierz(url, staleapki.appdir + staleapki.tmpdir + plik);
+                Pobierz(url, staleapki.appDir + staleapki.tmpDir + plik);
 
                 try
                     {
-                    string[] aStooqIndeksy = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + plik);
-                    File.Delete(staleapki.appdir + staleapki.tmpdir + plik); // żeby nie było bałaganu
+                    string[] aStooqIndeksy = File.ReadAllLines(staleapki.appDir + staleapki.tmpDir + plik);
 
                     var tabPraser = new Regex("<table (.+?)</table>");
                     MatchCollection matches = tabPraser.Matches(aStooqIndeksy[0]);
@@ -265,16 +264,17 @@ namespace klasyakcjowe
                     dodajDoKolekcji(czyWaluta);
 
                     Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk);
-                    Action b = () => backupXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik,this.serwis,this.typ);
+                    Action b = () => backupXML(staleapki.appDir + staleapki.tmpDir + xmlBackupPlik,this.serwis,this.typ);
                     b.BeginInvoke(null,null);
                     }
                 catch
                     {
                     //numKolekcja.Add(new daneNumTabeli(DateTime.Now, "Błąd ładowania danych", "", 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
                     Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
-                    Action w = () => wczytajXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
+                    Action w = () => wczytajXML(staleapki.appDir + staleapki.tmpDir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
                     w.BeginInvoke(null, null);
                     }
+                finally  { File.Delete(staleapki.appDir + staleapki.tmpDir + plik); } // żeby nie było bałaganu
                 }
 
             // Action wrzucający tabelę do xml, żeby w razie błedu tabele nie były puste, tylko miały dane z poprzedniego
@@ -597,12 +597,11 @@ namespace klasyakcjowe
             public override void Prasuj(string url, string plik, string xmlBackupPlik, bool czyWaluta)
                 {
                 // próba pobrania
-                Pobierz(url, staleapki.appdir + staleapki.tmpdir + plik);
+                Pobierz(url, staleapki.appDir + staleapki.tmpDir + plik);
 
                 try
                     {
-                    string[] aStooqAkcje = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + plik);
-                    File.Delete(staleapki.appdir + staleapki.tmpdir + plik); // żeby nie było bałaganu
+                    string[] aStooqAkcje = File.ReadAllLines(staleapki.appDir + staleapki.tmpDir  + plik);
 
                     // szukanie tabel z danymi, taki główny regex
                     var tabPraser = new Regex("<table (.+?)</table>");
@@ -651,16 +650,17 @@ namespace klasyakcjowe
                                                         tTransakcje[i]));
                         }
                     Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk);
-                    Action b = () => backupXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ);
+                    Action b = () => backupXML(staleapki.appDir + staleapki.tmpDir + xmlBackupPlik, this.serwis, this.typ);
                     b.BeginInvoke(null, null);
                     }           
                 catch 
                     { 
                     // akcjeKolekcja.Add(new daneAkcji(DateTime.Now, "Błąd ładowania danych", "", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0));
                     Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail);
-                    Action w = () => wczytajXML(staleapki.appdir + staleapki.tmpdir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
+                    Action w = () => wczytajXML(staleapki.appDir + staleapki.tmpDir + xmlBackupPlik, this.serwis, this.typ, czyWaluta);
                     w.BeginInvoke(null, null);
                     }
+                finally { File.Delete(staleapki.appDir + staleapki.tmpDir + plik); } // żeby nie było bałaganu
                 }
             
             public List<daneAkcji> generujTabele()

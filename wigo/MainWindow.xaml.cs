@@ -22,22 +22,24 @@ using System.Data;
 using System.Collections.Generic;
 using System.Collections;
 using System.Windows.Threading;
+using System.Linq;
 
 using commonStrings;
 using klasyakcjowe;
 
 namespace mm_gielda
-    {
+{
     // ================
     // stałe używane w kodzie, żeby były w jednym miejscu //
     // ================
     public struct staleapki
-        {
-        public const string tmpdir = @"\tmp\";
-        public const string tmpWykresDir = tmpdir + @"tmpWykresy\";
-        public const string bazadir = @"\baza\";
-        public const string danedir = @"\dane\";
-        public static readonly string appdir = Environment.CurrentDirectory;
+    {
+        public const string tmpDir = @"\tmp\";
+        public const string tmpWykresDir = tmpDir + @"tmpWykresy\";
+        public const string bazaDir = @"\baza\";
+        public const string daneDir = @"\dane\";
+        public const string pdfDir = tmpDir + @"pdfAnalizy\";
+        public static readonly string appDir = Environment.CurrentDirectory;
 
         public const string formatDaty = "dd-MM-yyyy HH:mm:ss";
         public const byte iloscNaj = 6;  // ilość w tabelach wzrosty,spadki i najaktywniejsze na podsumowaniu //
@@ -49,10 +51,10 @@ namespace mm_gielda
 
         // powiedzmy że zmienna, do metody pobierającej składy indeksów //
         public static bool pierwszePobranie = true;
-        }
+    }
 
-    public partial class MainWindow : Window
-        {
+    public partial class MainWindow: Window
+    {
 
         //timery
         DispatcherTimer timerGPW = new DispatcherTimer();
@@ -63,17 +65,17 @@ namespace mm_gielda
         // cały nasz mainwindow, okienko //
         // ================
         public MainWindow()
-            {
+        {
             try
-                {
+            {
                 InitializeComponent();
                 DirCheck();
-                }
+            }
             catch { };
-            }// zamkniecie maina
+        }// zamkniecie maina
 
         void setTimers()
-            {
+        {
             timerGPW.Tick += new EventHandler(timerGPW_Tick);
             timerGPW.Interval = new TimeSpan(0, config.gpwInterwal, 0);
 
@@ -85,16 +87,16 @@ namespace mm_gielda
 
             // jesli odpalonew w weekend, to nie startuj timerów, jedynie wczytaj w WindowInitialized tabele jednokrotnie //
             if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday | DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
-                {
+            {
                 timerGPW.Start();
                 timerSwiat.Start();
                 timerNewsy.Start();
-                }
             }
+        }
 
         #region === inne zdarzenia ===
         private void Window_Initialized(object sender, EventArgs e)
-            {
+        {
             // obsługa zdarzenia logującego w klasie mainwindow //
             Loger.updateLogbox += new EventHandler(Loger_updateLogbox);
             Loger.updateTotalDown += new EventHandler(Loger_updateTotalDown);
@@ -117,25 +119,19 @@ namespace mm_gielda
             timerGPW_Tick(null, null);
             timerSwiat_Tick(null, null);
             timerNewsy_Tick(null, null);
-            }
+        }
 
         // zdarzenie aktualizujace loga //
         void Loger_updateLogbox(object sender, EventArgs e)
-            {
+        {
             this.Dispatcher.Invoke(new Action(() => { logbox.AppendText(Loger.returnLastLogLine() + "\n"); }));
-            }
+        }
 
         // zdarzenie aktualizujące labelkę z pobranymi danymi //
         void Loger_updateTotalDown(object sender, EventArgs e)
-            {
+        {
             this.Dispatcher.Invoke(new Action(() => { totalDownL.Content = "Łącznie pobrano danych: " + Loger.returnTotalDownloaded().ToString(); }));
-            }
-        #endregion
-
-        //private void wiadomosciGrid_scrool_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        //    {
-        //    wiadomosciGrid_scrool.ScrollToVerticalOffset(wiadomosciGrid_scrool.VerticalOffset - e.Delta / 3);
-        //    }
-
         }
+        #endregion
     }
+}

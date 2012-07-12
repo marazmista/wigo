@@ -30,7 +30,7 @@ namespace mm_gielda
 
     public partial class MainWindow
     {
-        public readonly string configFilePath = staleapki.appdir + @"\config.xml";
+        public readonly string configFilePath = staleapki.appDir + @"\config.xml";
 
         private void zapiszConfig_Click(object sender, RoutedEventArgs e)
         {
@@ -67,7 +67,12 @@ namespace mm_gielda
                     new XAttribute("czyPobieracKomMoney", CB_pobierajKomMoney.IsChecked),
                     new XAttribute("NewsyInterwal", T_newsyInterwal.Text)));
 
-            configFile.Save(configFilePath);         
+            configFile.Save(configFilePath);
+            wczytajOpcje(); // przypisanie do zmiennych
+
+            timerGPW_Tick(null, null);
+            timerSwiat_Tick(null, null);
+            timerNewsy_Tick(null, null);
         }
 
         void wczytajOpcje()

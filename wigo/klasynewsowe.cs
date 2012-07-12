@@ -98,7 +98,7 @@ namespace klasynewsowe
             bool statPob;
             try
                 {
-                statPob = Pobierz(adresy.BankierRynkiNews, staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PBankierRynki);
+                statPob = Pobierz(adresy.BankierRynkiNews, staleapki.appDir + staleapki.tmpDir  + nazwyPlikow.PBankierRynki);
                 }
             catch { statPob = false; }
 
@@ -113,8 +113,7 @@ namespace klasynewsowe
 
                 try
                     {
-                    string[] aBankierRynki = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PBankierRynki);
-                    File.Delete(staleapki.appdir + staleapki.tmpdir + nazwyPlikow.PBankierRynki);
+                    string[] aBankierRynki = File.ReadAllLines(staleapki.appDir + staleapki.tmpDir  + nazwyPlikow.PBankierRynki);
 
                     foreach (string s in aBankierRynki)
                         {
@@ -158,10 +157,8 @@ namespace klasynewsowe
                         }
                     Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk + " (" + bankierKolekcja.Count + " rekordów)");
                    }
-                catch
-                    {
-                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieFail);
-                    };
+                catch  { Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail); }
+                finally  { File.Delete(staleapki.appDir + staleapki.tmpDir + nazwyPlikow.PBankierRynki); }; // żeby nie było bałaganu
               }
             }
 
@@ -171,7 +168,6 @@ namespace klasynewsowe
             Prasuj();
             return bankierKolekcja;
             }
-
     }
 
     class komentarzeMoney : News
@@ -185,7 +181,7 @@ namespace klasynewsowe
             bool statPob;
             try
                 {
-                statPob = Pobierz(adresy.MoneyKomentarze, staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PMoneyKomentarze);
+                statPob = Pobierz(adresy.MoneyKomentarze, staleapki.appDir + staleapki.tmpDir  + nazwyPlikow.PMoneyKomentarze);
                 }
             catch { statPob = false; }
 
@@ -197,8 +193,7 @@ namespace klasynewsowe
 
                     moneyKolekcja = new List<daneNewsa>();
 
-                    string[] aKomentarzeMoney = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir  + nazwyPlikow.PMoneyKomentarze);
-                    File.Delete(staleapki.appdir + staleapki.tmpdir + nazwyPlikow.PMoneyKomentarze);
+                    string[] aKomentarzeMoney = File.ReadAllLines(staleapki.appDir + staleapki.tmpDir  + nazwyPlikow.PMoneyKomentarze);
                     short i = 0;
 
                     foreach (string s in aKomentarzeMoney)
@@ -240,10 +235,8 @@ namespace klasynewsowe
                         }
                     Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieOk + " (" + moneyKolekcja.Count + " rekordów)");
                     }
-                catch
-                    {
-                    Loger.dodajDoLogaInfo(this.serwis + this.typ + messages.prasowanieFail);
-                    };
+                catch { Loger.dodajDoLogaError(this.serwis + this.typ + messages.prasowanieFail); }
+                finally { File.Delete(staleapki.appDir + staleapki.tmpDir + nazwyPlikow.PMoneyKomentarze); };
                 }
             }
 
@@ -252,17 +245,5 @@ namespace klasynewsowe
             Prasuj();
             return moneyKolekcja;
             }
-
         }
-
-    //class Analizy : News
-    //    {
-        
-    //    }
-
-    //class Rekomendacje : News
-    //    {
-        
-    //    }
-
     }

@@ -13,10 +13,12 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-
+using System.Windows.Input;
+using System.Linq;
 
 using klasyakcjowe;
 using commonStrings;
+using klasyAnalizyPDF;
 using System.Windows.Media.Imaging;
 
 namespace mm_gielda
@@ -45,7 +47,7 @@ namespace mm_gielda
         // pobieranie tego małego wykresu obok tabeli //
         void wczytajMalyWykres(string symbol,Image wpfImage, bool czyGPW)
             {
-            string wykresPlik = staleapki.appdir + staleapki.tmpWykresDir + symbol + "_mWykres.png";
+            string wykresPlik = staleapki.appDir + staleapki.tmpWykresDir + symbol + "_mWykres.png";
 
             // sprawdza czy pobiera coś z gpw, jeśli nie to pobiera zawsze, nie patrzy na godzinę //
             if (czyGPW)
@@ -109,7 +111,7 @@ namespace mm_gielda
             {
             int i = grid.SelectedIndex;
 
-            // sprawdza czy wczytuje akcje, czy indeks gpw //
+            // sprawdza czy wczytuje akcje, czy indeks gpw (inne nazwy labelek) //
             if (czyAkcja)
                 {
                 aNazwa.Content = tabela[i].Nazwa;
@@ -324,5 +326,167 @@ namespace mm_gielda
             wczytajAkcjeDetails(daneTabel.tRespect, respectGrid, true);
             }
 	    #endregion 
+        
+        #region === pobieranie list analiz ===
+        // po wcisnięciu przycisku dla pobrania listy, wczytanie do tabeli //
+        private void newsletterPobListe(object sender, RoutedEventArgs e)
+        {
+            tabelujNewsletteryGPW();
+        }
+
+        private void investorsPobListe(object sender, RoutedEventArgs e)
+        {
+            tabelujAnalizyInvestors();
+        } 
+        #endregion
+
+        #region === pobieranie i otwieranie pdf ===
+        // actoion zmieniający labele i blokujący przycisk //
+        Action<Label, string, Button, bool> zmbb = (label, napis, button, czyBlokowac) =>
+        {
+            label.Content = napis;
+            button.IsEnabled = !czyBlokowac;
+        };
+
+        // pobieranie i otieranie pdf
+        void pobierzPDF(int indeksWGridzie, List<daneAnalizy> lista, string serwis)
+        {
+            if (lista != null)
+            {
+                try
+                {
+                    var link = new Uri(lista[indeksWGridzie].Link);
+                    var fName = link.Segments[link.Segments.Length - 1];
+
+                    if (!File.Exists(staleapki.appDir + staleapki.pdfDir + fName))
+                        Pobierz(lista[indeksWGridzie].Link, staleapki.appDir + staleapki.pdfDir + fName);
+
+                    System.Diagnostics.Process.Start(staleapki.appDir + staleapki.pdfDir + fName);
+                }
+                catch { Loger.dodajDoLogaError(serwis + messages.docFail); };
+            }
+        }
+
+        private void investorsPobPDF(object sender, RoutedEventArgs e)
+        {
+            var i = investorsGrid.SelectedIndex;
+
+            this.Dispatcher.Invoke(zmbb, investorsPobPDFLabel, "Pobieranie...", investorsPobPDFButton, true);
+            new Action(delegate()
+            {
+                pobierzPDF(i, daneTabel.invAnalizyList, serwisy.Investors);
+                this.Dispatcher.Invoke(zmbb, investorsPobPDFLabel, "Pobierz i otwórz dokument", investorsPobPDFButton, false);
+            }).BeginInvoke(null, null);
+        }
+
+        private void gpwButtonPobPDF(object sender, RoutedEventArgs e)
+        {
+            var i = gpwNewsletterGrid.SelectedIndex;
+
+            this.Dispatcher.Invoke(zmbb, gpwPobPDFLabel, "Pobieranie...", newsletterGPWPobPDFButton, true);
+            new Action(delegate()
+            {
+                pobierzPDF(i, daneTabel.gpwNewsletterList, serwisy.GPW);
+                this.Dispatcher.Invoke(zmbb, gpwPobPDFLabel, "Pobierz i otwórz dokument", newsletterGPWPobPDFButton, false);
+            }).BeginInvoke(null, null);
+        } 
+        #endregion
+
+        #region === inne ==
+        // otwieranie newsów
+        private void wiadomosciGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (daneTabel.NK != null)
+                System.Diagnostics.Process.Start(daneTabel.NK[wiadomosciGrid.SelectedIndex].Link);
+        }
+
+        private void ClearPDFDir(object sender, RoutedEventArgs e)
+        {
+            Directory.Delete(staleapki.appDir + staleapki.pdfDir, true);
+            Directory.CreateDirectory(staleapki.appDir + staleapki.pdfDir);
+        } 
+        #endregion
+
+        #region == at przycisk ==
+        private void akcjeATClick(object sender, RoutedEventArgs e)
+        {
+            if (daneTabel.tAkcje != null)
+            {
+                var oo = daneTabel.tAkcje.Where(a => a.Nazwa == aNazwa.Content).ToList();
+                System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+            }
+        }
+
+        private void indeksyATClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (indeksyTabControl.SelectedIndex == 0)
+                {
+                    var oo = daneTabel.tIndeksyGPW.Where(a => a.Nazwa == iNazwa.Content).ToList();
+                    System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
+                if (indeksyTabControl.SelectedIndex == 1)
+                {
+                    var oo = daneTabel.tIndeksy.Where(a => a.Nazwa == iNazwa.Content).ToList();
+                    System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
+                if (indeksyTabControl.SelectedIndex == 2)
+                {
+                    var oo = daneTabel.tIndeksyFut.Where(a => a.Nazwa == iNazwa.Content).ToList();
+                    System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
+
+            }
+            catch { }
+        }
+
+        private void wtATClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (wtTabContol.SelectedIndex == 0)
+                {
+                    var oo = daneTabel.tWaluty.Where(a => a.Nazwa == wtNazwa.Content).ToList();
+                    System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
+                if (indeksyTabControl.SelectedIndex == 1)
+                {
+                    var oo = daneTabel.tTowary.Where(a => a.Nazwa == wtNazwa.Content).ToList();
+                    System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
+            }
+            catch { }
+        } 
+        #endregion
+
+        #region == przyciski wykresow na dole ==
+        void pokazWykreOkno(string link)
+        {
+            var wykWin = new wykresOkno(new BitmapImage(new Uri(link)));
+            wykWin.Show();
+            wykWin.wczytajWyk();
+        }
+
+        private void wigWykresShow(object sender, MouseButtonEventArgs e)
+        {
+            pokazWykreOkno("http://stooq.pl/c/?s=wig&c=1d&t=c&a=lg&b");
+        }
+
+        private void wig20WykresShow(object sender, MouseButtonEventArgs e)
+        {
+            pokazWykreOkno("http://stooq.pl/c/?s=wig20&c=1d&t=c&a=lg&b");
+        }
+
+        private void mwig40WykresShow(object sender, MouseButtonEventArgs e)
+        {
+            pokazWykreOkno("http://stooq.pl/c/?s=mwig40&c=1d&t=c&a=lg&b");
+        }
+
+        private void smwig80WykresShow(object sender, MouseButtonEventArgs e)
+        {
+            pokazWykreOkno("http://stooq.pl/c/?s=swig80&c=1d&t=c&a=lg&b");
+        } 
+        #endregion
         }
     }

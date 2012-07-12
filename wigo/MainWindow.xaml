@@ -25,15 +25,9 @@
         <ImageBrush ImageSource="res/Information_256x256.png" x:Key="info" />
         <ImageBrush ImageSource="res/statistics_64.png" x:Key="stats" />
         <ImageBrush ImageSource="res/circle-check.png" x:Key="ok" />
-                
-        <!-- Motywy zakładek-->       
-        <Style x:Key="taby2" TargetType="TabItem">
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="Background" Value="Gray" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Width" Value="Auto" />
-            <Setter Property="Margin" Value="-2,2,2,-2" />
-        </Style>
+        <ImageBrush ImageSource="res/Refresh_256x256.png" x:Key="refresh" />
+        <ImageBrush ImageSource="res/save_64.png" x:Key="pobierz" />
+        <ImageBrush ImageSource="res/Delete_256x256.png" x:Key="del" />
         
         <Style x:Key="rectStyle" TargetType="Rectangle">
             <Setter Property="Height" Value="20" />
@@ -47,9 +41,10 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         </Style>
-        
+
+        <!--template dla głównego tabcontrola-->
         <ControlTemplate x:Key="tabTemp" TargetType="{x:Type TabItem}">
-            <Border Height="auto" Name="Ramka" Width="Auto" CornerRadius="2" Background="Black" BorderBrush="Gray" BorderThickness="2" Margin="4,1">
+            <Border Height="auto" Name="Ramka" Width="Auto" CornerRadius="2" Background="Black" BorderThickness="2" Margin="4,1" BorderBrush="#FF050563">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Margin="2" Height="30" Width="30" Name="RectPic" Stretch="Fill" />
                     <Label Name="lTytul" Content="{TemplateBinding Header}" Foreground="White" />
@@ -99,10 +94,24 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-                
-        <!-- Labele -->
         
-        <Style x:Key="labeltytul" TargetType="Label">
+        <!--template dla małych tabów-->
+        <ControlTemplate x:Key="tabTemp2" TargetType="{x:Type TabItem}">
+            <Border Height="auto" Name="Ramka" Width="Auto" CornerRadius="2" Background="Black" BorderBrush="#FF050563" BorderThickness="2" Margin="1">
+                <Label Content="{TemplateBinding Header}" Name="lTytul" Foreground="White" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Ramka" Property="Background" Value="DarkGray" />
+                    <Setter TargetName="Ramka" Property="BorderBrush" Value="Yellow" />
+                    <Setter TargetName="lTytul" Property="Foreground" Value="Black" />
+                    <Setter TargetName="lTytul" Property="FontWeight" Value="Bold" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Labele -->
+        <Style x:Key="labelTytul" TargetType="Label">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="15" />
@@ -111,7 +120,7 @@
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />
         </Style>
-        <Style x:Key="labeldane" TargetType="Label">
+        <Style x:Key="labelDane" TargetType="Label">
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="FontSize" Value="11" />
             <Setter Property="Height" Value="Auto" />
@@ -120,7 +129,7 @@
             <Setter Property="VerticalAlignment" Value="Top" />            
         </Style>
 
-        <Style x:Key="labeltytul2" TargetType="Label">
+        <Style x:Key="labelTytul2" TargetType="Label">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="18" />
@@ -129,7 +138,7 @@
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />
         </Style>
-        <Style x:Key="labeldane2" TargetType="Label">
+        <Style x:Key="labelDane2" TargetType="Label">
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Height" Value="Auto" />
@@ -139,28 +148,23 @@
         </Style>
 
         <!-- Reszta -->
-        <Style x:Key="ramki" TargetType="Border">
+        <Style x:Key="ramkiDolInfo" TargetType="Border">
             <Setter Property="BorderBrush" Value="Black" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="Width" Value="178" />
             <Setter Property="Margin" Value="1,0,0,0" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
-        <Style x:Key="grid" TargetType="DataGrid">
+        <Style x:Key="Grid" TargetType="DataGrid">
             <Setter Property="Background" Value="LightGray" />
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="SelectionUnit" Value="FullRow" />
             <Setter Property="SelectionMode" Value="Single" />
             <Setter Property="AlternatingRowBackground" Value="Khaki" />
             <Setter Property="AutoGenerateColumns" Value="True" />
+            <Setter Property="CanUserSortColumns" Value="False" />
         </Style>
-        <Style x:Key="groupboxglowny" TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="Height" Value="auto" />
-            <Setter Property="Margin" Value="2,0,2,0" />
-        </Style>
-        <Style x:Key="groupboxspadki" TargetType="GroupBox">
+        <Style x:Key="groupBoxSpadki" TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="Red" />
             <Setter Property="Foreground" Value="Red" />
             <Setter Property="BorderThickness" Value="1" />
@@ -168,7 +172,7 @@
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" />
         </Style>
-        <Style x:Key="groupboxwzrosty" TargetType="GroupBox">
+        <Style x:Key="groupBoxWzrosty" TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="LawnGreen" />
             <Setter Property="Foreground" Value="LawnGreen" />
             <Setter Property="BorderThickness" Value="1" />
@@ -176,7 +180,7 @@
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" /> 
         </Style>
-        <Style x:Key="groupboxnajaktywniejsze" TargetType="GroupBox">
+        <Style x:Key="groupBoxNajaktywniejsze" TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="SkyBlue" />
             <Setter Property="Foreground" Value="Skyblue" />
             <Setter Property="BorderThickness" Value="1" />
@@ -202,105 +206,122 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="246,65,0,0" />
         </Style>
-        
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="2" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="VerticalAlignment" Value="Top" />   
         </Style>
-
+        <Style x:Key="ramkaPodsumowanie" TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Height" Value="Auto" />
+        </Style>
+        <Style x:Key="stackIloscRosnaceSpadajace" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="4,6" />
+        </Style>
+        <Style x:Key="tytulRamki" TargetType="Label">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
     </Window.Resources>
 
     <DockPanel>
         <!-- Dolne informacje  --> 
         <StackPanel DockPanel.Dock="Bottom" Height="120" Orientation="Horizontal">
-           <Border Style="{StaticResource ramki}" Name="wigborder" Margin="2,0,0,0">
+           <Border Style="{StaticResource ramkiDolInfo}" Name="wigborder" Margin="2,0,0,0">
                 <Grid Name="wiggrid" Margin="0">
-                    <Label Content="WIG" Name="wigl" Width="60" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="+2,8%"  Margin="107,27,0,0" Name="wigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" FontSize="12" />
-                    <Label Content="28" Margin="107,40,0,0" Name="wigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" FontSize="12" />
-                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wigotwl" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wigodnl" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="wiggodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="WIG" Name="wigl" Width="60" Style="{StaticResource labelTytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wigkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="+2,8%"  Margin="107,27,0,0" Name="wigprocentl" Style="{StaticResource labelDane}"  FontWeight="Bold" FontSize="12" />
+                    <Label Content="28" Margin="107,40,0,0" Name="wigzmianal" Style="{StaticResource labelDane}" FontWeight="Bold" FontSize="12" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wigotwl" Style="{StaticResource labelDane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wigodnl" Style="{StaticResource labelDane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labelDane}" />
+                    <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="wiggodzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="wigRect" Style="{StaticResource znaczekDol}" />
+                    <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="wigWykresShow" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Name="wig20border">
+            <Border Style="{StaticResource ramkiDolInfo}" Name="wig20border">
                 <Grid Name="wig20grid">
-                    <Label Content="WIG20" Name="wig20l" Width="80" Style="{StaticResource labeltytul}" Height="29"  />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="+2,8%" Margin="107,27,0,0" Name="wig20procentl" Style="{StaticResource labeldane}"  FontWeight="Bold" FontSize="12" />
-                    <Label Content="28" Margin="107,40,0,0" Name="wig20zmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" FontSize="12" />
-                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wig20otwl" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wig20odnl" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="wig20godzl" Style="{StaticResource labeldane}" />
+                    <Label Content="WIG20" Name="wig20l" Width="80" Style="{StaticResource labelTytul}" Height="29"  />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="wig20kursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="wig20procentl" Style="{StaticResource labelDane}"  FontWeight="Bold" FontSize="12" />
+                    <Label Content="28" Margin="107,40,0,0" Name="wig20zmianal"  Style="{StaticResource labelDane}" FontWeight="Bold" FontSize="12" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="wig20otwl" Style="{StaticResource labelDane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wig20odnl" Style="{StaticResource labelDane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labelDane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="wig20godzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="wig20Rect" Style="{StaticResource znaczekDol}" />
+                    <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="wig20WykresShow" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Name="mwigborder">
+            <Border Style="{StaticResource ramkiDolInfo}" Name="mwigborder">
                 <Grid Name="mwiggrid">
-                    <Label Content="mWIG40"  Name="mwigl" Width="88" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="+2,8%" Margin="107,27,0,0" Name="mwigprocentl" Style="{StaticResource labeldane}"  FontWeight="Bold" FontSize="12" />
-                    <Label Content="28"  Margin="107,40,0,0" Name="mwigzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" FontSize="12" />
-                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="mwigotwl"  Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labeldane}" />
+                    <Label Content="mWIG40"  Name="mwigl" Width="88" Style="{StaticResource labelTytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="mwigkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="mwigprocentl" Style="{StaticResource labelDane}"  FontWeight="Bold" FontSize="12" />
+                    <Label Content="28"  Margin="107,40,0,0" Name="mwigzmianal" Style="{StaticResource labelDane}" FontWeight="Bold" FontSize="12" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="mwigotwl"  Style="{StaticResource labelDane}" />
+                    <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labelDane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labelDane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labelDane}" />
                     <Rectangle Name="mwigRect" Style="{StaticResource znaczekDol}" />
+                    <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="mwig40WykresShow" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Name="swigborder">
+            <Border Style="{StaticResource ramkiDolInfo}" Name="swigborder">
                 <Grid Name="swiggrid">
-                    <Label Content="sWIG80" Name="swigl" Width="80" Style="{StaticResource labeltytul}" Height="29" />
-                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="+2,8%" Margin="107,27,0,0" Name="swigprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" FontSize="12" />
-                    <Label Content="28"  Margin="107,40,0,0" Name="swigzmianal"  Style="{StaticResource labeldane}" FontWeight="Bold" FontSize="12" />
-                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="swigotwl" Style="{StaticResource labeldane}" />
-                    <Label Content="Odniesienie" Height="28"  Margin="0,56,0,0" Name="swigodnl" Style="{StaticResource labeldane}" Width="80" />
-                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labeldane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labeldane}" Width="55" />
-                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="swiggodzl" Style="{StaticResource labeldane}" />
+                    <Label Content="sWIG80" Name="swigl" Width="80" Style="{StaticResource labelTytul}" Height="29" />
+                    <Label Content="Kurs" Margin="0,20,0,71" Name="swigkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="+2,8%" Margin="107,27,0,0" Name="swigprocentl" Style="{StaticResource labelDane}" FontWeight="Bold" FontSize="12" />
+                    <Label Content="28"  Margin="107,40,0,0" Name="swigzmianal"  Style="{StaticResource labelDane}" FontWeight="Bold" FontSize="12" />
+                    <Label Content="Otwarcie" Margin="0,40,0,0" Name="swigotwl" Style="{StaticResource labelDane}" />
+                    <Label Content="Odniesienie" Height="28"  Margin="0,56,0,0" Name="swigodnl" Style="{StaticResource labelDane}" Width="80" />
+                    <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labelDane}" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="swiggodzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="swigRect" Style="{StaticResource znaczekDol}" />
+                    <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="smwig80WykresShow" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="80" Name="eurplnborder">
+            <Border Style="{StaticResource ramkiDolInfo}" Width="80" Name="eurplnborder">
                 <Grid Name="eurplngrid">
-                    <Label Content="EURPLN"  Name="eurplnl" Style="{StaticResource labeltytul}" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="eurplngodzl" Style="{StaticResource labeldane}"  />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurplnzmianal" Style="{StaticResource labeldane}"  FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurplnotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labeldane}" />
+                    <Label Content="EURPLN"  Name="eurplnl" Style="{StaticResource labelTytul}" FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurplnkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="eurplngodzl" Style="{StaticResource labelDane}"  />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurplnprocentl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurplnzmianal" Style="{StaticResource labelDane}"  FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurplnotwarciel" Style="{StaticResource labelDane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurplnodniesieniel" Style="{StaticResource labelDane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="80" Name="usdplnborder">
+            <Border Style="{StaticResource ramkiDolInfo}" Width="80" Name="usdplnborder">
                 <Grid Name="usdplngrid">
-                    <Label Content="USDPLN"  Name="usdplnl" Style="{StaticResource labeltytul}"  FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="usdplngodzl" Style="{StaticResource labeldane}" />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="usdplnprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="usdplnzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="usdplnotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labeldane}" />
+                    <Label Content="USDPLN"  Name="usdplnl" Style="{StaticResource labelTytul}"  FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="usdplnkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="usdplngodzl" Style="{StaticResource labelDane}" />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="usdplnprocentl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="usdplnzmianal" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="usdplnotwarciel" Style="{StaticResource labelDane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="usdplnodniesieniel" Style="{StaticResource labelDane}" />
                 </Grid>
             </Border>
-            <Border Style="{StaticResource ramki}" Width="80" Name="eurusdborder">
+            <Border Style="{StaticResource ramkiDolInfo}" Width="80" Name="eurusdborder">
                 <Grid Name="eurusdgrid">
-                    <Label Content="EURUSD" Name="eurusdl" Style="{StaticResource labeltytul}" FontSize="12" />
-                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="18:25" Margin="24,27,0,0" Name="eurusdgodzl" Style="{StaticResource labeldane}" />
-                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurusdprocentl" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurusdzmianal" Style="{StaticResource labeldane}" FontWeight="Bold" />
-                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurusdotwarciel" Style="{StaticResource labeldane}" />
-                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labeldane}" />
+                    <Label Content="EURUSD" Name="eurusdl" Style="{StaticResource labelTytul}" FontSize="12" />
+                    <Label Content="0.0000" Margin="0,15,0,71" Name="eurusdkursl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="18:25" Margin="24,27,0,0" Name="eurusdgodzl" Style="{StaticResource labelDane}" />
+                    <Label Content="+0.00%" Margin="0,44,0,0" Name="eurusdprocentl" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,58,0,0" Name="eurusdzmianal" Style="{StaticResource labelDane}" FontWeight="Bold" />
+                    <Label Content="0.0000" Margin="0,93,0,0" Name="eurusdotwarciel" Style="{StaticResource labelDane}" />
+                    <Label Content="0.0000" Margin="0,78,0,0" Name="eurusdodniesieniel" Style="{StaticResource labelDane}" />
                 </Grid>
             </Border>
         </StackPanel>
@@ -308,99 +329,177 @@
 
         
         <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" TabStripPlacement="Left" Background="#FF868686" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="4" BorderThickness="0">
-            <TabItem Header="Podsumowanie" Template="{StaticResource tabTemp}">
+            <TabItem Header="Podsumowanie" Template="{StaticResource tabTemp}"  VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ScrollViewer>
                     <WrapPanel Margin="2,0,0,0">
-                        <GroupBox Header="Akcje GPW" Style="{StaticResource groupboxglowny}">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <GroupBox Header="Wzrosty"  Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWWzrostyGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWSpadkiGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" Name="akcjeGPWNajaktywniejszeGrid" />
-                                </GroupBox>
+                        <Border Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel>
+                                <Label Content="Akcje GPW" Style="{StaticResource tytulRamki}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="akcjeRosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="akcjeZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="akcjeSpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <GroupBox Header="Wzrosty"  Style="{StaticResource groupBoxWzrosty}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="akcjeGPWWzrostyGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="akcjeGPWSpadkiGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                        <DataGrid Style="{StaticResource Grid}" Name="akcjeGPWNajaktywniejszeGrid" />
+                                    </GroupBox>
+                                </StackPanel>
                             </StackPanel>
-                        </GroupBox>
-
-                        <GroupBox Header="WIG" Style="{StaticResource groupboxglowny}">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <GroupBox Header="Wzrosty"  Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" Name="wigWzrostyGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" Name="wigSpadkiGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" Name="wigNajaktywniejszeGrid" />
-                                </GroupBox>
+                        </Border>
+                        <Border Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel>
+                                <Label Content="WIG" Style="{StaticResource tytulRamki}"/>
+                                <StackPanel Orientation="Horizontal"  Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wigRosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wigZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wigSpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                        <GroupBox Header="Wzrosty"  Style="{StaticResource groupBoxWzrosty}">
+                                            <DataGrid Style="{StaticResource Grid}" Name="wigWzrostyGrid" />
+                                        </GroupBox>
+                                        <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                            <DataGrid Style="{StaticResource Grid}" Name="wigSpadkiGrid" />
+                                        </GroupBox>
+                                        <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                            <DataGrid Style="{StaticResource Grid}" Name="wigNajaktywniejszeGrid"/>
+                                        </GroupBox>
+                                    </StackPanel>
                             </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="WIG20" Style="{StaticResource groupboxglowny}" >
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" Name="wig20WzrostyGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" Name="wig20SpadkiGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" Name="wig20NajaktywniejszeGrid" />
-                                </GroupBox>
+                        </Border>
+                        <Border Style="{StaticResource ramkaPodsumowanie}" >
+                            <StackPanel>
+                                <Label Content="WIG20" Style="{StaticResource tytulRamki}"/>
+                                <StackPanel Orientation="Horizontal"  Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wig20RosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wig20ZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="wig20SpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                        <GroupBox Header="Wzrosty" Style="{StaticResource groupBoxWzrosty}">
+                                            <DataGrid Style="{StaticResource Grid}" Name="wig20WzrostyGrid" />
+                                        </GroupBox>
+                                        <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                            <DataGrid Style="{StaticResource Grid}" Name="wig20SpadkiGrid" />
+                                        </GroupBox>
+                                        <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                            <DataGrid Style="{StaticResource Grid}" Name="wig20NajaktywniejszeGrid" />
+                                        </GroupBox>
+                                    </StackPanel>
+                                </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel>
+                                <Label Content="mWIG40" Style="{StaticResource tytulRamki}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="mwig40RosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="mwig40ZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="mwig40SpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <GroupBox Header="Wzrosty" Style="{StaticResource groupBoxWzrosty}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="mwig40WzrostyGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="mwig40SpadkiGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                        <DataGrid Style="{StaticResource Grid}" Name="mwig40NajaktywniejszeGrid" />
+                                    </GroupBox>
+                                </StackPanel>
                             </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="mWIG40"  Style="{StaticResource groupboxglowny}">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" Name="mwig40WzrostyGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" Name="mwig40SpadkiGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" Name="mwig40NajaktywniejszeGrid" />
-                                </GroupBox>
+                        </Border>
+                        <Border Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel>
+                                <Label Content="sWIG80" Style="{StaticResource tytulRamki}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="swig80RosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="swig80ZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="swig80SpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <GroupBox Header="Wzrosty" Style="{StaticResource groupBoxWzrosty}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="swig80WzrostyGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="swig80SpadkiGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                        <DataGrid Style="{StaticResource Grid}" Name="swig80NajaktywniejszeGrid" />
+                                    </GroupBox>
+                                </StackPanel>
                             </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="sWIG80" Style="{StaticResource groupboxglowny}">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                <GroupBox Header="Wzrosty" Style="{StaticResource groupboxwzrosty}">
-                                    <DataGrid Style="{StaticResource grid}" Name="swig80WzrostyGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Spadki" Style="{StaticResource groupboxspadki}">
-                                    <DataGrid Style="{StaticResource grid}" Name="swig80SpadkiGrid" />
-                                </GroupBox>
-                                <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupboxnajaktywniejsze}" >
-                                    <DataGrid Style="{StaticResource grid}" Name="swig80NajaktywniejszeGrid" />
-                                </GroupBox>
-                            </StackPanel>
-                        </GroupBox>
+                        </Border>
                     </WrapPanel>    
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Indeksy" Template="{StaticResource tabTemp}">
+            <TabItem Header="Indeksy" Template="{StaticResource tabTemp}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
-                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
-                        <TabItem Header="GPW" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                    <DataGrid Name="indeksyGPWGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyGPWGrid_Selected" />
-                                </ScrollViewer>
+                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0" Name="indeksyTabControl">
+                        <TabItem Header="GPW" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="indeksyGPWGrid" Style="{StaticResource Grid}" DataGridCell.Selected="indeksyGPWGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="Światowe" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                    <DataGrid Name="indeksyGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyGrid_Selected" />
-                                </ScrollViewer>
+                        <TabItem Header="Światowe" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="indeksyGrid" Style="{StaticResource Grid}" DataGridCell.Selected="indeksyGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="Futures" Style="{StaticResource ResourceKey=taby2}">
-                                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                    <DataGrid Name="indeksyFutGrid" Style="{StaticResource grid}" DataGridCell.Selected="indeksyFutGrid_Selected" />
-                                </ScrollViewer>
+                        <TabItem Header="Futures" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="indeksyFutGrid" Style="{StaticResource Grid}" DataGridCell.Selected="indeksyFutGrid_Selected" />
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
@@ -417,8 +516,8 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel>
-                                    <Button Content="Dodaj do ulubionych" />
-                                    <Button Content="Przejdź to AT" />
+                                    <Button Margin="0,2" Content="Dodaj do ulubionych" />
+                                    <Button Content="Przejdź to AT" Click="indeksyATClick" />
                                 </StackPanel>
                             </Expander>
 
@@ -430,24 +529,24 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <Grid>
-                                    <Label Content="..." Margin="27,7,0,0" Name="iNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="iData" Style="{StaticResource labeldane2}" FontSize="12" />
-                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
-                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="iKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                                    <Label Name="iZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="iMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="iOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="iOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,208,0,0" Name="iWolumen" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,238,0,0" Name="iObrot" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,265,0,0" Name="iTransakcje" Style="{StaticResource labeldane2}" />
+                                    <Label Content="..." Margin="27,7,0,0" Name="iNazwa" Style="{StaticResource labelTytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="iData" Style="{StaticResource labelDane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labelDane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="iKurs" Margin="117,67,0,0" Style="{StaticResource labelDane2}" FontWeight="Bold" />
+                                    <Label Name="iZmiana" Margin="117,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="iMaxMin" Margin="117,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="iOtwarcie" Margin="117,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="iOdniesienie" Margin="117,178,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,208,0,0" Name="iWolumen" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,238,0,0" Name="iObrot" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,265,0,0" Name="iTransakcje" Style="{StaticResource labelDane2}" />
                                     <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="iBorder" VerticalAlignment="Top" Width="9" />
                                     <Rectangle Style="{StaticResource znaczekBokInfo}" Name="iRect" Margin="247,32,0,0" />
                                     <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="iWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
@@ -458,122 +557,78 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Akcje"  Template="{StaticResource tabTemp}">
+            <TabItem Header="Akcje"  Template="{StaticResource tabTemp}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
                     <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
-                        <TabItem Header="Wszystkie GPW" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="akcjeGrid" Style="{StaticResource grid}" DataGridCell.Selected="akcjeGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="Wszystkie GPW" Template="{StaticResource tabTemp2}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                <DataGrid Margin="0,2" Name="akcjeGrid" Style="{StaticResource Grid}" DataGridCell.Selected="akcjeGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="New Connect" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="newconnectGrid" Style="{StaticResource grid}" />
-                            </ScrollViewer>
+                        <TabItem Header="New Connect" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="newconnectGrid" Style="{StaticResource Grid}" />
                         </TabItem>
-                        <TabItem Header="WIG" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigGrid_Selected"/>
-                            </ScrollViewer>
+                        <TabItem Header="WIG" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="wigGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigGrid_Selected"/>
                         </TabItem>
-                        <TabItem Header="WIG20" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wig20Grid" Style="{StaticResource grid}" DataGridCell.Selected="wig20Grid_Selected"/>
-                            </ScrollViewer>
+                        <TabItem Header="WIG20" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="wig20Grid" Style="{StaticResource Grid}" DataGridCell.Selected="wig20Grid_Selected"/>
                         </TabItem>
-                        <TabItem Header="mWIG40" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="mwig40Grid" Style="{StaticResource grid}" DataGridCell.Selected="mwig40Grid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="mWIG40" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="mwig40Grid" Style="{StaticResource Grid}" DataGridCell.Selected="mwig40Grid_Selected" />
                         </TabItem>
-                        <TabItem Header="sWIG80" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="swig80Grid" Style="{StaticResource grid}" DataGridCell.Selected="swig80Grid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="sWIG80" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="swig80Grid" Style="{StaticResource Grid}" DataGridCell.Selected="swig80Grid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG BANKI" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigbankiGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigbankiGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG BANKI" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigbankiGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigbankiGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG BUDOW" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigbudowGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigbudowGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG BUDOW" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigbudowGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigbudowGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG CEE" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigceeGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigceeGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG CEE" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigceeGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigceeGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG CHEMIA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigchemiaGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigchemiaGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG CHEMIA" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigchemiaGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigchemiaGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG DEWEL" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigdewelGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigdewelGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG DEWEL" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigdewelGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigdewelGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG ENERG" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigenergGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigenergGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG ENERG" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigenergGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigenergGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG INFO" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wiginfoGrid" Style="{StaticResource grid}" DataGridCell.Selected="wiginfoGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG INFO" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wiginfoGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wiginfoGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG MEDIA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigmediaGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigmediaGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG MEDIA" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigmediaGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigmediaGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG PALIWA" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigpaliwaGrid" Style="{StaticResource grid}"  DataGridCell.Selected="wigpaliwaGrid_Selected"/>
-                            </ScrollViewer>
+                        <TabItem Header="WIG PALIWA" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigpaliwaGrid" Style="{StaticResource Grid}"  DataGridCell.Selected="wigpaliwaGrid_Selected"/>
                         </TabItem>
-                        <TabItem Header="WIG PLUS" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}"> 
-                                <DataGrid Name="wigplusGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigplusGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG PLUS" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigplusGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigplusGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG POLAND" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigpolandGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigpolandGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG POLAND" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigpolandGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigpolandGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG SPOZYW" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigspozywGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigspozywGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG SPOZYW" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigspozywGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigspozywGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG SUROWC" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigsurowcGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigsurowcGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG SUROWC" Template="{StaticResource tabTemp2}">
+                                <DataGrid Name="wigsurowcGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigsurowcGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG TELKOM" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigtelkomGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigtelkomGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG TELKOM" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="wigtelkomGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigtelkomGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="WIG UKRAIN" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="wigukrainGrid" Style="{StaticResource grid}" DataGridCell.Selected="wigukrainGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="WIG UKRAIN" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="wigukrainGrid" Style="{StaticResource Grid}" DataGridCell.Selected="wigukrainGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="RESPECT" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="respectGrid" Style="{StaticResource grid}" DataGridCell.Selected="respectGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="RESPECT" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="respectGrid" Style="{StaticResource Grid}" DataGridCell.Selected="respectGrid_Selected" />
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
@@ -590,8 +645,8 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel>
-                                    <Button Content="Dodaj do ulubionych" />
-                                    <Button Content="Przejdź to AT" />
+                                    <Button Content="Dodaj do ulubionych" Margin="0,2" />
+                                    <Button Content="Przejdź to AT" Click="akcjeATClick" />
                                 </StackPanel>
                             </Expander>
 
@@ -603,24 +658,24 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <Grid>
-                                    <Label Content="..." Margin="27,7,0,0" Name="aNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="aData" Style="{StaticResource labeldane2}" FontSize="12" />
-                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
-                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="aKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                                    <Label Name="aZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="aMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="aOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="aOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,238,0,0" Name="aObrot" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,265,0,0" Name="aTransakcje" Style="{StaticResource labeldane2}" />
-                                    <Label Margin="117,208,0,0" Name="aWolumen" Style="{StaticResource labeldane2}" />
+                                    <Label Content="..." Margin="27,7,0,0" Name="aNazwa" Style="{StaticResource labelTytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="aData" Style="{StaticResource labelDane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labelDane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Obrót:" Margin="52,238,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Transakcje:" Margin="12,265,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Wolumen:" Margin="24,208,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="aKurs" Margin="117,67,0,0" Style="{StaticResource labelDane2}" FontWeight="Bold" />
+                                    <Label Name="aZmiana" Margin="117,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="aMaxMin" Margin="117,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="aOtwarcie" Margin="117,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="aOdniesienie" Margin="117,178,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,238,0,0" Name="aObrot" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,265,0,0" Name="aTransakcje" Style="{StaticResource labelDane2}" />
+                                    <Label Margin="117,208,0,0" Name="aWolumen" Style="{StaticResource labelDane2}" />
                                     <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="aBorder" VerticalAlignment="Top" Width="9" />
                                     <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="aWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
                                     <Rectangle Name="aRect" Style="{StaticResource znaczekBokInfo}" Margin="247,32,0,0" />
@@ -635,15 +690,15 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <TabControl HorizontalAlignment="Left" Width="335" Height="200">
-                                    <TabItem Style="{StaticResource taby2}" Header="Ogólne">
+                                    <TabItem Template="{StaticResource tabTemp2}" Header="Ogólne">
                                         <ScrollViewer>
                                             
                                         </ScrollViewer>
                                     </TabItem>
-                                    <TabItem Style="{StaticResource taby2}" Header="Profil">
+                                    <TabItem Template="{StaticResource tabTemp2}" Header="Profil">
                                         <TextBox Style="{StaticResource tbox}" >Info o spółce... ble ble ble</TextBox>
                                     </TabItem>
-                                    <TabItem Style="{StaticResource taby2}" Header="Akcjonariat">
+                                    <TabItem Template="{StaticResource tabTemp2}" Header="Akcjonariat">
                                         
                                     </TabItem>
                                 </TabControl>
@@ -653,22 +708,18 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="Waluty i towary"  Template="{StaticResource tabTemp}">
+            <TabItem Header="Waluty i towary"  Template="{StaticResource tabTemp}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="360" />
                     </Grid.ColumnDefinitions>
-                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0">
-                        <TabItem Header="Waluty" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer  Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="walutyGrid" Style="{StaticResource grid}" DataGridCell.Selected="walutyGrid_Selected" />
-                            </ScrollViewer>
+                    <TabControl Grid.Column="0" Background="#FF868686" Foreground="White" BorderThickness="0" Name="wtTabContol">
+                        <TabItem Header="Waluty" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="walutyGrid" Style="{StaticResource Grid}" DataGridCell.Selected="walutyGrid_Selected" />
                         </TabItem>
-                        <TabItem Header="Towary" Style="{StaticResource ResourceKey=taby2}">
-                            <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                                <DataGrid Name="towaryGrid" Style="{StaticResource grid}" DataGridCell.Selected="towaryGrid_Selected" />
-                            </ScrollViewer>
+                        <TabItem Header="Towary" Template="{StaticResource tabTemp2}">
+                            <DataGrid Name="towaryGrid" Style="{StaticResource Grid}" DataGridCell.Selected="towaryGrid_Selected" />
                         </TabItem>
                     </TabControl>
                     <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Left" />
@@ -685,8 +736,8 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel>
-                                    <Button Content="Dodaj do ulubionych" />
-                                    <Button Content="Przejdź to AT" />
+                                    <Button Content="Dodaj do ulubionych" Margin="0,2" />
+                                    <Button Content="Przejdź to AT" Click="wtATClick" />
                                 </StackPanel>
                             </Expander>
 
@@ -699,18 +750,18 @@
                                 </Expander.Header>
 
                                 <Grid>
-                                    <Label Content="..." Margin="27,7,0,0" Name="wtNazwa" Style="{StaticResource labeltytul2}" FontSize="19" />
-                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="wtData" Style="{StaticResource labeldane2}" FontSize="12" />
-                                    <Label Content="Kurs:" Style="{StaticResource labeldane2}" Margin="60,67,0,0" />
-                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="wtKurs" Margin="117,67,0,0" Style="{StaticResource labeldane2}" FontWeight="Bold" />
-                                    <Label Name="wtZmiana" Margin="117,93,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="wtMaxMin" Margin="117,118,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="wtOtwarcie" Margin="117,148,0,0" Style="{StaticResource labeldane2}" />
-                                    <Label Name="wtOdniesienie" Margin="117,178,0,0" Style="{StaticResource labeldane2}" />
+                                    <Label Content="..." Margin="27,7,0,0" Name="wtNazwa" Style="{StaticResource labelTytul2}" FontSize="19" />
+                                    <Label Content="..." Height="28" Margin="9,33,0,0" Name="wtData" Style="{StaticResource labelDane2}" FontSize="12" />
+                                    <Label Content="Kurs:" Style="{StaticResource labelDane2}" Margin="60,67,0,0" />
+                                    <Label Content="Zmiana:" Margin="38,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Max | Min:" Margin="20,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Otwarcie:" Margin="28,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Content="Odniesienie:" Margin="7,178,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="wtKurs" Margin="117,67,0,0" Style="{StaticResource labelDane2}" FontWeight="Bold" />
+                                    <Label Name="wtZmiana" Margin="117,93,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="wtMaxMin" Margin="117,118,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="wtOtwarcie" Margin="117,148,0,0" Style="{StaticResource labelDane2}" />
+                                    <Label Name="wtOdniesienie" Margin="117,178,0,0" Style="{StaticResource labelDane2}" />
                                     <Border BorderBrush="Silver" BorderThickness="0" Height="286" HorizontalAlignment="Left" Margin="3,7,0,0" Name="wtBorder" VerticalAlignment="Top" Width="9" />
                                     <Image Height="96" HorizontalAlignment="Left" Margin="20,299,0,0" Name="wtWykres" Stretch="Fill" VerticalAlignment="Top" Width="200" />
                                     <Rectangle Name="wtRect" Style="{StaticResource znaczekBokInfo}" Margin="247,32,0,0" />
@@ -722,25 +773,70 @@
             </TabItem>
             <TabItem Header="Ulubione"  Template="{StaticResource tabTemp}">
                 <ScrollViewer Style="{StaticResource ResourceKey=scroll}">
-                    <DataGrid Name="ulubioneGrid" Style="{StaticResource grid}" />
+                    <DataGrid Name="ulubioneGrid" Style="{StaticResource Grid}" />
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Makro"  Template="{StaticResource tabTemp}" />
             <TabItem Header="Wiadomości"  Template="{StaticResource tabTemp}">
-                <ScrollViewer  Style="{StaticResource ResourceKey=scroll}" Name="wiadomosciGrid_scrool">
-                    <DataGrid Name="wiadomosciGrid" Style="{StaticResource grid}" />
-                </ScrollViewer>
+                <DataGrid Name="wiadomosciGrid" Style="{StaticResource Grid}" MouseDoubleClick="wiadomosciGrid_MouseDoubleClick" />
             </TabItem>
             <TabItem Header="Analizy"  Template="{StaticResource tabTemp}">
-                <ScrollViewer>
-                    <DataGrid>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Data" />
-                            <DataGridTextColumn Header="Serwis" />
-                            <DataGridTextColumn Header="Tytuł" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5,2,0,2" Click="ClearPDFDir" ToolTip="Jeśli jakiś dokument się nie otwiera, skorzystaj (może się nie pobrał do końca)">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{StaticResource del}" Height="24" Width="24" />
+                                <Label Content="Wyczyść wszystkie pobrane dokumenty" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                     <WrapPanel Grid.Row="1">
+                        <Border Margin="2" Height="auto" Width="auto" Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel Margin="3">
+                                <Label Content="Analizy Inverstors.pl" Style="{StaticResource tytulRamki}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Margin="0,2" Click="investorsPobListe" Height="28" Name="investorsPobListeButton">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Fill="{StaticResource refresh}" Height="20" Width="20" />
+                                            <Label Content="Pobierz listę dostępnych analiz" Name="investorsPobListeLabel" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Margin="2,2" Click="investorsPobPDF" Name="investorsPobPDFButton" Height="28">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Fill="{StaticResource pobierz}" Height="20" Width="20" />
+                                            <Label Content="Pobierz i otwórz dokument" Name="investorsPobPDFLabel" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                                <DataGrid Name="investorsGrid" Style="{StaticResource Grid}" Width="410" Height="170" CanUserSortColumns="False" CanUserReorderColumns="False" MouseDoubleClick="investorsPobPDF" />
+                            </StackPanel>
+                        </Border>
+                        <Border Margin="4" Height="auto" Width="auto" Style="{StaticResource ramkaPodsumowanie}">
+                                <StackPanel Margin="3">
+                                    <Label Content="Newslettery GPW" Style="{StaticResource tytulRamki}" />
+                                    <StackPanel Orientation="Horizontal">
+                                    <Button Margin="0,2" Height="28" Click="newsletterPobListe" Name="newsletterGPWPobListeButton">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Rectangle Fill="{StaticResource refresh}" Height="20" Width="20" />
+                                            <Label Content="Pobierz listę dostępnych newsletterów" Name="newsletterGPWPobListeLabel" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="2,2" Height="28" Click="gpwButtonPobPDF" Name="newsletterGPWPobPDFButton">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Rectangle Fill="{StaticResource pobierz}" Height="20" Width="20" />
+                                                <Label Content="Pobierz i otwórz dokument" Name="gpwPobPDFLabel" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                    <DataGrid Name="gpwNewsletterGrid" Style="{StaticResource Grid}" Width="410" Height="170" CanUserSortColumns="False" CanUserReorderColumns="False" />
+                                </StackPanel>
+                            </Border>
+                    </WrapPanel>
+                </Grid>
             </TabItem>
             <TabItem Header="Portfel"  Template="{StaticResource tabTemp}"/>
             <TabItem Header="Opcje" Template="{StaticResource tabTemp}">
@@ -751,12 +847,10 @@
                     </Grid.RowDefinitions>
                     <Grid>
                         <Button Name="zapiszConfig" HorizontalAlignment="Left" Margin="5,2,0,2" Click="zapiszConfig_Click">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Rectangle Fill="{StaticResource ok}" Height="24" Width="24" />
-                                    <Label Content="Zapisz ustawienia" />
-                                </StackPanel>
-                            </Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{StaticResource ok}" Height="24" Width="24" />
+                                <Label Content="Zapisz ustawienia" />
+                            </StackPanel>
                         </Button>
                     </Grid>
                 <WrapPanel Grid.Row="1">

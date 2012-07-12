@@ -24,6 +24,7 @@ using System.Windows.Threading;
 using klasynewsowe;
 using commonStrings;
 using klasyakcjowe;
+using klasyAnalizyPDF;
 
 
 namespace mm_gielda
@@ -53,15 +54,19 @@ namespace mm_gielda
         // I po to też te wszystkie ciągłe konwersje ToString() albo ToInt32() niżej w metodzie filtrujNajaktwyniejsze // 
         public string Nazwa { get; set; }
         public float Kurs { get; set; }
+        public float Zmiana { get; set; }
+        public string ZmianaProc { get; set; }
         public string Obrot { get; set; } 
         public string Wolumen { get; set; }
 
         public daneNajaktyniejsze() { }
 
-        public daneNajaktyniejsze(string nazwa, float kurs, string obrot, string wolumen)
+        public daneNajaktyniejsze(string nazwa, float kurs,float zmiana, string zmianaProc, string obrot, string wolumen)
             {
             this.Nazwa = nazwa;
             this.Kurs = kurs;
+            this.Zmiana = zmiana;
+            this.ZmianaProc = zmianaProc;
             this.Obrot = obrot;
             this.Wolumen = wolumen;
             }
@@ -128,8 +133,11 @@ namespace mm_gielda
 
         internal static List<daneWzrostySpadki> tSwig80Wzrosty;
         internal static List<daneWzrostySpadki> tSwig80Spadki;
-        internal static List<daneNajaktyniejsze> tSwig80Najaktywniejsze; 
+        internal static List<daneNajaktyniejsze> tSwig80Najaktywniejsze;
         #endregion
+
+        internal static List<daneAnalizy> invAnalizyList;
+        internal static List<daneAnalizy> gpwNewsletterList;
         }
 
     #region === logująca klasa ===
@@ -202,14 +210,16 @@ namespace mm_gielda
             {
             try
                 {
-                if (!(Directory.Exists(staleapki.appdir + staleapki.tmpdir)))
-                    Directory.CreateDirectory(staleapki.appdir + @"\tmp");
-                if (!(Directory.Exists(staleapki.appdir + staleapki.bazadir)))
-                    Directory.CreateDirectory(staleapki.appdir + @"\baza");
-                if (!(Directory.Exists(staleapki.appdir + staleapki.danedir)))
-                    Directory.CreateDirectory(staleapki.appdir + @"\dane");
-                if (!(Directory.Exists(staleapki.appdir + staleapki.tmpWykresDir)))
-                    Directory.CreateDirectory(staleapki.appdir + staleapki.tmpdir + "tmpWykresy");
+                if (!Directory.Exists(staleapki.appDir + staleapki.tmpDir))
+                    Directory.CreateDirectory(staleapki.appDir + @"\tmp");
+                if (!Directory.Exists(staleapki.appDir + staleapki.bazaDir))
+                    Directory.CreateDirectory(staleapki.appDir + @"\baza");
+                if (!Directory.Exists(staleapki.appDir + staleapki.daneDir))
+                    Directory.CreateDirectory(staleapki.appDir + @"\dane");
+                if (!Directory.Exists(staleapki.appDir + staleapki.tmpWykresDir))
+                    Directory.CreateDirectory(staleapki.appDir + staleapki.tmpDir + "tmpWykresy");
+                if (!Directory.Exists(staleapki.appDir + staleapki.pdfDir))
+                    Directory.CreateDirectory(staleapki.appDir + staleapki.tmpDir + "pdfAnalizy");
 
                 Loger.dodajDoLogaInfo("Katalogi OK");
                 }
@@ -253,33 +263,33 @@ namespace mm_gielda
 
         // metodka pobierająca albo odświeżająca skład indeksów //
         void pobierzSkladIndeksow()
-            {
+        {
             // sprawdza czy to jest pierwsze pobieranie indeksów po odpaleniu apki, żeby zapobiec
             // pobieraniu lub sprawdzaniu każdego indeksy przy każdym odświeżaniu akcji //
             if (staleapki.pierwszePobranie)
-                {
+            {
                 Loger.dodajDoLogaInfo(messages.indOdswStart);
                 try
-                    {
+                {
                     // przerabianie wszystkich indeksów z listy powyższej //
                     foreach (var s in listaIndeksyGPW)
-                        {
+                    {
                         // ścieżka do pliku //
-                        string filepath = staleapki.appdir + staleapki.bazadir + s + ".txt";
+                        string filepath = staleapki.appDir + staleapki.bazaDir + s + ".txt";
 
                         // jeśli pliczku nie ma, albo jest starszy niż tydzien //
                         if (!File.Exists(filepath) | (File.GetCreationTime(filepath) - DateTime.Now).TotalDays > 5)
-                            {
+                        {
                             Loger.dodajDoLogaInfo(messages.indAktual + s.ToUpper());
                             // tempowa lista z symbolami należącymi do indeksu //
                             List<string> tmpl = new List<string>();
 
                             // pobieranie pliczku z komponentami indeksu //
                             string adres = adresy.StooqSkladIndeks + s;
-                            Pobierz(adres, staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
+                            Pobierz(adres, staleapki.appDir + staleapki.tmpDir + "tmpfile.html");
 
                             // kod tej stronki //
-                            string[] tmpf = File.ReadAllLines(staleapki.appdir + staleapki.tmpdir + "tmpfile.html");
+                            string[] tmpf = File.ReadAllLines(staleapki.appDir + staleapki.tmpDir + "tmpfile.html");
                             File.Delete(filepath);
 
                             // szukanie symboli spółek w indeksie //
@@ -288,56 +298,57 @@ namespace mm_gielda
 
                             // dodawanie do tej tempowej tabelki a potem zapis całości do pliku //
                             foreach (var m in match)
-                                {
+                            {
                                 var tmps = m.ToString();
                                 tmps = tmps
                                             .Substring(26, 3)
                                             .ToUpper();
 
                                 tmpl.Add(tmps);
-                                }
+                            }
                             File.WriteAllLines(filepath, tmpl.ToArray());
                             File.SetCreationTime(filepath, DateTime.Now);
-                            }
                         }
+                    }
                     Loger.dodajDoLogaInfo(messages.indOdswKoniec);
                     staleapki.pierwszePobranie = false;
-                    }
-                catch { Loger.dodajDoLogaError(messages.indOdswFail); }
                 }
+                catch { Loger.dodajDoLogaError(messages.indOdswFail); }
             }
+        }
 
-        void wczytajTabeleIndeksu(string indeks,ref List<daneAkcji> listaCel,DataGrid grid)
+        void wczytajTabeleIndeksu(string indeks, ref List<daneAkcji> listaCel, DataGrid grid)
+        {
+            if (File.Exists(staleapki.appDir + staleapki.bazaDir + indeks + ".txt"))
             {
-            if (File.Exists(staleapki.appdir + staleapki.bazadir + indeks + ".txt"))
-                {
                 try
-                    {
+                {
                     // wczytuje skład indeksu z pliku
-                    string[] sklad = File.ReadAllLines(staleapki.appdir + staleapki.bazadir + indeks + ".txt");
+                    string[] sklad = File.ReadAllLines(staleapki.appDir + staleapki.bazaDir + indeks + ".txt");
                     var tmpl = new List<daneAkcji>();   //tempowa lista, żeby potem przypisać do static listy //
 
                     // leci po tablicy i kopiuje te akcje, które są w indeksie //
                     for (int i = 0; i < sklad.Length; i++)
-                        {
+                    {
                         var row = daneTabel.tAkcje.Find(a => a.Symbol == sklad[i]);
                         if (row != null)
-                            tmpl.Add(row);  
-                        }
+                            tmpl.Add(row);
+                    }
                     listaCel = tmpl;
 
                     // wczytanie do grida
                     this.Dispatcher.Invoke(wAkcje, grid, listaCel);
-                    }
-                catch { Loger.dodajDoLogaError(indeks.ToUpper() + messages.indLoadFail); }
                 }
-            else
-                Loger.dodajDoLogaError(staleapki.appdir + staleapki.bazadir + indeks + ".txt - Plik nie istnieje!");
+                catch { Loger.dodajDoLogaError(indeks.ToUpper() + messages.indLoadFail); }
             }
+            else
+                Loger.dodajDoLogaError(staleapki.appDir + staleapki.bazaDir + indeks + ".txt - Plik nie istnieje!");
+        }
 
+        #region === metodki wypełniające dane na tabie "podsumowanie" ===
         // metodka filtrująca indeksy i wrzucająca do list te akcje które rosną i spadają najbardziej //
         void filtrujWzrostySpadki(List<daneAkcji> listaZrodlo, ref List<daneWzrostySpadki> listaCelWzrosty, ref List<daneWzrostySpadki> listaCelSpadki)
-            {
+        {
             // sortowanie po zmianie porocentowej //
             IEnumerable<daneAkcji> tmp1 = listaZrodlo.OrderBy(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
             IEnumerable<daneAkcji> tmp2 = listaZrodlo.OrderByDescending(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
@@ -348,29 +359,30 @@ namespace mm_gielda
 
             // zbieranie 5 pierwszych i wpisanie do listy typu daneWzrostySpadki //
             for (byte i = 0; i < staleapki.iloscNaj; i++)
-                {
-                tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa,tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana)));
-                tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa,tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana)));
-                }
+            {
+                tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa, tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana)));
+                tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa, tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana)));
+            }
             listaCelWzrosty = tmpW;
             listaCelSpadki = tmpS;
-            }
+        }
 
+        // metodka filtrująca indeksy i wrzucające te z największym wolumenem //
         void filtrujNajaktywniejsze(List<daneAkcji> listaZrodlo, ref List<daneNajaktyniejsze> listaCel)
-            {
+        {
             // konwersja mnożników. Można kiedys poprawić jak znajdzie się lepszy sposób...
             #region = konwersja mnożników obrotu (k,m,g) na liczby, żeby posortować =
             var convAllTab = new List<daneNajaktyniejsze>(400);
             for (int i = 0; i < listaZrodlo.Count; i++)
-                {
+            {
                 float tmpflo;
                 string tmps = listaZrodlo[i].Obrot.Replace('.', ',');
                 if (tmps.Contains('k') | tmps.Contains('m') | tmps.Contains('g'))
-                    {
+                {
                     tmpflo = Convert.ToSingle(tmps.Remove(tmps.Length - 1));
                     // identyfikacja mnożnika i przemnożenie
                     switch (tmps[tmps.Length - 1])
-                        {
+                    {
                         case 'k':
                             tmpflo *= 1000;
                             break;
@@ -382,14 +394,14 @@ namespace mm_gielda
                             break;
                         default:
                             break;
-                        }
                     }
+                }
                 else
                     tmpflo = (tmps != "") ? Convert.ToInt32(tmps) : 0;
 
                 int t = (int)tmpflo;
-                convAllTab.Add(new daneNajaktyniejsze(listaZrodlo[i].Nazwa, listaZrodlo[i].Kurs, t.ToString("D"), listaZrodlo[i].Wolumen));
-                }; 
+                convAllTab.Add(new daneNajaktyniejsze(listaZrodlo[i].Nazwa, listaZrodlo[i].Kurs,Convert.ToSingle(listaZrodlo[i].Zmiana), listaZrodlo[i].ZmianaProc, t.ToString("D"), listaZrodlo[i].Wolumen));
+            };
             #endregion
 
             IEnumerable<daneNajaktyniejsze> sConvTab = convAllTab.OrderByDescending(x => Convert.ToInt32(x.Obrot)).Take(staleapki.iloscNaj);
@@ -397,15 +409,38 @@ namespace mm_gielda
             var tmpN = new List<daneNajaktyniejsze>(staleapki.iloscNaj);
 
             for (byte i = 0; i < staleapki.iloscNaj; i++)
-                {
+            {
                 // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
                 var row = daneTabel.tAkcje.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
                 string obrotStock = row.Obrot;
 
-                tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, obrotStock, sConvTab.ElementAt(i).Wolumen));
-                }
-            listaCel = tmpN;
+                tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs,sConvTab.ElementAt(i).Zmiana,sConvTab.ElementAt(i).ZmianaProc, obrotStock, sConvTab.ElementAt(i).Wolumen));
             }
+            listaCel = tmpN;
+        }
+
+        // liczenie rosnących i spadających //
+        void policzRosnaceSpadajace(List<daneAkcji> lista, ref Label ileRosnie, ref Label ileZero, ref Label ileSpada)
+        {
+            ushort ileR = 0, ileZ = 0, ileS = 0;
+            foreach (var o in lista)
+            {
+                float tmpz = Convert.ToSingle(o.Zmiana);
+                {
+                    if (tmpz > 0.00)
+                        ileR++;
+                    if (tmpz < 0.00)
+                        ileS++;
+                    if (tmpz == 0.00)
+                        ileZ++;
+                }
+                ileRosnie.Content = ileR;
+                ileZero.Content = ileZ;
+                ileSpada.Content = ileS;
+            }
+        }
+
+        #endregion
 
         #region === actiony ogólne dla wątków ===
         Action<Action> genDelegate = (genMetoda) =>
@@ -443,6 +478,11 @@ namespace mm_gielda
             {
             wpfDataGrid.ItemsSource = lista;
             };
+        
+        Action<DataGrid,List<daneAnalizy>> wAnalizy = delegate (DataGrid wpfDataGrid, List<daneAnalizy> lista)
+            {
+            wpfDataGrid.ItemsSource = lista;
+            };
         #endregion
 
         #region === metody timerowe, wczytujące tabele ===
@@ -453,7 +493,19 @@ namespace mm_gielda
             if (config.czyPobieracAkcje)
                 genDelegate.BeginInvoke(generujAkcje, done => { this.Dispatcher.Invoke(wAkcje,DispatcherPriority.Background,akcjeGrid, daneTabel.tAkcje); }, null);
             if (config.czyPobieracIndeksyGPW)
-                genDelegate.BeginInvoke(generujIndeksyGPW, done => { this.Dispatcher.Invoke(wAkcje, DispatcherPriority.Background, indeksyGPWGrid, daneTabel.tIndeksyGPW); }, null);
+                genDelegate.BeginInvoke(generujIndeksyGPW, done => { 
+                    this.Dispatcher.Invoke(wAkcje, DispatcherPriority.Background, indeksyGPWGrid, daneTabel.tIndeksyGPW);
+                    if (daneTabel.tIndeksyGPW.Count != 0)
+                        {
+                        // wczytanie dolnych kwadracików
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG",wigkursl,wigotwl,wigodnl,wigobrl,wigwoll,wigzmianal,wigprocentl,wiggodzl,wiggrid,wigRect);}));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG20", wig20kursl, wig20otwl, wig20odnl, wig20obrl, wig20woll, wig20zmianal, wig20procentl, wig20godzl, wig20grid,wig20Rect); }));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("MWIG40", mwigkursl, mwigotwl, mwigodnl, mwigobrl, mwigwoll, mwigzmianal, mwigprocentl, mwiggodzl, mwiggrid,mwigRect); }));
+                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("SWIG80", swigkursl, swigotwl, swigodnl, swigobrl, swigwoll, swigzmianal, swigprocentl, swiggodzl, swiggrid,swigRect); }));
+                        }
+                    else
+                        Loger.dodajDoLogaError(messages.indBoxRefreshError);
+                    }, null);
             }
 
         void tabelujSwiat()
@@ -465,7 +517,18 @@ namespace mm_gielda
             if (config.czyPobieracTowary)
                 genDelegate.BeginInvoke(generujTowary, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, towaryGrid, daneTabel.tTowary); }, null);
             if (config.czyPobieracWaluty)
-                genDelegate.BeginInvoke(generujWaluty, done => { this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, walutyGrid, daneTabel.tWaluty); }, null);
+                genDelegate.BeginInvoke(generujWaluty, done => { 
+                    this.Dispatcher.Invoke(wInne, DispatcherPriority.Background, walutyGrid, daneTabel.tWaluty);
+                    if (daneTabel.tWaluty.Count != 0)
+                    {
+                        // wczytanie dolnych kwadracików
+                        this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURPLN", eurplnkursl, eurplnotwarciel, eurplnodniesieniel, eurplnzmianal, eurplnprocentl, eurplngodzl, eurplngrid);
+                        this.Dispatcher.Invoke(odswiezDolInfoWaluty, "USDPLN", usdplnkursl, usdplnotwarciel, usdplnodniesieniel, usdplnzmianal, usdplnprocentl, usdplngodzl, usdplngrid);
+                        this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURUSD", eurusdkursl, eurusdotwarciel, eurusdodniesieniel, eurusdzmianal, eurusdprocentl, eurusdgodzl, eurusdgrid);
+                    }
+                    else
+                        Loger.dodajDoLogaError(messages.walutyBoxRefreshError);
+                }, null);
             }
 
         void tabelujNewsy()
@@ -475,17 +538,29 @@ namespace mm_gielda
 
         void tabelujWzrostySpadki()
             {
+            // filtrowanie tabel, i wrzucenie do list //
             filtrujWzrostySpadki(daneTabel.tAkcje, ref daneTabel.tAkcjeGPWWzrosty, ref daneTabel.tAkcjeGPWSpadki);
             filtrujWzrostySpadki(daneTabel.tWig, ref daneTabel.tWigWzrosty, ref daneTabel.tWigSpadki);
             filtrujWzrostySpadki(daneTabel.tWig20, ref daneTabel.tWig20Wzrosty, ref daneTabel.tWig20Spadki);
             filtrujWzrostySpadki(daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
             filtrujWzrostySpadki(daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
 
+            // wrzucenie do interfejsu
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, akcjeGPWWzrostyGrid, akcjeGPWSpadkiGrid, daneTabel.tAkcjeGPWWzrosty, daneTabel.tAkcjeGPWSpadki);
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, wigWzrostyGrid, wigSpadkiGrid, daneTabel.tWigWzrosty, daneTabel.tWigSpadki);
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, wig20WzrostyGrid, wig20SpadkiGrid, daneTabel.tWig20Wzrosty, daneTabel.tWig20Spadki);
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, mwig40WzrostyGrid, mwig40SpadkiGrid, daneTabel.tMwig40Wzrosty, daneTabel.tMwig40Spadki);
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, swig80WzrostyGrid, swig80SpadkiGrid, daneTabel.tSwig80Wzrosty, daneTabel.tSwig80Spadki);
+
+            // przeliczenie rosnących i spadajcych //
+            this.Dispatcher.BeginInvoke(new Action(delegate()
+            {
+                policzRosnaceSpadajace(daneTabel.tAkcje, ref akcjeRosnieIlosc, ref akcjeZeroIlosc, ref akcjeSpadaIlosc);
+                policzRosnaceSpadajace(daneTabel.tWig, ref wigRosnieIlosc, ref wigZeroIlosc, ref wigSpadaIlosc);
+                policzRosnaceSpadajace(daneTabel.tWig20, ref wig20RosnieIlosc, ref wig20ZeroIlosc, ref wig20SpadaIlosc);
+                policzRosnaceSpadajace(daneTabel.tmWig40, ref mwig40RosnieIlosc, ref mwig40ZeroIlosc, ref mwig40SpadaIlosc);
+                policzRosnaceSpadajace(daneTabel.tsWig80, ref swig80RosnieIlosc, ref swig80ZeroIlosc, ref swig80SpadaIlosc);
+            }), DispatcherPriority.Background, null);
             }
 
         void tabelujNajaktywniejsze()
@@ -501,6 +576,28 @@ namespace mm_gielda
             this.Dispatcher.Invoke(wN, DispatcherPriority.Background, wig20NajaktywniejszeGrid, daneTabel.tWig20Najaktywniejsze);
             this.Dispatcher.Invoke(wN, DispatcherPriority.Background, mwig40NajaktywniejszeGrid, daneTabel.tMwig40Najaktywniejsze);
             this.Dispatcher.Invoke(wN, DispatcherPriority.Background, swig80NajaktywniejszeGrid, daneTabel.tSwig80Najaktywniejsze);
+            }
+
+        void tabelujAnalizyInvestors()
+            {
+            // blokowanie buttona i zmiana labelki, że pobiera //
+            this.Dispatcher.Invoke(zmbb, investorsPobListeLabel, "Pobieranie...", investorsPobListeButton, true);
+            genDelegate.BeginInvoke(pobierzListeAnalizInvestors,done => 
+            {   // wrzucenie do listy, i przywrócenie labelek na przycisku //
+                this.Dispatcher.Invoke(wAnalizy,DispatcherPriority.Background,investorsGrid,daneTabel.invAnalizyList);
+                this.Dispatcher.Invoke(zmbb, investorsPobListeLabel, "Pobierz listę dostępnych analiz", investorsPobListeButton, false);
+            }, null);
+            }
+
+        void tabelujNewsletteryGPW()
+            {
+            // blokowanie buttona i zmiana labelki, że pobiera //
+            this.Dispatcher.Invoke(zmbb, newsletterGPWPobListeLabel, "Pobieranie...", newsletterGPWPobListeButton, true);
+            genDelegate.BeginInvoke(pobierzListeGPWNewsletter,donne =>
+            {   // wrzucenie do listy, i przywrócenie labelek na przycisku //
+                this.Dispatcher.Invoke(wAnalizy,DispatcherPriority.Background,gpwNewsletterGrid,daneTabel.gpwNewsletterList);
+                this.Dispatcher.Invoke(zmbb, newsletterGPWPobListeLabel, "Pobierz listę dostępnych newsletterów", newsletterGPWPobListeButton, false);
+            },null);
             }
         #endregion
 
@@ -639,21 +736,10 @@ namespace mm_gielda
                 {
                 if (czyOdswierzacIndeksyGPW())
                     {
-                    //Loger.dodajDoLogaInfo(serwisy.Stooq + typy.IndeksyGPW + messages.pobStart);
+                    Loger.dodajDoLogaInfo(serwisy.Stooq + typy.IndeksyGPW + messages.pobStart);
                     daneTabel.tIndeksyGPW = stooqIndeksyGPW.generujTabele();
-
-                    if (daneTabel.tIndeksyGPW.Count != 0)
-                        {
-                        // wczytanie dolnych kwadracików
-                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG",wigkursl,wigotwl,wigodnl,wigobrl,wigwoll,wigzmianal,wigprocentl,wiggodzl,wiggrid,wigRect);}));
-                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("WIG20", wig20kursl, wig20otwl, wig20odnl, wig20obrl, wig20woll, wig20zmianal, wig20procentl, wig20godzl, wig20grid,wig20Rect); }));
-                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("MWIG40", mwigkursl, mwigotwl, mwigodnl, mwigobrl, mwigwoll, mwigzmianal, mwigprocentl, mwiggodzl, mwiggrid,mwigRect); }));
-                        this.Dispatcher.Invoke(new Action(() => { odswiezDolInfoIndeksy("SWIG80", swigkursl, swigotwl, swigodnl, swigobrl, swigwoll, swigzmianal, swigprocentl, swiggodzl, swiggrid,swigRect); }));
-                        }
-                    else
-                        Loger.dodajDoLogaError(messages.indBoxRefreshError);
-                    }
-                }
+                    } 
+               }
             catch { }
             }
 
@@ -697,18 +783,28 @@ namespace mm_gielda
                 {
                 Loger.dodajDoLogaInfo(serwisy.Stooq + typy.Waluty + messages.pobStart);
                 daneTabel.tWaluty = stooqWaluty.generujTabele();
-
-                if (daneTabel.tWaluty.Count != 0)
-                    {
-                    // wczytanie dolnych kwadracików
-                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURPLN", eurplnkursl, eurplnotwarciel, eurplnodniesieniel, eurplnzmianal, eurplnprocentl, eurplngodzl, eurplngrid);
-                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "USDPLN", usdplnkursl, usdplnotwarciel, usdplnodniesieniel, usdplnzmianal, usdplnprocentl, usdplngodzl, usdplngrid);
-                    this.Dispatcher.Invoke(odswiezDolInfoWaluty, "EURUSD", eurusdkursl, eurusdotwarciel, eurusdodniesieniel, eurusdzmianal, eurusdprocentl, eurusdgodzl, eurusdgrid);
-                    }
-                else
-                    Loger.dodajDoLogaError(messages.walutyBoxRefreshError);
                 }
             catch { }
+            }
+
+        private void pobierzListeAnalizInvestors()
+        {
+            var invAnalizy = new analizyInvestors();
+            try
+                {
+                daneTabel.invAnalizyList = invAnalizy.generujTabele();
+                }
+            catch { Loger.dodajDoLogaError(serwisy.Investors + messages.pobListeBIFail); };
+        }
+
+        private void pobierzListeGPWNewsletter()
+            {
+            var gpwNews = new newsletterGPW();
+            try
+                {
+                daneTabel.gpwNewsletterList = gpwNews.generujTabele();
+                }
+            catch { };
             }
         }
     }
