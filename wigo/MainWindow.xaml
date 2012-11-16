@@ -229,6 +229,16 @@
     </Window.Resources>
 
     <DockPanel>
+        <!--Ticker-->
+        <StackPanel DockPanel.Dock="Top" Height="35" Orientation="Horizontal">
+            <!--<Border VerticalAlignment="Center" Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Ellipse Height="24" Width="24" Fill="Green" Name="workElipse" />
+                    <Label Content="Gotowe" Name="workLabel" VerticalAlignment="Center"/>
+                </StackPanel>                
+            </Border>-->
+        </StackPanel>
+        
         <!-- Dolne informacje  --> 
         <StackPanel DockPanel.Dock="Bottom" Height="120" Orientation="Horizontal">
            <Border Style="{StaticResource ramkiDolInfo}" Name="wigborder" Margin="2,0,0,0">
@@ -240,7 +250,7 @@
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="wigotwl" Style="{StaticResource labelDane}" />
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wigodnl" Style="{StaticResource labelDane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wigwoll" Style="{StaticResource labelDane}" />
-                    <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="Obrót" Height="28" Margin="0,78,0,0" Name="wigobrl" Style="{StaticResource labelDane}" Width="55" FontWeight="Bold" />
                     <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="wiggodzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="wigRect" Style="{StaticResource znaczekDol}" />
                     <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="wigWykresShow" />
@@ -255,7 +265,7 @@
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="wig20otwl" Style="{StaticResource labelDane}" />
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="wig20odnl" Style="{StaticResource labelDane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="wig20woll"  Style="{StaticResource labelDane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="wig20obrl" Style="{StaticResource labelDane}" Width="55" FontWeight="Bold" />
                     <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="wig20godzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="wig20Rect" Style="{StaticResource znaczekDol}" />
                     <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="wig20WykresShow" />
@@ -270,7 +280,7 @@
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="mwigotwl"  Style="{StaticResource labelDane}" />
                     <Label Content="Odniesienie" Height="28" Margin="0,56,0,0" Name="mwigodnl"  Style="{StaticResource labelDane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="mwigwoll" Style="{StaticResource labelDane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="mwigobrl" Style="{StaticResource labelDane}" Width="55" FontWeight="Bold" />
                     <Label Content="17:20" Height="28" Margin="130,-2,0,0" Name="mwiggodzl"  Style="{StaticResource labelDane}" />
                     <Rectangle Name="mwigRect" Style="{StaticResource znaczekDol}" />
                     <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="mwig40WykresShow" />
@@ -285,7 +295,7 @@
                     <Label Content="Otwarcie" Margin="0,40,0,0" Name="swigotwl" Style="{StaticResource labelDane}" />
                     <Label Content="Odniesienie" Height="28"  Margin="0,56,0,0" Name="swigodnl" Style="{StaticResource labelDane}" Width="80" />
                     <Label Content="Wolumen" Height="28" Margin="0,93,0,0" Name="swigwoll"  Style="{StaticResource labelDane}" />
-                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labelDane}" Width="55" />
+                    <Label Content="Obrót" Height="28"  Margin="0,78,0,0" Name="swigobrl" Style="{StaticResource labelDane}" Width="55" FontWeight="Bold" />
                     <Label Content="17:20" Height="28"  Margin="130,-2,0,0" Name="swiggodzl" Style="{StaticResource labelDane}" />
                     <Rectangle Name="swigRect" Style="{StaticResource znaczekDol}" />
                     <Rectangle Fill="{StaticResource diagram}" Height="24" Width="24" Margin="90,92,60,0" MouseUp="smwig80WykresShow" />
@@ -326,17 +336,16 @@
             </Border>
         </StackPanel>
         <!--Dolnie koniec-->
-
         
-        <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" TabStripPlacement="Left" Background="#FF868686" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="4" BorderThickness="0">
+        <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Name="mainTabCo" VerticalAlignment="Stretch" TabStripPlacement="Left" Background="#FF868686" Foreground="White" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="4" BorderThickness="0">
             <TabItem Header="Podsumowanie" Template="{StaticResource tabTemp}"  VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ScrollViewer>
                     <WrapPanel Margin="2,0,0,0">
                         <Border Style="{StaticResource ramkaPodsumowanie}">
                             <StackPanel>
-                                <Label Content="Akcje GPW" Style="{StaticResource tytulRamki}"/>
-                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                               <StackPanel Orientation="Horizontal" Margin="0,2">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Label Content="Akcje GPW" Style="{StaticResource labelTytul}"/>
                                         <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
                                             <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
                                             <Label Content="0" Name="akcjeRosnieIlosc" FontSize="11" FontWeight="Bold" />
@@ -364,9 +373,9 @@
                         </Border>
                         <Border Style="{StaticResource ramkaPodsumowanie}">
                             <StackPanel>
-                                <Label Content="WIG" Style="{StaticResource tytulRamki}"/>
                                 <StackPanel Orientation="Horizontal"  Margin="0,2">
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <StackPanel>
+                                        <Label Content="WIG" Style="{StaticResource labelTytul}"/>
                                         <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
                                             <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
                                             <Label Content="0" Name="wigRosnieIlosc" FontSize="11" FontWeight="Bold" />
@@ -379,6 +388,8 @@
                                             <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
                                             <Label Content="0" Name="wigSpadaIlosc" FontSize="11" FontWeight="Bold" />
                                         </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                     </StackPanel>
                                         <GroupBox Header="Wzrosty"  Style="{StaticResource groupBoxWzrosty}">
                                             <DataGrid Style="{StaticResource Grid}" Name="wigWzrostyGrid" />
@@ -394,9 +405,9 @@
                         </Border>
                         <Border Style="{StaticResource ramkaPodsumowanie}" >
                             <StackPanel>
-                                <Label Content="WIG20" Style="{StaticResource tytulRamki}"/>
                                 <StackPanel Orientation="Horizontal"  Margin="0,2">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Label Content="WIG20" Style="{StaticResource labelTytul}"/>
                                         <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
                                             <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
                                             <Label Content="0" Name="wig20RosnieIlosc" FontSize="11" FontWeight="Bold" />
@@ -424,9 +435,9 @@
                         </Border>
                         <Border Style="{StaticResource ramkaPodsumowanie}">
                             <StackPanel>
-                                <Label Content="mWIG40" Style="{StaticResource tytulRamki}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,2">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Label Content="mWIG40" Style="{StaticResource labelTytul}"/>
                                         <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
                                             <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
                                             <Label Content="0" Name="mwig40RosnieIlosc" FontSize="11" FontWeight="Bold" />
@@ -454,9 +465,9 @@
                         </Border>
                         <Border Style="{StaticResource ramkaPodsumowanie}">
                             <StackPanel>
-                                <Label Content="sWIG80" Style="{StaticResource tytulRamki}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,2">
                                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Label Content="sWIG80" Style="{StaticResource labelTytul}"/>
                                         <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
                                             <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
                                             <Label Content="0" Name="swig80RosnieIlosc" FontSize="11" FontWeight="Bold" />
@@ -805,7 +816,7 @@
                                             <Label Content="Pobierz listę dostępnych analiz" Name="investorsPobListeLabel" />
                                         </StackPanel>
                                     </Button>
-                                    <Button Margin="2,2" Click="investorsPobPDF" Name="investorsPobPDFButton" Height="28">
+                                    <Button Margin="2,2" Click="investorsPobPDF" Name="investorsPobPDFButton" Height="28" Visibility="Hidden">
                                         <StackPanel Orientation="Horizontal">
                                             <Rectangle Fill="{StaticResource pobierz}" Height="20" Width="20" />
                                             <Label Content="Pobierz i otwórz dokument" Name="investorsPobPDFLabel" />
@@ -825,7 +836,7 @@
                                             <Label Content="Pobierz listę dostępnych newsletterów" Name="newsletterGPWPobListeLabel" />
                                             </StackPanel>
                                         </Button>
-                                        <Button Margin="2,2" Height="28" Click="gpwButtonPobPDF" Name="newsletterGPWPobPDFButton">
+                                        <Button Margin="2,2" Height="28" Click="gpwButtonPobPDF" Name="newsletterGPWPobPDFButton" Visibility="Hidden">
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Fill="{StaticResource pobierz}" Height="20" Width="20" />
                                                 <Label Content="Pobierz i otwórz dokument" Name="gpwPobPDFLabel" />

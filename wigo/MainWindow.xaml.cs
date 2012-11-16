@@ -22,18 +22,19 @@ using System.Data;
 using System.Collections.Generic;
 using System.Collections;
 using System.Windows.Threading;
+using System.Threading;
 using System.Linq;
 
 using commonStrings;
 using klasyakcjowe;
 
 namespace mm_gielda
-{
+    {
     // ================
     // stałe używane w kodzie, żeby były w jednym miejscu //
     // ================
     public struct staleapki
-    {
+        {
         public const string tmpDir = @"\tmp\";
         public const string tmpWykresDir = tmpDir + @"tmpWykresy\";
         public const string bazaDir = @"\baza\";
@@ -51,10 +52,10 @@ namespace mm_gielda
 
         // powiedzmy że zmienna, do metody pobierającej składy indeksów //
         public static bool pierwszePobranie = true;
-    }
+        }
 
     public partial class MainWindow: Window
-    {
+        {
 
         //timery
         DispatcherTimer timerGPW = new DispatcherTimer();
@@ -65,17 +66,17 @@ namespace mm_gielda
         // cały nasz mainwindow, okienko //
         // ================
         public MainWindow()
-        {
-            try
             {
+            try
+                {
                 InitializeComponent();
                 DirCheck();
-            }
+                }
             catch { };
-        }// zamkniecie maina
+            }// zamkniecie maina
 
         void setTimers()
-        {
+            {
             timerGPW.Tick += new EventHandler(timerGPW_Tick);
             timerGPW.Interval = new TimeSpan(0, config.gpwInterwal, 0);
 
@@ -87,16 +88,43 @@ namespace mm_gielda
 
             // jesli odpalonew w weekend, to nie startuj timerów, jedynie wczytaj w WindowInitialized tabele jednokrotnie //
             if (DateTime.Now.DayOfWeek != DayOfWeek.Saturday | DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
-            {
+                {
                 timerGPW.Start();
                 timerSwiat.Start();
                 timerNewsy.Start();
+                }
             }
-        }
+
+        //Action<Ellipse, Label> checkWork = (elipsa, labelka) =>
+        //    //void checkWork(Ellipse elipsa,Label labelka)
+        //    {
+        //        if (envVar.akcjeTrwaOdsw == true)
+        //            {
+        //            do
+        //                {
+        //                labelka.Content = "Pracuje...";
+        //                elipsa.Fill = Brushes.Red;
+        //                elipsa.Visibility = (elipsa.IsVisible) ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+        //                Thread.Sleep(500);
+        //                }
+        //            while (envVar.akcjeTrwaOdsw == true);
+        //            }
+        //        else
+        //            {
+        //            labelka.Content = "Gotowe";
+        //            elipsa.Fill = Brushes.Green;
+        //            elipsa.Visibility = System.Windows.Visibility.Visible;
+        //            }
+        //    };
+
+        //void checW()
+        //    {
+        //    this.Dispatcher.BeginInvoke(checkWork, DispatcherPriority.Background, workElipse, workLabel);
+        //    }
 
         #region === inne zdarzenia ===
         private void Window_Initialized(object sender, EventArgs e)
-        {
+            {
             // obsługa zdarzenia logującego w klasie mainwindow //
             Loger.updateLogbox += new EventHandler(Loger_updateLogbox);
             Loger.updateTotalDown += new EventHandler(Loger_updateTotalDown);
@@ -108,10 +136,10 @@ namespace mm_gielda
 
             // wczytanie configa jeśli jest //
             if (File.Exists(configFilePath))
-            {
+                {
                 wczytajOpcje();
                 Loger.dodajDoLogaInfo("Wczytano ustawienia");
-            }
+                }
             else
                 Loger.dodajDoLogaInfo("Brak pliku ustawień, wczytano domyślne");
 
@@ -119,19 +147,19 @@ namespace mm_gielda
             timerGPW_Tick(null, null);
             timerSwiat_Tick(null, null);
             timerNewsy_Tick(null, null);
-        }
+            }
 
         // zdarzenie aktualizujace loga //
         void Loger_updateLogbox(object sender, EventArgs e)
-        {
+            {
             this.Dispatcher.Invoke(new Action(() => { logbox.AppendText(Loger.returnLastLogLine() + "\n"); }));
-        }
+            }
 
         // zdarzenie aktualizujące labelkę z pobranymi danymi //
         void Loger_updateTotalDown(object sender, EventArgs e)
-        {
+            {
             this.Dispatcher.Invoke(new Action(() => { totalDownL.Content = "Łącznie pobrano danych: " + Loger.returnTotalDownloaded().ToString(); }));
-        }
+            }
         #endregion
+        }
     }
-}

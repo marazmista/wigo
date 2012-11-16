@@ -16,48 +16,48 @@ using mm_gielda;
 using commonStrings;
 
 namespace klasyAnalizyPDF
-{
+    {
     // szablon dla grida //
     class daneAnalizy
-    {
+        {
         public string Tytul { get; set; }
         public string Link { get; set; }
 
         public daneAnalizy(string tytul, string link)
-        {
+            {
             this.Tytul = tytul;
             this.Link = link;
+            }
         }
-    }
 
     // metodki przydające się w pobieraniu i ogarnianiu tych list z analizami //
     abstract class mainAnaliza
-    {
+        {
         protected List<daneAnalizy> analizyLista = new List<daneAnalizy>(15);
 
         protected string serwis;
 
         public virtual void Pobierz(string url, string sciezka)
-        {
-            try
             {
+            try
+                {
                 var pobieracz = new WebClient();
                 pobieracz.DownloadFile(url, sciezka);
 
                 var fi = new FileInfo(sciezka);
                 Loger.dodajDoLogaInfo(this.serwis + messages.pobListaBI + " (" + fi.Length / 1024 + "kB)");
                 Loger.dodajPobrane(fi.Length);
-            }
+                }
             catch { Loger.dodajDoLogaError(this.serwis + messages.pobListeBIFail); }
+            }
         }
-    }
 
-    class analizyInvestors : mainAnaliza
-    {
+    class analizyInvestors: mainAnaliza
+        {
         public analizyInvestors() { this.serwis = serwisy.Investors; }
 
         void prasujListe(string biUrl, string krUrl)
-        {
+            {
             string tmpFilePathBI = staleapki.appDir + staleapki.tmpDir + "tmpfileBI.html";
             string tmpFilePathKR = staleapki.appDir + staleapki.tmpDir + "tmpfileKR.html";
 
@@ -69,14 +69,14 @@ namespace klasyAnalizyPDF
             Action bi = delegate()
             {
                 try
-                {
+                    {
                     Pobierz(biUrl, tmpFilePathBI);
                     string[] aInvestorsHTML = File.ReadAllLines(tmpFilePathBI);
 
                     foreach (var s in aInvestorsHTML)
-                    {
-                        if (s.Contains("<td class=\"PDF\"><a href="))
                         {
+                        if (s.Contains("<td class=\"PDF\"><a href="))
+                            {
                             var regex = new Regex("\"(.+?)\"");
                             MatchCollection matches = regex.Matches(s);
 
@@ -89,9 +89,9 @@ namespace klasyAnalizyPDF
                             var tmpTytul2 = tmpTytul[tmpTytul.Length - 1];
 
                             tmpBI.Add(new daneAnalizy(tmpTytul2, "http://investors.pl" + tmpLink));
+                            }
                         }
                     }
-                }
                 catch { Loger.dodajDoLogaError(serwis + messages.pobListeBIFail); }
             };
 
@@ -99,14 +99,14 @@ namespace klasyAnalizyPDF
             Action kr = delegate()
             {
                 try
-                {
+                    {
                     Pobierz(krUrl, tmpFilePathKR);
                     string[] aInvestorsHTML = File.ReadAllLines(tmpFilePathKR);
 
                     foreach (var s in aInvestorsHTML)
-                    {
-                        if (s.Contains("<td class=\"PDF\"><a href="))
                         {
+                        if (s.Contains("<td class=\"PDF\"><a href="))
+                            {
                             var regex = new Regex("\"(.+?)\"");
                             MatchCollection matches = regex.Matches(s);
 
@@ -119,9 +119,9 @@ namespace klasyAnalizyPDF
                             var tmpTytul2 = tmpTytul[tmpTytul.Length - 1];
 
                             tmpKR.Add(new daneAnalizy("Komentarz rynkowy" + tmpTytul2, "http://investors.pl" + tmpLink));
+                            }
                         }
                     }
-                }
                 catch { Loger.dodajDoLogaError(serwis + messages.pobListeKRFail); }
             };
 
@@ -139,17 +139,17 @@ namespace klasyAnalizyPDF
             // wywalenie jesli są
             if (File.Exists(tmpFilePathBI)) File.Delete(tmpFilePathBI);
             if (File.Exists(tmpFilePathKR)) File.Delete(tmpFilePathKR);
-        } 
+            }
 
         public List<daneAnalizy> generujTabele()
             {
-                prasujListe(adresy.InvestorsBI,adresy.InvestorsKR);
-                return analizyLista;
+            prasujListe(adresy.InvestorsBI, adresy.InvestorsKR);
+            return analizyLista;
             }
-    }
+        }
 
-    class newsletterGPW : mainAnaliza
-    {
+    class newsletterGPW: mainAnaliza
+        {
         public newsletterGPW() { this.serwis = serwisy.GPW; }
 
         void prasujListe(string newsletterURL)
@@ -157,14 +157,14 @@ namespace klasyAnalizyPDF
             string tmpFilePath = staleapki.appDir + staleapki.tmpDir + "tmpFileNewsGPW.html";
 
             try
-            {
+                {
                 Pobierz(newsletterURL, tmpFilePath);
                 string[] newsletterHTML = File.ReadAllLines(tmpFilePath);
 
                 foreach (var s in newsletterHTML)
-                {
-                    if (s.Contains("<a class=\"pdf\" href=\"")) //szukanie linii, bo tam jest i linik, i tytul
                     {
+                    if (s.Contains("<a class=\"pdf\" href=\"")) //szukanie linii, bo tam jest i linik, i tytul
+                        {
                         var regexLink = new Regex("\"(.+?)\"");
                         var regexTytul = new Regex(">(.+?)<");
 
@@ -176,33 +176,33 @@ namespace klasyAnalizyPDF
                         string tmpT = regexTytul.Matches(s)[0].ToString();
                         tmpT = tmpT
                             .Remove(tmpT.Length - 1)
-                            .Remove(0,1);
+                            .Remove(0, 1);
 
-                        analizyLista.Add(new daneAnalizy("Newsletter " + tmpT,tmpL));
+                        analizyLista.Add(new daneAnalizy("Newsletter " + tmpT, tmpL));
+                        }
                     }
                 }
-            }
             catch { Loger.dodajDoLogaError(serwis + messages.pobGPWNewsletterFail); }
-            finally { if (File.Exists(tmpFilePath)) File.Delete(tmpFilePath);};
+            finally { if (File.Exists(tmpFilePath)) File.Delete(tmpFilePath); };
             }
-    
+
         public List<daneAnalizy> generujTabele()
             {
             prasujListe(adresy.GPWNewsletter);
             return analizyLista;
             }
-    }
+        }
 
-    class pekaoAnalizy : mainAnaliza
-    {
+    class pekaoAnalizy: mainAnaliza
+        {
         public pekaoAnalizy() { this.serwis = serwisy.Pekao; }
 
         void prasujListe(byte dzien, byte miesiac, ushort rok)
-        {
+            {
             string tmpFilePath = staleapki.appDir + staleapki.tmpDir + "tmpPekao.html";
 
             try
-            {
+                {
                 // P R O B L E M //
                 Pobierz("http://www.analizy.pekao.com.pl/?p=aPdf&m=" + miesiac + "&r=" + rok + "&d=" + dzien, tmpFilePath);
 
@@ -210,9 +210,9 @@ namespace klasyAnalizyPDF
 
                 var regexTytul = new Regex(">(.+?)<");
 
-            }
+                }
             catch { };
-        }
+            }
 
+        }
     }
-}

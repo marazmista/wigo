@@ -45,7 +45,7 @@ namespace mm_gielda
         #endregion
 
         // pobieranie tego małego wykresu obok tabeli //
-        void wczytajMalyWykres(string symbol,Image wpfImage, bool czyGPW)
+        void wczytajMalyWykres(string symbol, Image wpfImage, bool czyGPW)
             {
             string wykresPlik = staleapki.appDir + staleapki.tmpWykresDir + symbol + "_mWykres.png";
 
@@ -67,11 +67,11 @@ namespace mm_gielda
                 BitmapImage bp = new BitmapImage(new Uri(wykresPlik));
                 wpfImage.Source = bp;
                 }
-            catch {  }
+            catch { }
             }
 
         // zmiana koloru paska i ikonki(góra, dół, kwadrat) na bocznym infie //
-        void KolorISymbol(string zmiana,Border border, Grid grid, Rectangle rect)
+        void KolorISymbol(string zmiana, Border border, Grid grid, Rectangle rect)
             {
             var kolorUp = Brushes.Green;
             var kolorDown = Brushes.Red;
@@ -95,7 +95,7 @@ namespace mm_gielda
 
                 rect.Fill = (ImageBrush)Resources["down"];
                 };
-            
+
             if (Convert.ToSingle(zmiana) == 0.00)
                 {
                 if (border != null)
@@ -107,7 +107,7 @@ namespace mm_gielda
             }
 
         #region === zdarzenie wczytujace dane obok tabel po wcisnieciu na gridzie ===
-		void wczytajAkcjeDetails(List<daneAkcji> tabela, DataGrid grid, bool czyAkcja)
+        void wczytajAkcjeDetails(List<daneAkcji> tabela, DataGrid grid, bool czyAkcja)
             {
             int i = grid.SelectedIndex;
 
@@ -127,7 +127,7 @@ namespace mm_gielda
                 KolorISymbol(tabela[i].Zmiana, aBorder, null, aRect);
 
                 aWykres.Source = null;
-                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }),DispatcherPriority.Background );
+                this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, aWykres, true); }), DispatcherPriority.Background);
                 }
             else
                 {
@@ -141,7 +141,7 @@ namespace mm_gielda
                 iWolumen.Content = tabela[i].Wolumen;
                 iObrot.Content = tabela[i].Obrot;
                 iTransakcje.Content = tabela[i].Transakcje;
-                KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
+                KolorISymbol(tabela[i].Zmiana, iBorder, null, iRect);
 
                 iWykres.Source = null;
                 this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, true); }), DispatcherPriority.Background);
@@ -162,7 +162,7 @@ namespace mm_gielda
                 wtMaxMin.Content = tabela[i].MaxMin;
                 wtOtwarcie.Content = tabela[i].Otwarcie;
                 wtOdniesienie.Content = tabela[i].Odniesienie;
-                KolorISymbol(tabela[i].Zmiana, wtBorder,null, wtRect);
+                KolorISymbol(tabela[i].Zmiana, wtBorder, null, wtRect);
 
                 wtWykres.Source = null;
                 this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, wtWykres, false); }), DispatcherPriority.Background);
@@ -176,7 +176,7 @@ namespace mm_gielda
                 iMaxMin.Content = tabela[i].MaxMin;
                 iOtwarcie.Content = tabela[i].Otwarcie;
                 iOdniesienie.Content = tabela[i].Odniesienie;
-                KolorISymbol(tabela[i].Zmiana, iBorder,null, iRect);
+                KolorISymbol(tabela[i].Zmiana, iBorder, null, iRect);
 
                 iWykres.Source = null;
                 this.Dispatcher.BeginInvoke(new Action(delegate() { wczytajMalyWykres(tabela[i].Symbol, iWykres, false); }), DispatcherPriority.Background);
@@ -325,19 +325,19 @@ namespace mm_gielda
             {
             wczytajAkcjeDetails(daneTabel.tRespect, respectGrid, true);
             }
-	    #endregion 
-        
+        #endregion
+
         #region === pobieranie list analiz ===
         // po wcisnięciu przycisku dla pobrania listy, wczytanie do tabeli //
         private void newsletterPobListe(object sender, RoutedEventArgs e)
-        {
+            {
             tabelujNewsletteryGPW();
-        }
+            }
 
         private void investorsPobListe(object sender, RoutedEventArgs e)
-        {
+            {
             tabelujAnalizyInvestors();
-        } 
+            }
         #endregion
 
         #region === pobieranie i otwieranie pdf ===
@@ -350,11 +350,11 @@ namespace mm_gielda
 
         // pobieranie i otieranie pdf
         void pobierzPDF(int indeksWGridzie, List<daneAnalizy> lista, string serwis)
-        {
-            if (lista != null)
             {
-                try
+            if (lista != null)
                 {
+                try
+                    {
                     var link = new Uri(lista[indeksWGridzie].Link);
                     var fName = link.Segments[link.Segments.Length - 1];
 
@@ -362,13 +362,13 @@ namespace mm_gielda
                         Pobierz(lista[indeksWGridzie].Link, staleapki.appDir + staleapki.pdfDir + fName);
 
                     System.Diagnostics.Process.Start(staleapki.appDir + staleapki.pdfDir + fName);
-                }
+                    }
                 catch { Loger.dodajDoLogaError(serwis + messages.docFail); };
+                }
             }
-        }
 
         private void investorsPobPDF(object sender, RoutedEventArgs e)
-        {
+            {
             var i = investorsGrid.SelectedIndex;
 
             this.Dispatcher.Invoke(zmbb, investorsPobPDFLabel, "Pobieranie...", investorsPobPDFButton, true);
@@ -377,10 +377,10 @@ namespace mm_gielda
                 pobierzPDF(i, daneTabel.invAnalizyList, serwisy.Investors);
                 this.Dispatcher.Invoke(zmbb, investorsPobPDFLabel, "Pobierz i otwórz dokument", investorsPobPDFButton, false);
             }).BeginInvoke(null, null);
-        }
+            }
 
         private void gpwButtonPobPDF(object sender, RoutedEventArgs e)
-        {
+            {
             var i = gpwNewsletterGrid.SelectedIndex;
 
             this.Dispatcher.Invoke(zmbb, gpwPobPDFLabel, "Pobieranie...", newsletterGPWPobPDFButton, true);
@@ -389,104 +389,104 @@ namespace mm_gielda
                 pobierzPDF(i, daneTabel.gpwNewsletterList, serwisy.GPW);
                 this.Dispatcher.Invoke(zmbb, gpwPobPDFLabel, "Pobierz i otwórz dokument", newsletterGPWPobPDFButton, false);
             }).BeginInvoke(null, null);
-        } 
+            }
         #endregion
 
         #region === inne ==
         // otwieranie newsów
         private void wiadomosciGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
+            {
             if (daneTabel.NK != null)
                 System.Diagnostics.Process.Start(daneTabel.NK[wiadomosciGrid.SelectedIndex].Link);
-        }
+            }
 
         private void ClearPDFDir(object sender, RoutedEventArgs e)
-        {
+            {
             Directory.Delete(staleapki.appDir + staleapki.pdfDir, true);
             Directory.CreateDirectory(staleapki.appDir + staleapki.pdfDir);
-        } 
+            }
         #endregion
 
         #region == at przycisk ==
         private void akcjeATClick(object sender, RoutedEventArgs e)
-        {
-            if (daneTabel.tAkcje != null)
             {
+            if (daneTabel.tAkcje != null)
+                {
                 var oo = daneTabel.tAkcje.Where(a => a.Nazwa == aNazwa.Content).ToList();
                 System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                }
             }
-        }
 
         private void indeksyATClick(object sender, RoutedEventArgs e)
-        {
-            try
             {
-                if (indeksyTabControl.SelectedIndex == 0)
+            try
                 {
+                if (indeksyTabControl.SelectedIndex == 0)
+                    {
                     var oo = daneTabel.tIndeksyGPW.Where(a => a.Nazwa == iNazwa.Content).ToList();
                     System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
-                }
+                    }
                 if (indeksyTabControl.SelectedIndex == 1)
-                {
+                    {
                     var oo = daneTabel.tIndeksy.Where(a => a.Nazwa == iNazwa.Content).ToList();
                     System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
-                }
+                    }
                 if (indeksyTabControl.SelectedIndex == 2)
-                {
+                    {
                     var oo = daneTabel.tIndeksyFut.Where(a => a.Nazwa == iNazwa.Content).ToList();
                     System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
-                }
+                    }
 
-            }
+                }
             catch { }
-        }
+            }
 
         private void wtATClick(object sender, RoutedEventArgs e)
-        {
-            try
             {
-                if (wtTabContol.SelectedIndex == 0)
+            try
                 {
+                if (wtTabContol.SelectedIndex == 0)
+                    {
                     var oo = daneTabel.tWaluty.Where(a => a.Nazwa == wtNazwa.Content).ToList();
                     System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
-                }
+                    }
                 if (indeksyTabControl.SelectedIndex == 1)
-                {
+                    {
                     var oo = daneTabel.tTowary.Where(a => a.Nazwa == wtNazwa.Content).ToList();
                     System.Diagnostics.Process.Start(adresy.StooqAt + oo[0].Symbol);
+                    }
                 }
-            }
             catch { }
-        } 
+            }
         #endregion
 
         #region == przyciski wykresow na dole ==
         void pokazWykreOkno(string link)
-        {
+            {
             var wykWin = new wykresOkno(new BitmapImage(new Uri(link)));
             wykWin.Show();
             wykWin.wczytajWyk();
-        }
+            }
 
         private void wigWykresShow(object sender, MouseButtonEventArgs e)
-        {
+            {
             pokazWykreOkno("http://stooq.pl/c/?s=wig&c=1d&t=c&a=lg&b");
-        }
+            }
 
         private void wig20WykresShow(object sender, MouseButtonEventArgs e)
-        {
+            {
             pokazWykreOkno("http://stooq.pl/c/?s=wig20&c=1d&t=c&a=lg&b");
-        }
+            }
 
         private void mwig40WykresShow(object sender, MouseButtonEventArgs e)
-        {
+            {
             pokazWykreOkno("http://stooq.pl/c/?s=mwig40&c=1d&t=c&a=lg&b");
-        }
+            }
 
         private void smwig80WykresShow(object sender, MouseButtonEventArgs e)
-        {
+            {
             pokazWykreOkno("http://stooq.pl/c/?s=swig80&c=1d&t=c&a=lg&b");
-        } 
+            }
         #endregion
         }
     }
