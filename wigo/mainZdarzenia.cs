@@ -189,6 +189,11 @@ namespace mm_gielda
             wczytajAkcjeDetails(daneTabel.tAkcje, akcjeGrid, true);
             }
 
+        private void newconnectGrid_Selected(object sender, RoutedEventArgs e)
+            {
+            wczytajAkcjeDetails(daneTabel.tAkcjeNC, newconnectGrid, true);
+            }
+
         private void indeksyGPWGrid_Selected(object sender, RoutedEventArgs e)
             {
             wczytajAkcjeDetails(daneTabel.tIndeksyGPW, indeksyGPWGrid, false);

@@ -592,6 +592,7 @@ namespace klasyakcjowe
         // ================
         class Akcje : NumAkcje
             {
+            public Akcje() { }
             public Akcje(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
 
             public override void Prasuj(string url, string plik, string xmlBackupPlik, bool czyWaluta)
@@ -670,8 +671,21 @@ namespace klasyakcjowe
                 }
             }
 
+        class AkcjeNC: Akcje
+            {
+            public AkcjeNC(string serwis, string typ) { this.serwis = serwis; this.typ = typ; }
+
+            new public List<daneAkcji> generujTabele()
+                {
+                Prasuj(adresy.StooqAkcjeNC, nazwyPlikow.PStooqAkcjeNC, nazwyPlikow.xmlStooqAkcjeNC, false);
+                return numKolekcja;
+                }
+            }
+
         // ================
         // klasa zajmująca się indeksami GPW //
+        // mylące może być, że dziedziczy z NumAkcje. Dzieje się tak dlatego, że
+        // też mamy dane nt. obrotu, walumenu i ilosci transakcji, więc inny typ listy
         // ================
         class IndeksyGPW : NumAkcje
             {

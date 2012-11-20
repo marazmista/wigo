@@ -82,6 +82,7 @@ namespace mm_gielda
 
         #region == ogólne tabele ==
         internal static List<daneAkcji> tAkcje;
+        internal static List<daneAkcji> tAkcjeNC;
         internal static List<daneAkcji> tIndeksyGPW;
         internal static List<daneNumTabeli> tIndeksy;
         internal static List<daneNumTabeli> tIndeksyFut;
@@ -146,6 +147,7 @@ namespace mm_gielda
     static class envVar
         {
         internal static bool akcjeTrwaOdsw = false;
+        internal static bool akcjeNCTrwaOdsw = false;
         internal static bool indeksyGPWTrwaOdsw = false;
         internal static bool indeksyTrwaOdsw = false;
         internal static bool indeksyFutTrwaOdsw = false;
@@ -374,8 +376,12 @@ namespace mm_gielda
             // zbieranie 5 pierwszych i wpisanie do listy typu daneWzrostySpadki //
             for (byte i = 0; i < staleapki.iloscNaj; i++)
                 {
-                tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa, tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana),tmp1.ElementAt(i).Obrot));
-                tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa, tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana),tmp2.ElementAt(i).Obrot));
+                try
+                    {
+                    tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa, tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana), tmp1.ElementAt(i).Obrot));
+                    tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa, tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana), tmp2.ElementAt(i).Obrot));
+                    }
+                catch { }
                 }
             listaCelWzrosty = tmpW;
             listaCelSpadki = tmpS;
@@ -424,11 +430,15 @@ namespace mm_gielda
 
             for (byte i = 0; i < staleapki.iloscNaj; i++)
                 {
-                // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
-                var row = daneTabel.tAkcje.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
-                string obrotStock = row.Obrot;
+                try
+                    {
+                    // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
+                    var row = daneTabel.tAkcje.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
+                    string obrotStock = row.Obrot;
 
-                tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, sConvTab.ElementAt(i).Zmiana, sConvTab.ElementAt(i).ZmianaProc, obrotStock, sConvTab.ElementAt(i).Wolumen));
+                    tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, sConvTab.ElementAt(i).Zmiana, sConvTab.ElementAt(i).ZmianaProc, obrotStock, sConvTab.ElementAt(i).Wolumen));
+                    }
+                catch { }
                 }
             listaCel = tmpN;
             }
@@ -437,9 +447,10 @@ namespace mm_gielda
         void policzRosnaceSpadajace(List<daneAkcji> lista, ref Label ileRosnie, ref Label ileZero, ref Label ileSpada)
             {
             Func<ushort,ushort,string> policzProcent = (calosc, dana) => {
-                string procent;
-                procent = " ("+ (((float)dana / (float)calosc) * 100).ToString("0.0")+"%)";
-                return procent;
+                string procent = " (0%)";
+                if (calosc != 0)
+                    procent = " (" + (((float)dana / (float)calosc) * 100).ToString("0.0") + "%)";
+                return procent; 
             };
 
             ushort ileR = 0, ileZ = 0, ileS = 0,suma = 0;
@@ -534,6 +545,12 @@ namespace mm_gielda
                     else
                         Loger.dodajDoLogaError(messages.indBoxRefreshError);
                 }, null);
+                }
+
+            if (config.czyPobieracAkcje & envVar.akcjeNCTrwaOdsw == false)
+                {
+                envVar.akcjeNCTrwaOdsw = true;
+                genDelegate.BeginInvoke(generujAkcjeNC, done => { this.Dispatcher.Invoke(wAkcje, DispatcherPriority.Background, newconnectGrid, daneTabel.tAkcjeNC); }, null);
                 }
             }
 
@@ -777,6 +794,20 @@ namespace mm_gielda
                 }
             catch { }
             envVar.akcjeTrwaOdsw = false;
+            }
+
+        private void generujAkcjeNC()
+            {
+            var stooqNCAkcje = new AkcjeNC(serwisy.Stooq, typy.AkcjeNC);
+            try
+                {
+                if (czyOdswierzacAkcje())
+                    {
+                    daneTabel.tAkcjeNC = stooqNCAkcje.generujTabele();
+                    }
+                }
+            catch { }
+            envVar.akcjeNCTrwaOdsw = false;
             }
 
         private void generujIndeksyGPW()

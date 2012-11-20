@@ -15,6 +15,7 @@ namespace mm_gielda
     {
         public static bool czyPobieracIndeksyGPW = true;
         public static bool czyPobieracAkcje = true;
+        public static bool czyPobieracAkcjeNC = true;
         public static bool czyPobieracIndeksySw = true;
         public static bool czyPobieracIndeksyFut = true;
         public static bool czyPobieracWaluty = true;
@@ -55,6 +56,7 @@ namespace mm_gielda
                 new XElement("GPW",
                     new XAttribute("czyPobieracIndeksyGPW", CB_pobierajIndeksyGPW.IsChecked),
                     new XAttribute("czyPobieracAkcjeGPW", CB_pobierajAkcjeGPW.IsChecked),
+                    new XAttribute("czyPobieracAkcjeNC", CB_pobierajAkcjeNC.IsChecked),
                     new XAttribute("GPWinterwal", T_GPWinterwal.Text)),
                 new XElement("Swiat",
                     new XAttribute("czyPobieacIndeksySwiat", CB_pobierajIndeksySwiat.IsChecked),
@@ -82,6 +84,7 @@ namespace mm_gielda
             var gpwElem = configFile.Element("GPW");
             CB_pobierajIndeksyGPW.IsChecked = config.czyPobieracIndeksyGPW = (bool)gpwElem.Attribute("czyPobieracIndeksyGPW");
             CB_pobierajAkcjeGPW.IsChecked = config.czyPobieracAkcje = (bool)gpwElem.Attribute("czyPobieracAkcjeGPW");
+            CB_pobierajAkcjeNC.IsChecked = config.czyPobieracAkcjeNC = (bool)gpwElem.Attribute("czyPobieracAkcjeNC");
             config.gpwInterwal = Convert.ToByte((int)gpwElem.Attribute("GPWinterwal"));
             T_GPWinterwal.Text = config.gpwInterwal.ToString();
 

@@ -55,6 +55,7 @@ namespace commonStrings
         public const string Komentarze = " Komentarze";
 
         public const string Akcje = " Akcje";
+        public const string AkcjeNC = " Akcje NewConnect";
         public const string Indeksy = " Indeksy";
         public const string IndeksyGPW = " Indeksy GPW";
         public const string IndeksyFut = " Indeksy Fut.";
@@ -80,6 +81,7 @@ namespace commonStrings
         public const string PMoneyKomentarze = "moneykomentarze.html";
 
         public const string PStooqAkcje = "stooqakcje.html";
+        public const string PStooqAkcjeNC = "stooqnc.html";
         public const string PStooqIndeksy = "stooqindeksy.html";
         public const string PStooqIndeksyGPW = "stooqindeksygpw.html";
         public const string PStooqIndeksyFut = "stooqindeksyfut.html";
@@ -87,6 +89,7 @@ namespace commonStrings
         public const string PStooqTowary = "stooqtowary.html";
 
         public const string xmlStooqAkcje = "stooqakcje.xml";
+        public const string xmlStooqAkcjeNC = "stooqakcjenc.xml";
         public const string xmlStooqIndeksy = "stooqindeksy.xml";
         public const string xmlStooqIndeksyGPW = "stooqindeksygpw.xml";
         public const string xmlStooqIndeksyFut = "stooqfut.xml";
@@ -104,6 +107,7 @@ namespace commonStrings
 
         // ---- używane w klasach akcjowych ----//
         public const string StooqAkcjeGPW = "http://stooq.pl/notowania/index.html?kat=g2&show=3&wtr=1&chart_=1&typ_=l&sort=";
+        public const string StooqAkcjeNC = "http://stooq.pl/notowania/index.html?&kat=n1&show=3&chart=1&typ=l&wtr=1&chart_=1&typ_=l&sort=";
         public const string StooqIndeksySwiat = "http://stooq.pl/notowania/index.html?kat=i1&show=3&wtr=1&chart_=1&typ_=l&sort=";
         public const string StooqIndeksyGPw = "http://stooq.pl/notowania/index.html?kat=g1&show=3&wtr=1&chart_=1&typ_=l&sort=";
         public const string StooqTowary = "http://stooq.pl/notowania/index.html?kat=t1&show=3&wtr=1&chart_=1&typ_=l&sort=";

@@ -1,4 +1,11 @@
-﻿using System;
+﻿
+// copy marazmista 16.07.2012 //
+
+// ================
+// okienka z informacjami, wykresami
+// ================
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
