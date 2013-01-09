@@ -156,12 +156,16 @@
             <Setter Property="AlternatingRowBackground" Value="Khaki" />
             <Setter Property="AutoGenerateColumns" Value="True" />
             <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="FontWeight" Value="Normal" />
         </Style>
         <Style x:Key="gB_Main" TargetType="GroupBox">
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Height" Value="130" />
             <Setter Property="Margin" Value="3,0,3,0" />
             <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style x:Key="groupBoxSpadki" TargetType="GroupBox" BasedOn="{StaticResource gB_Main}">
             <Setter Property="Background" Value="Red" />
@@ -349,7 +353,7 @@
                                     <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
                                         <DataGrid Style="{StaticResource Grid}" Name="akcjeGPWSpadkiGrid" />
                                     </GroupBox>
-                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}">
                                         <DataGrid Style="{StaticResource Grid}" Name="akcjeGPWNajaktywniejszeGrid" />
                                     </GroupBox>
                                 </StackPanel>
@@ -382,7 +386,7 @@
                                             <DataGrid Style="{StaticResource Grid}" Name="wigSpadkiGrid" />
                                         </GroupBox>
                                         <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
-                                            <DataGrid Style="{StaticResource Grid}" Name="wigNajaktywniejszeGrid"/>
+                                            <DataGrid Style="{StaticResource Grid}" Name="wigNajaktywniejszeGrid" />
                                         </GroupBox>
                                     </StackPanel>
                             </StackPanel>
@@ -473,6 +477,36 @@
                                     </GroupBox>
                                     <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
                                         <DataGrid Style="{StaticResource Grid}" Name="swig80NajaktywniejszeGrid" />
+                                    </GroupBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource ramkaPodsumowanie}">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Label Content="NewConnect" Style="{StaticResource labelTytul}"/>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource up}" Height="24" Width="24" />
+                                            <Label Content="0" Name="ncRosnieIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource zero}" Height="24" Width="24" />
+                                            <Label Content="0" Name="ncZeroIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                        <StackPanel Style="{StaticResource stackIloscRosnaceSpadajace}">
+                                            <Rectangle Fill="{StaticResource down}" Height="24" Width="24" />
+                                            <Label Content="0" Name="ncSpadaIlosc" FontSize="11" FontWeight="Bold" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <GroupBox Header="Wzrosty" Style="{StaticResource groupBoxWzrosty}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="ncWzrostyGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Spadki" Style="{StaticResource groupBoxSpadki}">
+                                        <DataGrid Style="{StaticResource Grid}" Name="ncSpadkiGrid" />
+                                    </GroupBox>
+                                    <GroupBox Header="Najaktywniejsze" Style="{StaticResource groupBoxNajaktywniejsze}" >
+                                        <DataGrid Style="{StaticResource Grid}" Name="ncNajaktywniejszeGrid" />
                                     </GroupBox>
                                 </StackPanel>
                             </StackPanel>

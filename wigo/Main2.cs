@@ -98,7 +98,6 @@ namespace mm_gielda
         internal static List<daneAkcji> tWig20;
         internal static List<daneAkcji> tmWig40;
         internal static List<daneAkcji> tsWig80;
-        internal static List<daneAkcji> tNewConnect;
         internal static List<daneAkcji> tWigBanki;
         internal static List<daneAkcji> tWigBudow;
         internal static List<daneAkcji> tWigCee;
@@ -137,6 +136,10 @@ namespace mm_gielda
         internal static List<daneWzrostySpadki> tSwig80Wzrosty;
         internal static List<daneWzrostySpadki> tSwig80Spadki;
         internal static List<daneNajaktyniejsze> tSwig80Najaktywniejsze;
+
+        internal static List<daneWzrostySpadki> tNcWzrosty;
+        internal static List<daneWzrostySpadki> tNcSpadki;
+        internal static List<daneNajaktyniejsze> tNcNajaktywniejsze;
         #endregion
 
         internal static List<daneAnalizy> invAnalizyList;
@@ -244,7 +247,7 @@ namespace mm_gielda
 
         bool czyTrwaSesja()
             {
-            if ((DateTime.Now.Date == staleapki.dataUruchmienia) & (DateTime.Now.Hour <= staleapki.nieOdswGPWPoGodz) & (DateTime.Now.Minute < staleapki.nieOdswGPWPoMin))
+            if ((DateTime.Now.Date == staleapki.dataUruchmienia) && (DateTime.Now.Hour <= staleapki.nieOdswGPWPoGodz) && (DateTime.Now.Minute < staleapki.nieOdswGPWPoMin))
                 return true;
             else
                 return false;
@@ -363,35 +366,41 @@ namespace mm_gielda
 
         #region === metodki wypełniające dane na tabie "podsumowanie" ===
         // metodka filtrująca indeksy i wrzucająca do list te akcje które rosną i spadają najbardziej //
-        void filtrujWzrostySpadki(List<daneAkcji> listaZrodlo, ref List<daneWzrostySpadki> listaCelWzrosty, ref List<daneWzrostySpadki> listaCelSpadki)
+        void filtrujWzrostySpadki(ref List<daneAkcji> listaZrodlo, ref List<daneWzrostySpadki> listaCelWzrosty, ref List<daneWzrostySpadki> listaCelSpadki)
             {
-            // sortowanie po zmianie porocentowej //
-            IEnumerable<daneAkcji> tmp1 = listaZrodlo.OrderBy(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
-            IEnumerable<daneAkcji> tmp2 = listaZrodlo.OrderByDescending(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
-
-            // tempowe, żeby potem przypisać do staticów //
-            var tmpW = new List<daneWzrostySpadki>(staleapki.iloscNaj);
-            var tmpS = new List<daneWzrostySpadki>(staleapki.iloscNaj);
-
-            // zbieranie 5 pierwszych i wpisanie do listy typu daneWzrostySpadki //
-            for (byte i = 0; i < staleapki.iloscNaj; i++)
+            try
                 {
-                try
+                // sortowanie po zmianie porocentowej //
+                IEnumerable<daneAkcji> tmp1 = listaZrodlo.OrderBy(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
+                IEnumerable<daneAkcji> tmp2 = listaZrodlo.OrderByDescending(x => Convert.ToSingle(x.ZmianaProc.Remove(x.ZmianaProc.Length - 1))).Take(staleapki.iloscNaj);
+
+                // tempowe, żeby potem przypisać do staticów //
+                var tmpW = new List<daneWzrostySpadki>(staleapki.iloscNaj);
+                var tmpS = new List<daneWzrostySpadki>(staleapki.iloscNaj);
+
+                // zbieranie 5 pierwszych i wpisanie do listy typu daneWzrostySpadki //
+                for (byte i = 0; i < staleapki.iloscNaj; i++)
                     {
-                    tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa, tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana), tmp1.ElementAt(i).Obrot));
-                    tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa, tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana), tmp2.ElementAt(i).Obrot));
+                    try
+                        {
+                        tmpS.Add(new daneWzrostySpadki(tmp1.ElementAt(i).Nazwa, tmp1.ElementAt(i).Kurs, tmp1.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp1.ElementAt(i).Zmiana), tmp1.ElementAt(i).Obrot));
+                        tmpW.Add(new daneWzrostySpadki(tmp2.ElementAt(i).Nazwa, tmp2.ElementAt(i).Kurs, tmp2.ElementAt(i).ZmianaProc, Convert.ToSingle(tmp2.ElementAt(i).Zmiana), tmp2.ElementAt(i).Obrot));
+                        }
+                    catch { }
                     }
-                catch { }
+                listaCelWzrosty = tmpW;
+                listaCelSpadki = tmpS;
                 }
-            listaCelWzrosty = tmpW;
-            listaCelSpadki = tmpS;
+            catch {  }
             }
 
         // metodka filtrująca indeksy i wrzucające te z największym wolumenem //
-        void filtrujNajaktywniejsze(List<daneAkcji> listaZrodlo, ref List<daneNajaktyniejsze> listaCel)
+        void filtrujNajaktywniejsze(ref List<daneAkcji> listaZrodlo, ref List<daneNajaktyniejsze> listaCel)
             {
-            // konwersja mnożników. Można kiedys poprawić jak znajdzie się lepszy sposób...
-            #region = konwersja mnożników obrotu (k,m,g) na liczby, żeby posortować =
+            try
+                {
+                 // konwersja mnożników. Można kiedys poprawić jak znajdzie się lepszy sposób...
+                #region = konwersja mnożników obrotu (k,m,g) na liczby, żeby posortować =
             var convAllTab = new List<daneNajaktyniejsze>(400);
             for (int i = 0; i < listaZrodlo.Count; i++)
                 {
@@ -424,52 +433,59 @@ namespace mm_gielda
                 };
             #endregion
 
-            IEnumerable<daneNajaktyniejsze> sConvTab = convAllTab.OrderByDescending(x => Convert.ToInt32(x.Obrot)).Take(staleapki.iloscNaj);
+                IEnumerable<daneNajaktyniejsze> sConvTab = convAllTab.OrderByDescending(x => Convert.ToInt32(x.Obrot)).Take(staleapki.iloscNaj);
 
-            var tmpN = new List<daneNajaktyniejsze>(staleapki.iloscNaj);
+                var tmpN = new List<daneNajaktyniejsze>(staleapki.iloscNaj);
 
-            for (byte i = 0; i < staleapki.iloscNaj; i++)
-                {
-                try
+                for (byte i = 0; i < staleapki.iloscNaj; i++)
                     {
-                    // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
-                    var row = daneTabel.tAkcje.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
-                    string obrotStock = row.Obrot;
+                    try
+                        {
+                        // to jest po to, żeby w tabeli było nadal k,m,g a nie wiadomo jakie liczby np. 124000000 //
+                        var row = listaZrodlo.Find(a => a.Nazwa == sConvTab.ElementAt(i).Nazwa);
+                        string obrotStock = row.Obrot;
 
-                    tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, sConvTab.ElementAt(i).Zmiana, sConvTab.ElementAt(i).ZmianaProc, obrotStock, sConvTab.ElementAt(i).Wolumen));
+                        tmpN.Add(new daneNajaktyniejsze(sConvTab.ElementAt(i).Nazwa, sConvTab.ElementAt(i).Kurs, sConvTab.ElementAt(i).Zmiana, sConvTab.ElementAt(i).ZmianaProc, obrotStock, sConvTab.ElementAt(i).Wolumen));
+                        }
+                    catch { }
                     }
-                catch { }
+                listaCel = tmpN;
                 }
-            listaCel = tmpN;
+            catch {  }
             }
 
         // liczenie rosnących i spadających //
-        void policzRosnaceSpadajace(List<daneAkcji> lista, ref Label ileRosnie, ref Label ileZero, ref Label ileSpada)
+        void policzRosnaceSpadajace(ref List<daneAkcji> lista, ref Label ileRosnie, ref Label ileZero, ref Label ileSpada)
             {
-            Func<ushort,ushort,string> policzProcent = (calosc, dana) => {
-                string procent = " (0%)";
-                if (calosc != 0)
-                    procent = " (" + (((float)dana / (float)calosc) * 100).ToString("0.0") + "%)";
-                return procent; 
-            };
-
-            ushort ileR = 0, ileZ = 0, ileS = 0,suma = 0;
-            foreach (var o in lista)
+            try
                 {
-                float tmpz = Convert.ToSingle(o.Zmiana);
+                Func<ushort, ushort, string> policzProcent = (calosc, dana) =>
+                {
+                    string procent = " (0%)";
+                    if (calosc != 0)
+                        procent = " (" + (((float)dana / (float)calosc) * 100).ToString("0.0") + "%)";
+                    return procent;
+                };
+
+                ushort ileR = 0, ileZ = 0, ileS = 0, suma = 0;
+                foreach (var o in lista)
                     {
-                    if (tmpz > 0.00)
-                        ileR++;
-                    if (tmpz < 0.00)
-                        ileS++;
-                    if (tmpz == 0.00)
-                        ileZ++;
+                    float tmpz = Convert.ToSingle(o.Zmiana);
+                        {
+                        if (tmpz > 0.00)
+                            ileR++;
+                        if (tmpz < 0.00)
+                            ileS++;
+                        if (tmpz == 0.00)
+                            ileZ++;
+                        }
                     }
+                suma = (ushort)(ileR + ileS + ileZ);
+                ileRosnie.Content = ileR + policzProcent(suma, ileR);
+                ileZero.Content = ileZ + policzProcent(suma, ileZ);
+                ileSpada.Content = ileS + policzProcent(suma, ileS);
                 }
-            suma = (ushort)(ileR+ileS+ileZ);
-            ileRosnie.Content = ileR + policzProcent(suma,ileR);
-            ileZero.Content = ileZ + policzProcent(suma,ileZ);
-            ileSpada.Content = ileS + policzProcent(suma,ileS);
+            catch {  }
             }
 
         #endregion
@@ -602,11 +618,11 @@ namespace mm_gielda
         void tabelujWzrostySpadki()
             {
             // filtrowanie tabel, i wrzucenie do list //
-            filtrujWzrostySpadki(daneTabel.tAkcje, ref daneTabel.tAkcjeGPWWzrosty, ref daneTabel.tAkcjeGPWSpadki);
-            filtrujWzrostySpadki(daneTabel.tWig, ref daneTabel.tWigWzrosty, ref daneTabel.tWigSpadki);
-            filtrujWzrostySpadki(daneTabel.tWig20, ref daneTabel.tWig20Wzrosty, ref daneTabel.tWig20Spadki);
-            filtrujWzrostySpadki(daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
-            filtrujWzrostySpadki(daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
+            filtrujWzrostySpadki(ref daneTabel.tAkcje, ref daneTabel.tAkcjeGPWWzrosty, ref daneTabel.tAkcjeGPWSpadki);
+            filtrujWzrostySpadki(ref daneTabel.tWig, ref daneTabel.tWigWzrosty, ref daneTabel.tWigSpadki);
+            filtrujWzrostySpadki(ref daneTabel.tWig20, ref daneTabel.tWig20Wzrosty, ref daneTabel.tWig20Spadki);
+            filtrujWzrostySpadki(ref daneTabel.tmWig40, ref daneTabel.tMwig40Wzrosty, ref daneTabel.tMwig40Spadki);
+            filtrujWzrostySpadki(ref daneTabel.tsWig80, ref daneTabel.tSwig80Wzrosty, ref daneTabel.tSwig80Spadki);
 
             // wrzucenie do interfejsu
             this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, akcjeGPWWzrostyGrid, akcjeGPWSpadkiGrid, daneTabel.tAkcjeGPWWzrosty, daneTabel.tAkcjeGPWSpadki);
@@ -618,21 +634,21 @@ namespace mm_gielda
             // przeliczenie rosnących i spadajcych //
             this.Dispatcher.BeginInvoke(new Action(delegate()
             {
-                policzRosnaceSpadajace(daneTabel.tAkcje, ref akcjeRosnieIlosc, ref akcjeZeroIlosc, ref akcjeSpadaIlosc);
-                policzRosnaceSpadajace(daneTabel.tWig, ref wigRosnieIlosc, ref wigZeroIlosc, ref wigSpadaIlosc);
-                policzRosnaceSpadajace(daneTabel.tWig20, ref wig20RosnieIlosc, ref wig20ZeroIlosc, ref wig20SpadaIlosc);
-                policzRosnaceSpadajace(daneTabel.tmWig40, ref mwig40RosnieIlosc, ref mwig40ZeroIlosc, ref mwig40SpadaIlosc);
-                policzRosnaceSpadajace(daneTabel.tsWig80, ref swig80RosnieIlosc, ref swig80ZeroIlosc, ref swig80SpadaIlosc);
+                policzRosnaceSpadajace(ref daneTabel.tAkcje, ref akcjeRosnieIlosc, ref akcjeZeroIlosc, ref akcjeSpadaIlosc);
+                policzRosnaceSpadajace(ref daneTabel.tWig, ref wigRosnieIlosc, ref wigZeroIlosc, ref wigSpadaIlosc);
+                policzRosnaceSpadajace(ref daneTabel.tWig20, ref wig20RosnieIlosc, ref wig20ZeroIlosc, ref wig20SpadaIlosc);
+                policzRosnaceSpadajace(ref daneTabel.tmWig40, ref mwig40RosnieIlosc, ref mwig40ZeroIlosc, ref mwig40SpadaIlosc);
+                policzRosnaceSpadajace(ref daneTabel.tsWig80, ref swig80RosnieIlosc, ref swig80ZeroIlosc, ref swig80SpadaIlosc);
             }), DispatcherPriority.Background, null);
             }
 
         void tabelujNajaktywniejsze()
             {
-            filtrujNajaktywniejsze(daneTabel.tAkcje, ref daneTabel.tAkcjeGPWNajaktwyniejsze);
-            filtrujNajaktywniejsze(daneTabel.tWig, ref daneTabel.tWigNajaktywniejsze);
-            filtrujNajaktywniejsze(daneTabel.tWig20, ref daneTabel.tWig20Najaktywniejsze);
-            filtrujNajaktywniejsze(daneTabel.tmWig40, ref daneTabel.tMwig40Najaktywniejsze);
-            filtrujNajaktywniejsze(daneTabel.tsWig80, ref daneTabel.tSwig80Najaktywniejsze);
+            filtrujNajaktywniejsze(ref daneTabel.tAkcje, ref daneTabel.tAkcjeGPWNajaktwyniejsze);
+            filtrujNajaktywniejsze(ref daneTabel.tWig, ref daneTabel.tWigNajaktywniejsze);
+            filtrujNajaktywniejsze(ref daneTabel.tWig20, ref daneTabel.tWig20Najaktywniejsze);
+            filtrujNajaktywniejsze(ref daneTabel.tmWig40, ref daneTabel.tMwig40Najaktywniejsze);
+            filtrujNajaktywniejsze(ref daneTabel.tsWig80, ref daneTabel.tSwig80Najaktywniejsze);
 
             this.Dispatcher.Invoke(wN, DispatcherPriority.Background, akcjeGPWNajaktywniejszeGrid, daneTabel.tAkcjeGPWNajaktwyniejsze);
             this.Dispatcher.Invoke(wN, DispatcherPriority.Background, wigNajaktywniejszeGrid, daneTabel.tWigNajaktywniejsze);
@@ -804,6 +820,20 @@ namespace mm_gielda
                 if (czyOdswierzacAkcje())
                     {
                     daneTabel.tAkcjeNC = stooqNCAkcje.generujTabele();
+
+                    // ok, to jest wydzielone tutaj, a nie w metodach tabelujWzrostySpadki i w tabelujNajaktywniejsze, ponieważ
+                    // newConnect może być włączony lub nie, i dlatego nie może byc razem z akcjami gpw. Poza tym tabela źródłowa jest inna
+                    // (newconnectowa) i ona generuje się później niż gpw i te metodki do filtracji nie miałyby danych.
+                    filtrujWzrostySpadki(ref daneTabel.tAkcjeNC, ref daneTabel.tNcWzrosty, ref daneTabel.tNcSpadki);
+                    filtrujNajaktywniejsze(ref daneTabel.tAkcjeNC, ref daneTabel.tNcNajaktywniejsze);
+
+                    this.Dispatcher.Invoke(wWS, DispatcherPriority.Background, ncWzrostyGrid, ncSpadkiGrid, daneTabel.tNcWzrosty, daneTabel.tNcSpadki);
+                    this.Dispatcher.Invoke(wN, DispatcherPriority.Background, ncNajaktywniejszeGrid, daneTabel.tNcNajaktywniejsze);
+
+                    this.Dispatcher.Invoke(new Action(delegate()
+                        {
+                        policzRosnaceSpadajace(ref daneTabel.tAkcjeNC, ref ncRosnieIlosc, ref ncZeroIlosc, ref ncSpadaIlosc);
+                        }), DispatcherPriority.Background, null);
                     }
                 }
             catch { }
