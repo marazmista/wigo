@@ -13,6 +13,9 @@ Binarki dostępne tutaj: https://docs.google.com/folder/d/0B7nxOyrvj2IieGVOSUZOS
 --
 # Screenshots
 [Okno główne](https://docs.google.com/file/d/0B7nxOyrvj2IiSFdyU1NmYmpqMFE/edit?usp=sharing)
-[Indeksów](https://docs.google.com/file/d/0B7nxOyrvj2IicndmWVJxM0Vxd1k/edit?usp=sharing)
+
+[Indeksy](https://docs.google.com/file/d/0B7nxOyrvj2IicndmWVJxM0Vxd1k/edit?usp=sharing)
+
 [Akcje](https://docs.google.com/file/d/0B7nxOyrvj2IiS1oyWVV5XzdscFk/edit?usp=sharing)
+
 [Opcje programu](https://docs.google.com/file/d/0B7nxOyrvj2IiZU9rNTNXaDNtRms/edit?usp=sharing)
