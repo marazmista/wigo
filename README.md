@@ -8,7 +8,7 @@ Program do monitorowania Polskiej giełdy, walut, towarów. Wymaga .Net 4.
 http://www.gnu.org/licenses/gpl-2.0.txt
 
 --
-Binarki dostępne tutaj: https://docs.google.com/folder/d/0B7nxOyrvj2IieGVOSUZOS1hTVk0/edit
+Binarki dostępne tutaj: https://copy.com/hjBm4tNA6SMo
 
 --
 # Screenshots
